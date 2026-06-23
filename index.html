@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainCube Studio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg:      #eeedf8;
+  --s1:      #ffffff;
+  --s2:      #f4f3fc;
+  --s3:      #edeaf8;
+  --border:  #dcdaf0;
+  --border2: #bdb9e0;
+  --text:    #0f0e2a;
+  --muted:   #6b67a0;
+  --dim:     #a09ccc;
+
+  --orange:  #5c3df5;
+  --orange2: #7358f7;
+  --teal:    #3b22cc;
+  --teal2:   #4e34e0;
+  --blue:    #7c3aed;
+  --yellow:  #8b5cf6;
+
+  --r:  6px;
+  --r2: 10px;
+  --r3: 14px;
+
+  --sh:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.03);
+  --sh2: 0 8px 36px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ──────────── HEADER ──────────── */
+.hdr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 28px;
+  height: 56px;
+  background: var(--s1);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--sh);
+}
+
+.hdr-brand { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+
+.hdr-name {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  line-height: 1;
+}
+.hdr-name .part-brain {
+  font-weight: 800;
+  font-size: 1.18rem;
+  letter-spacing: -0.7px;
+  color: var(--text);
+}
+.hdr-name .part-cube {
+  font-weight: 800;
+  font-size: 1.18rem;
+  letter-spacing: -0.7px;
+  color: var(--orange);
+}
+.hdr-name .part-sep {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border2);
+  margin: 0 7px 2px;
+  flex-shrink: 0;
+  align-self: center;
+}
+.hdr-name .part-studio {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--muted);
+  letter-spacing: 0.1px;
+}
+
+.hdr-sub {
+  font-size: 0.63rem;
+  color: var(--dim);
+  font-weight: 500;
+  letter-spacing: 0.15px;
+}
+
+.hdr-date {
+  font-size: 0.67rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--s2);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ──────────── LAYOUT ──────────── */
+.wrap { max-width: 840px; margin: 0 auto; padding: 22px 20px; }
+
+/* ──────────── API ROW ──────────── */
+.api-row {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: var(--sh);
+}
+
+/* Provider tabs */
+.provider-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+.provider-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--s2);
+  color: var(--muted);
+  font-size: 0.73rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background-color 0.12s;
+  user-select: none;
+}
+.provider-tab:hover { border-color: var(--orange); color: var(--orange); }
+.provider-tab.on { border-color: var(--orange); background: rgba(92,61,245,0.07); color: var(--orange); }
+.provider-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+.provider-tab.on .provider-dot { opacity: 1; }
+.provider-tag {
+  font-size: 0.57rem;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(139,92,246,0.1);
+  color: var(--yellow);
+  text-transform: uppercase;
+}
+
+.api-fields {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.api-fields label {
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.api-fields input[type=password] {
+  flex: 1;
+  min-width: 160px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r);
+  padding: 7px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  outline: none;
+  transition: border-color 0.14s;
+}
+.api-fields input[type=password]:focus { border-color: var(--orange); }
+.api-fields select {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r);
+  padding: 7px 9px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.73rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.14s;
+}
+.api-fields select:focus { border-color: var(--orange); }
+
+.key-hint {
+  font-size: 0.62rem;
+  color: var(--dim);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.key-hint .saved-badge {
+  background: rgba(59,34,204,0.07);
+  border: 1px solid rgba(59,34,204,0.2);
+  color: var(--teal);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+.provider-info {
+  margin-top: 8px;
+  font-size: 0.67rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  line-height: 1.5;
+}
+.provider-info a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 600;
+}
+.provider-info a:hover { text-decoration: underline; }
+.pinfo-free {
+  background: rgba(34, 180, 100, 0.1);
+  border: 1px solid rgba(34, 180, 100, 0.3);
+  color: #1a7a45;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.pinfo-pay {
+  background: rgba(210, 140, 30, 0.1);
+  border: 1px solid rgba(210, 140, 30, 0.3);
+  color: #8a5a00;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ──────────── TABS ──────────── */
+.nav {
+  display: flex;
+  gap: 2px;
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 4px;
+  margin-bottom: 16px;
+  width: fit-content;
+  box-shadow: var(--sh);
+}
+.nav-tab {
+  padding: 7px 18px;
+  border-radius: var(--r);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.12s, background-color 0.12s;
+  white-space: nowrap;
+  user-select: none;
+  letter-spacing: -0.1px;
+}
+.nav-tab:hover { color: var(--text); background-color: var(--s2); }
+.nav-tab.on { background: var(--orange); color: #fff; }
+
+.pg { display: none; }
+.pg.on { display: block; }
+
+/* ──────────── PANEL ──────────── */
+.panel {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r3);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  box-shadow: var(--sh);
+}
+.panel-head {
+  font-weight: 700;
+  font-size: 0.62rem;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-head .pip {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--orange);
+  flex-shrink: 0;
+}
+
+label {
+  font-size: 0.69rem;
+  color: var(--muted);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+  letter-spacing: 0.05px;
+}
+
+input[type=text], textarea, select {
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r);
+  padding: 8px 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.83rem;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.14s, background-color 0.14s;
+}
+input[type=text]:focus, textarea:focus, select:focus {
+  border-color: var(--orange);
+  background: var(--s1);
+}
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+
+/* ──────────── LANG TOGGLE ──────────── */
+.lang-group { display: flex; gap: 5px; }
+.lang-opt {
+  flex: 1;
+  padding: 8px 8px;
+  text-align: center;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--s2);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background-color 0.12s;
+  user-select: none;
+  letter-spacing: 0.4px;
+}
+.lang-opt:hover { border-color: var(--teal); color: var(--teal); }
+.lang-opt.on { border-color: var(--teal); color: var(--teal); background: rgba(59,34,204,0.06); }
+
+/* ──────────── UPLOAD ZONE ──────────── */
+.drop-zone {
+  border: 1.5px dashed var(--border2);
+  border-radius: var(--r);
+  padding: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.18s;
+  position: relative;
+  background: var(--s2);
+}
+.drop-zone:hover { border-color: var(--orange); }
+.drop-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.drop-zone-text { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+.drop-zone-text strong { color: var(--teal); font-weight: 700; }
+.drop-preview { max-width: 100%; max-height: 96px; border-radius: 5px; display: none; }
+
+/* ──────────── BUTTONS ──────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--r);
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.77rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.12s, background-color 0.12s, border-color 0.12s, color 0.12s;
+}
+.btn-ghost {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+.btn-teal {
+  background: rgba(59,34,204,0.07);
+  border: 1px solid rgba(59,34,204,0.2);
+  color: var(--teal);
+}
+.btn-teal:hover { background: rgba(59,34,204,0.14); }
+.btn-red {
+  background: rgba(210,50,50,0.05);
+  border: 1px solid rgba(210,50,50,0.15);
+  color: #c03030;
+  font-size: 0.68rem;
+  padding: 4px 8px;
+}
+.btn-red:hover { background: rgba(210,50,50,0.1); }
+.btn-gen {
+  background: var(--orange);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  padding: 13px;
+  width: 100%;
+  justify-content: center;
+  border-radius: var(--r2);
+  margin-top: 6px;
+}
+.btn-gen:hover { opacity: 0.88; }
+.btn-gen:disabled { opacity: 0.32; cursor: not-allowed; }
+
+/* ──────────── TOAST ──────────── */
+.toast {
+  display: none;
+  padding: 9px 14px;
+  border-radius: var(--r);
+  font-size: 0.76rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.toast.err { background: rgba(210,50,50,0.06); border: 1px solid rgba(210,50,50,0.18); color: #b02020; display: block; }
+.toast.ok  { background: rgba(59,34,204,0.06); border: 1px solid rgba(59,34,204,0.18); color: var(--teal); display: block; }
+
+/* ──────────── TEMPLATE LIST ──────────── */
+.tpl-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: border-color 0.12s;
+}
+.tpl-item:hover, .tpl-item.on { border-color: var(--orange); }
+.tpl-item.on { background: rgba(92,61,245,0.04); }
+.tpl-name { flex: 1; font-weight: 600; }
+
+/* ──────────── HISTORY ──────────── */
+.hist-item {
+  padding: 10px 14px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: border-color 0.12s;
+}
+.hist-item:hover { border-color: var(--orange); }
+.hist-item-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 3px; }
+.hist-title { font-weight: 700; font-size: 0.82rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hist-badge {
+  font-size: 0.61rem;
+  font-weight: 700;
+  background: rgba(139,92,246,0.08);
+  border: 1px solid rgba(139,92,246,0.22);
+  color: var(--yellow);
+  padding: 2px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.hist-meta { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+
+/* ──────────── MODAL ──────────── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 26, 0.58);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+.overlay.on { display: flex; }
+.modal {
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 980px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--sh2);
+  overflow: hidden;
+}
+.modal-top {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.modal-heading {
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+.modal-brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 1;
+  gap: 0;
+}
+.modal-brand-brain {
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.6px;
+  color: var(--text);
+}
+.modal-brand-cube {
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.6px;
+  color: var(--orange);
+}
+.modal-brand-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--border2);
+  margin: 0 6px 1px;
+  flex-shrink: 0;
+  align-self: center;
+}
+.modal-brand-studio {
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.1px;
+}
+.modal-x {
+  width: 28px; height: 28px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.85rem;
+  transition: border-color 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+.modal-x:hover { border-color: #c02020; color: #c02020; }
+.modal-body {
+  overflow-y: auto;
+  padding: 18px;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+/* ──────────── LOADER ──────────── */
+.mloader {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 20px; gap: 14px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.spin {
+  width: 28px; height: 28px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: rot .7s linear infinite;
+}
+@keyframes rot { to { transform: rotate(360deg); } }
+
+/* ──────────── OUTPUT SECTIONS ──────────── */
+.out-section { margin-bottom: 16px; }
+.out-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.out-label span { color: var(--orange); }
+
+/* Titles */
+.title-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.title-card {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 12px 14px;
+}
+.title-card-lang { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px; color: var(--dim); margin-bottom: 6px; }
+.title-card-text { font-weight: 700; font-size: 0.97rem; line-height: 1.35; color: var(--text); }
+.title-card.ua .title-card-text { color: var(--teal); }
+
+/* Descriptions */
+.desc-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  overflow: hidden;
+}
+.desc-col { padding: 12px 14px; }
+.desc-col:first-child { border-right: 1px solid var(--border); }
+.desc-lang { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px; color: var(--dim); margin-bottom: 7px; display: block; }
+.desc-body { font-size: 0.78rem; line-height: 1.62; white-space: pre-wrap; color: var(--text); }
+.desc-col:last-child .desc-body { color: var(--teal); }
+
+/* SCENE TABLE */
+.scene-wrap {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  overflow: hidden;
+}
+.scene-tbl { width: 100%; border-collapse: collapse; }
+.scene-tbl thead { background: var(--s2); }
+.scene-tbl thead th {
+  padding: 9px 12px;
+  font-size: 0.59rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--muted);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.scene-tbl thead th:first-child { width: 36px; text-align: center; }
+.scene-tbl tbody tr { border-bottom: 1px solid var(--border); }
+.scene-tbl tbody tr:last-child { border-bottom: none; }
+.scene-tbl tbody tr:hover { background: var(--s2); }
+.scene-tbl tbody td { padding: 10px 12px; font-size: 0.78rem; line-height: 1.46; vertical-align: top; }
+.scene-tbl tbody td:first-child {
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--orange);
+  width: 36px;
+}
+
+/* Voice pair */
+.voice-pair { display: flex; flex-direction: column; gap: 6px; }
+.voice-en { color: var(--text); font-size: 0.77rem; }
+.voice-ua { color: var(--teal); font-size: 0.77rem; font-style: italic; }
+.vlang { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.5px; color: var(--dim); text-transform: uppercase; margin-bottom: 2px; }
+
+.col-visual { color: var(--blue); }
+
+/* Screen text */
+.screen-pair { display: flex; flex-direction: column; gap: 6px; }
+.screen-en { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #5c3df5; white-space: pre-line; line-height: 1.4; }
+.screen-ua { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); white-space: pre-line; font-style: italic; line-height: 1.4; }
+.slang { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.5px; color: var(--dim); text-transform: uppercase; margin-bottom: 2px; }
+
+/* ──────────── CHECKLIST SECTIONS ──────────── */
+.chk-section {
+  margin-bottom: 14px;
+}
+.chk-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.chk-icon {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.chk-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.chk-title span { color: var(--orange); }
+.chk-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.chk-col {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  overflow: hidden;
+}
+.chk-col-head {
+  padding: 6px 12px;
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  background: var(--s3);
+}
+.chk-col.en .chk-col-head { color: var(--blue); }
+.chk-col.ua .chk-col-head { color: var(--teal); }
+.chk-list {
+  list-style: none;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chk-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+.chk-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--s3);
+  border: 1px solid var(--border2);
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.chk-col.voice-col li { color: var(--text); }
+.chk-col.voice-col.ua li { color: var(--teal); font-style: italic; }
+.chk-col.visual-col li { color: var(--blue); }
+.chk-col.screen-col li { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; white-space: pre-line; color: #5c3df5; line-height: 1.4; }
+.chk-col.screen-col.ua li { color: var(--muted); font-style: italic; }
+
+/* SEO */
+.seo-box {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(59,34,204,0.04);
+  border: 1px solid rgba(59,34,204,0.14);
+  border-radius: var(--r2);
+  padding: 12px 14px;
+}
+.seo-label { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 4px; }
+.seo-text { font-size: 0.79rem; line-height: 1.57; color: var(--text); }
+
+/* ──────────── RESPONSIVE ──────────── */
+@media(max-width: 640px) {
+  .hdr { padding: 0 16px; }
+  .wrap { padding: 16px 14px; }
+  .row2 { grid-template-columns: 1fr; }
+  .title-cards { grid-template-columns: 1fr; }
+  .desc-wrap { grid-template-columns: 1fr; }
+  .desc-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  .scene-tbl thead th:nth-child(3),
+  .scene-tbl tbody td:nth-child(3) { display: none; }
+  .hdr-name .part-brain,
+  .hdr-name .part-cube { font-size: 1rem; }
+  .chk-cols { grid-template-columns: 1fr; }
+  .provider-tabs { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-name">
+      <span class="part-brain">Brain</span><span class="part-cube">Cube</span>
+      <span class="part-sep"></span>
+      <span class="part-studio">Studio</span>
+    </div>
+    <div class="hdr-sub">YouTube Shorts Generator · Speedcubing</div>
+  </div>
+  <div class="hdr-date" id="dateBadge"></div>
+</header>
+
+<div class="wrap">
+
+  <!-- API ROW — MULTI-PROVIDER -->
+  <div class="api-row">
+    <!-- Provider selector -->
+    <div class="provider-tabs">
+      <div class="provider-tab on" id="ptab-gemini" onclick="switchProvider('gemini')">
+        <div class="provider-dot"></div>
+        Google Gemini
+      </div>
+      <div class="provider-tab" id="ptab-claude" onclick="switchProvider('claude')">
+        <div class="provider-dot"></div>
+        Claude (Anthropic)
+        <span class="provider-tag">резерв</span>
+      </div>
+    </div>
+
+    <!-- Gemini fields -->
+    <div class="api-fields" id="fields-gemini">
+      <label>Gemini API Key</label>
+      <input type="password" id="geminiKey" placeholder="AIzaSy..." />
+      <select id="geminiModel" onchange="saveGeminiModel()">
+        <option value="gemini-2.5-flash">gemini-2.5-flash ⚡ БЕЗКОШТОВНО (рекомендовано)</option>
+        <option value="gemini-2.5-flash-lite-preview-06-17">gemini-2.5-flash-lite 💨 БЕЗКОШТОВНО (найшвидший)</option>
+        <option value="gemini-2.5-pro">gemini-2.5-pro 🧠 БЕЗКОШТОВНО ліміт 50/день</option>
+      </select>
+      <button class="btn btn-teal" onclick="saveGeminiKey()">Зберегти</button>
+      <div class="key-hint" id="geminiHint"></div>
+    </div>
+    <div class="provider-info" id="info-gemini">
+      <span class="pinfo-free">✓ БЕЗКОШТОВНО</span>
+      2.5-flash: 1500 запитів/день · 2.5-flash-lite: найшвидший · Ключ: <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com</a>
+    </div>
+
+    <!-- Claude fields -->
+    <div class="api-fields" id="fields-claude" style="display:none">
+      <label>Anthropic API Key</label>
+      <input type="password" id="claudeKey" placeholder="sk-ant-..." />
+      <select id="claudeModel" onchange="saveClaudeModel()">
+        <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 💨 ~$0.000006/запит (найдешевший)</option>
+        <option value="claude-sonnet-4-6">claude-sonnet-4-6 ⚡ ~$0.00003/запит (балансований)</option>
+      </select>
+      <button class="btn btn-teal" onclick="saveClaudeKey()">Зберегти</button>
+      <div class="key-hint" id="claudeHint"></div>
+    </div>
+    <div class="provider-info" id="info-claude" style="display:none">
+      <span class="pinfo-pay">$ Платний</span>
+      Haiku: $1/млн токенів · Новий акаунт: $5 безкоштовно (≈800 000 запитів!) · Ключ: <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>
+    </div>
+  </div>
+
+  <div id="toastMsg" class="toast"></div>
+
+  <!-- TABS -->
+  <div class="nav">
+    <div class="nav-tab on" onclick="switchTab('gen')">Generate / Генерація</div>
+    <div class="nav-tab" onclick="switchTab('tpl')">Template / Шаблон</div>
+    <div class="nav-tab" onclick="switchTab('hist')">History / Історія</div>
+  </div>
+
+  <!-- GENERATE PAGE -->
+  <div class="pg on" id="pg-gen">
+    <div class="panel">
+      <div class="panel-head"><div class="pip"></div>Video Parameters / Параметри відео</div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Content Type / Тип контенту</label>
+          <select id="contentType">
+            <option value="f2l">F2L Tips</option>
+            <option value="oll">OLL</option>
+            <option value="pll">PLL</option>
+            <option value="fingertricks">Fingertricks</option>
+            <option value="method">Tutorial / Навчання</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Algorithm / Алгоритм</label>
+          <input type="text" id="algorithm" placeholder="(R U' R' U') R U R'..." />
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Slot / Case — Слот / Кейс</label>
+          <input type="text" id="caseSlot" placeholder="front-right slot..." />
+        </div>
+        <div class="field">
+          <label>Cube / Кубик</label>
+          <input type="text" id="cubeUsed" placeholder="GAN 14, MoYu WRM..." />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Notes / Нотатки</label>
+        <input type="text" id="notes" placeholder="effective trick, beginner-friendly..." />
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Photo / Фото (Ctrl+V)</label>
+          <div class="drop-zone" id="dropZone">
+            <input type="file" id="imgInput" accept="image/*" onchange="handleImg(event)" />
+            <img class="drop-preview" id="imgPreview" />
+            <div id="dropPlaceholder">
+              <div style="font-size:18px;margin-bottom:4px">📷</div>
+              <div class="drop-zone-text">Click or <strong>Ctrl+V</strong></div>
+            </div>
+          </div>
+          <button class="btn btn-ghost" id="clearImgBtn" onclick="clearImg()" style="display:none;margin-top:5px;font-size:0.7rem;padding:4px 9px;">Remove</button>
+        </div>
+
+        <div class="field">
+          <label>Output Language / Мова виводу</label>
+          <div class="lang-group" id="langGroup">
+            <div class="lang-opt on" onclick="setLang('en')">EN</div>
+            <div class="lang-opt" onclick="setLang('ua')">UA</div>
+            <div class="lang-opt" onclick="setLang('both')">Both</div>
+          </div>
+          <div style="margin-top:7px;font-size:0.63rem;color:var(--dim);line-height:1.45">
+            Screen text always EN + UA / Текст на екрані завжди EN + UA
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-gen" id="genBtn" onclick="generate()">Generate Content / Згенерувати контент</button>
+    </div>
+  </div>
+
+  <!-- TEMPLATE PAGE -->
+  <div class="pg" id="pg-tpl">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="panel">
+        <div class="panel-head"><div class="pip" style="background:var(--teal)"></div>Edit Template / Шаблон</div>
+        <div class="row2">
+          <div class="field"><label>Template Name / Назва</label><input type="text" id="tplName" placeholder="My Template" /></div>
+          <div class="field"><label>Channel / Канал</label><input type="text" id="tplChannel" value="BrainCube by Dmytro" /></div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Title Style / Стиль заголовку</label>
+            <select id="tplTitleStyle">
+              <option value="hook">Hook (Stop doing X!)</option>
+              <option value="secret">Secret Tip</option>
+              <option value="speed">Speed / Fast</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Sequence / Послідовність (5 frames)</label>
+            <select id="tplSequence">
+              <option value="hook_case_slow_fast_outro">Hook→Case→Slow→Fast→Outro</option>
+              <option value="hook_fast_slow_explain_outro">Hook→Fast→Slow→Explain→Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>CTA (Call to Action)</label><input type="text" id="tplCTA" value="Subscribe for daily CFOP tips!" /></div>
+        <div class="field"><label>Base Hashtags / Хештеги</label><input type="text" id="tplHashtags" value="#Shorts #Speedcubing #RubiksCube #BrainCube" /></div>
+        <div style="display:flex;gap:7px;margin-top:4px">
+          <button class="btn btn-teal" onclick="saveTpl()" style="flex:1">Save / Зберегти</button>
+          <button class="btn btn-ghost" onclick="newTpl()">+ New</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="pip"></div>Saved / Збережені</div>
+        <div id="tplList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY PAGE -->
+  <div class="pg" id="pg-hist">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="pip" style="background:var(--yellow)"></div>
+        History / Історія
+        <button class="btn btn-red" onclick="clearHist()" style="margin-left:auto">Clear / Очистити</button>
+      </div>
+      <div id="histList" style="color:var(--muted);font-size:0.8rem;text-align:center;padding:18px">Empty / Поки пусто...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modal" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-top">
+      <div class="modal-brand">
+        <span class="modal-brand-brain">Brain</span><span class="modal-brand-cube">Cube</span><span class="modal-brand-dot"></span><span class="modal-brand-studio">Studio</span>
+      </div>
+      <div class="modal-heading" id="modalHead">Generating... / Генерація...</div>
+      <div class="modal-x" onclick="closeModal()" title="Close (Esc)">✕</div>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <div class="mloader"><div class="spin"></div><div>Analyzing... / Аналізую...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let lang = 'en';
+let curTpl = null;
+let imgB64 = null;
+let currentProvider = 'gemini'; // 'gemini' | 'claude'
+let templates = JSON.parse(localStorage.getItem('bc_tpl') || '[]');
+let history   = JSON.parse(localStorage.getItem('bc_hist') || '[]');
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('dateBadge').textContent =
+    new Date().toLocaleDateString('uk-UA', {day:'numeric', month:'long', year:'numeric'});
+
+  // Restore Gemini settings
+  const gm = localStorage.getItem('bc_model');
+  if (gm) document.getElementById('geminiModel').value = gm;
+  const gk = localStorage.getItem('bc_apikey');
+  if (gk) {
+    document.getElementById('geminiKey').value = gk;
+    updateKeyHint('gemini', true);
+  }
+
+  // Restore Claude settings
+  const cm = localStorage.getItem('bc_claude_model');
+  if (cm) document.getElementById('claudeModel').value = cm;
+  const ck = localStorage.getItem('bc_claude_key');
+  if (ck) {
+    document.getElementById('claudeKey').value = ck;
+    updateKeyHint('claude', true);
+  }
+
+  // Restore last used provider
+  const lastProvider = localStorage.getItem('bc_provider');
+  if (lastProvider) switchProvider(lastProvider);
+
+  renderTpls();
+  renderHist();
+  if (templates.length) loadTpl(0);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('paste', onPaste);
+});
+
+// ── PROVIDER SWITCHING ──
+function switchProvider(p) {
+  currentProvider = p;
+  localStorage.setItem('bc_provider', p);
+
+  document.getElementById('ptab-gemini').classList.toggle('on', p === 'gemini');
+  document.getElementById('ptab-claude').classList.toggle('on', p === 'claude');
+  document.getElementById('fields-gemini').style.display = p === 'gemini' ? 'flex' : 'none';
+  document.getElementById('fields-claude').style.display = p === 'claude' ? 'flex' : 'none';
+  document.getElementById('info-gemini').style.display   = p === 'gemini' ? 'flex' : 'none';
+  document.getElementById('info-claude').style.display   = p === 'claude' ? 'flex' : 'none';
+}
+
+function updateKeyHint(provider, saved) {
+  const el = document.getElementById(provider + 'Hint');
+  if (!el) return;
+  if (saved) {
+    el.innerHTML = `<span class="saved-badge">✓ Ключ збережено</span>`;
+  } else {
+    el.innerHTML = '';
+  }
+}
+
+// ── SAVE KEYS ──
+function saveGeminiKey() {
+  const v = document.getElementById('geminiKey').value.trim();
+  if (!v) { toast('Введи Gemini API ключ', 'err'); return; }
+  localStorage.setItem('bc_apikey', v);
+  updateKeyHint('gemini', true);
+  toast('Gemini ключ збережено ✓', 'ok');
+}
+function saveGeminiModel() {
+  localStorage.setItem('bc_model', document.getElementById('geminiModel').value);
+}
+function saveClaudeKey() {
+  const v = document.getElementById('claudeKey').value.trim();
+  if (!v) { toast('Введи Anthropic API ключ', 'err'); return; }
+  localStorage.setItem('bc_claude_key', v);
+  updateKeyHint('claude', true);
+  toast('Claude ключ збережено ✓', 'ok');
+}
+function saveClaudeModel() {
+  localStorage.setItem('bc_claude_model', document.getElementById('claudeModel').value);
+}
+
+function switchTab(id) {
+  const tabs = ['gen','tpl','hist'];
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('on', tabs[i] === id));
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+}
+
+function setLang(l) {
+  lang = l;
+  const opts = document.querySelectorAll('.lang-opt');
+  ['en','ua','both'].forEach((x,i) => opts[i].classList.toggle('on', x === l));
+}
+
+function handleImg(e) { const f = e.target.files[0]; if(f) loadFile(f); }
+function loadFile(f) {
+  if (!f || !f.type.startsWith('image/')) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    imgB64 = ev.target.result.split(',')[1];
+    document.getElementById('imgPreview').src = ev.target.result;
+    document.getElementById('imgPreview').style.display = 'block';
+    document.getElementById('dropPlaceholder').style.display = 'none';
+    document.getElementById('clearImgBtn').style.display = 'inline-flex';
+  };
+  r.readAsDataURL(f);
+}
+function clearImg() {
+  imgB64 = null;
+  document.getElementById('imgPreview').src = '';
+  document.getElementById('imgPreview').style.display = 'none';
+  document.getElementById('dropPlaceholder').style.display = 'block';
+  document.getElementById('clearImgBtn').style.display = 'none';
+  document.getElementById('imgInput').value = '';
+}
+function onPaste(e) {
+  const items = e.clipboardData?.items; if (!items) return;
+  for (const it of items) {
+    if (it.type.startsWith('image/')) {
+      e.preventDefault();
+      loadFile(it.getAsFile());
+      const dz = document.getElementById('dropZone');
+      dz.style.borderColor = 'var(--teal)';
+      setTimeout(() => dz.style.borderColor = '', 700);
+      break;
+    }
+  }
+}
+
+function saveTpl() {
+  const name = document.getElementById('tplName').value.trim();
+  if (!name) { toast('Enter a template name / Введи назву шаблону', 'err'); return; }
+  const t = {
+    id: Date.now(), name,
+    titleStyle: document.getElementById('tplTitleStyle').value,
+    channel: document.getElementById('tplChannel').value,
+    hashtags: document.getElementById('tplHashtags').value,
+    cta: document.getElementById('tplCTA').value,
+    sequence: document.getElementById('tplSequence').value,
+  };
+  const i = templates.findIndex(x => x.name === name);
+  if (i >= 0) templates[i] = t; else templates.push(t);
+  localStorage.setItem('bc_tpl', JSON.stringify(templates));
+  curTpl = t; renderTpls(); toast('Template saved / Шаблон збережено', 'ok');
+}
+function loadTpl(i) {
+  const t = templates[i]; curTpl = t;
+  document.getElementById('tplName').value       = t.name;
+  document.getElementById('tplChannel').value    = t.channel;
+  document.getElementById('tplTitleStyle').value = t.titleStyle;
+  document.getElementById('tplSequence').value   = t.sequence || 'hook_case_slow_fast_outro';
+  document.getElementById('tplCTA').value        = t.cta;
+  document.getElementById('tplHashtags').value   = t.hashtags;
+  renderTpls();
+}
+function delTpl(i) {
+  if (!confirm('Delete? / Видалити?')) return;
+  templates.splice(i, 1);
+  localStorage.setItem('bc_tpl', JSON.stringify(templates));
+  curTpl = templates.length ? templates[0] : null;
+  if (curTpl) loadTpl(0);
+  renderTpls();
+}
+function newTpl() {
+  document.getElementById('tplName').value       = '';
+  document.getElementById('tplChannel').value    = 'BrainCube by Dmytro';
+  document.getElementById('tplTitleStyle').value = 'hook';
+  document.getElementById('tplSequence').value   = 'hook_case_slow_fast_outro';
+  document.getElementById('tplCTA').value        = 'Subscribe for daily CFOP tips!';
+  document.getElementById('tplHashtags').value   = '#Shorts #Speedcubing #BrainCube';
+  renderTpls();
+}
+function renderTpls() {
+  const el = document.getElementById('tplList');
+  if (!templates.length) { el.innerHTML = '<div style="color:var(--muted);font-size:0.75rem;padding:5px">Empty / Пусто...</div>'; return; }
+  el.innerHTML = templates.map((t,i) => `
+    <div class="tpl-item ${curTpl && curTpl.id === t.id ? 'on' : ''}" onclick="loadTpl(${i})">
+      <div class="tpl-name">${esc(t.name)}</div>
+      <button class="btn btn-red" onclick="event.stopPropagation();delTpl(${i})">✕</button>
+    </div>`).join('');
+}
+
+function historyContext() {
+  if (!history.length) return '';
+  const list = history.slice(0, 10).map((h,i) =>
+    `${i+1}. "${h.titleUA || h.titleEN}" (${h.contentType}, algo: ${h.algorithm || 'N/A'})`
+  ).join('\n');
+  return `\n\nIMPORTANT — LAST ${Math.min(history.length,10)} GENERATED VIDEOS (do NOT repeat these topics or titles):\n${list}`;
+}
+
+// ──────────── MAIN PROMPT builder ────────────
+function buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl) {
+  const seqMap = {
+    'hook_case_slow_fast_outro':    '1.Hook(preview) 2.Show case 3.Slow exec 4.Fast exec 5.Outro/CTA',
+    'hook_fast_slow_explain_outro': '1.Hook(preview) 2.Fast exec 3.Slow exec 4.Brief explain 5.Outro/CTA'
+  };
+  const seqRule = seqMap[tpl.sequence || 'hook_case_slow_fast_outro'];
+  const hCtx    = historyContext();
+
+  return `You are an expert YouTube Shorts producer for the speedcubing channel "${tpl.channel || 'BrainCube'}".
+
+Video details:
+- Type: ${contentType}
+- Algorithm: ${algorithm}
+- Case/Slot: ${caseSlot || 'N/A'}
+- Cube: ${cubeUsed || 'N/A'}
+- Notes: ${notes || 'N/A'}
+- Title style: ${tpl.titleStyle || 'hook'}
+- CTA: ${tpl.cta || 'Subscribe for more CFOP tips!'}
+- Base hashtags: ${tpl.hashtags || '#Shorts #Speedcubing'}
+${hCtx}
+
+STRICT RULES:
+1. EXACTLY 5 frames. Sequence: [${seqRule}]
+2. Title: 5-8 words, catchy. NEVER include the algorithm notation in the title.
+3. descriptionEN and descriptionUA must end with 6-8 hashtags.
+4. EN fields → English only. UA fields → Ukrainian only. visualsUA and seoTip → Ukrainian.
+5. Do NOT repeat topics/titles from history above.
+6. VOICE (voiceEN / voiceUA): 1 short sentence per frame, MAX 12 words. Talk about the CONCEPT and FEELING, NEVER read out the algorithm notation aloud. The algorithm is shown visually, not spoken.
+7. SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of screenTextEN.
+8. VISUALS (visualsUA): 1 action sentence per frame only.
+
+Return ONLY valid JSON (no markdown, no extra text):
+{
+  "titleEN": "Catchy English title 5-8 words",
+  "titleUA": "Цікавий заголовок 5-8 слів",
+  "titleTagsEN": "#Tag1 #Tag2 #Tag3",
+  "titleTagsUA": "#Тег1 #Тег2 #Тег3",
+  "descriptionEN": "Hook line.\\n\\nAlgorithm: ${algorithm}\\nCube: ${cubeUsed || 'N/A'}\\n${tpl.cta || 'Subscribe!'}\\n\\n#Hashtags",
+  "descriptionUA": "Гачок.\\n\\nАлгоритм: ${algorithm}\\nКубик: ${cubeUsed || 'N/A'}\\n${tpl.cta || 'Subscribe!'}\\n\\n#Хештеги",
+  "visualsUA": ["1 дія","1 дія","1 дія","1 дія","1 дія"],
+  "voiceEN": ["1 short sentence","1 short sentence","1 short sentence","1 short sentence","1 short sentence"],
+  "voiceUA": ["1 коротке речення","1 коротке речення","1 коротке речення","1 коротке речення","1 коротке речення"],
+  "screenTextEN": ["MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle"],
+  "screenTextUA": ["ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок"],
+  "seoTip": "Коротка SEO порада"
+}`;
+}
+
+// ──────────── GEMINI API call ────────────
+async function callGemini(prompt, apiKey) {
+  const model = document.getElementById('geminiModel').value;
+  const body = imgB64
+    ? { contents: [{ parts: [{ inline_data: { mime_type: 'image/jpeg', data: imgB64 } }, { text: prompt }] }] }
+    : { contents: [{ parts: [{ text: prompt }] }] };
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+  );
+  if (!res.ok) throw new Error((await res.json()).error?.message || `Gemini HTTP ${res.status}`);
+  const data = await res.json();
+  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return JSON.parse(raw.replace(/```json|```/g, '').trim());
+}
+
+// ──────────── CLAUDE API call ────────────
+async function callClaude(prompt, apiKey) {
+  const model = document.getElementById('claudeModel').value;
+
+  // Build message content — with or without image
+  let userContent;
+  if (imgB64) {
+    userContent = [
+      { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imgB64 } },
+      { type: 'text', text: prompt }
+    ];
+  } else {
+    userContent = prompt;
+  }
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-calls': 'true'
+    },
+    body: JSON.stringify({
+      model,
+      max_tokens: 2000,
+      messages: [{ role: 'user', content: userContent }]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || `Claude HTTP ${res.status}`);
+  }
+  const data = await res.json();
+  const raw = data.content?.[0]?.text || '';
+  return JSON.parse(raw.replace(/```json|```/g, '').trim());
+}
+
+// ──────────── GENERATE ────────────
+async function generate() {
+  const algorithm   = document.getElementById('algorithm').value.trim();
+  const contentType = document.getElementById('contentType').value;
+  if (!algorithm) { toast('Введи алгоритм', 'err'); return; }
+
+  // Get active API key
+  let apiKey;
+  if (currentProvider === 'gemini') {
+    apiKey = document.getElementById('geminiKey').value.trim() || localStorage.getItem('bc_apikey') || '';
+    if (!apiKey) { toast('Введи Gemini API ключ', 'err'); return; }
+  } else {
+    apiKey = document.getElementById('claudeKey').value.trim() || localStorage.getItem('bc_claude_key') || '';
+    if (!apiKey) { toast('Введи Claude (Anthropic) API ключ', 'err'); return; }
+  }
+
+  openModal();
+  resetModalBody();
+  document.getElementById('genBtn').disabled = true;
+
+  const tpl      = curTpl || {};
+  const cubeUsed = document.getElementById('cubeUsed').value.trim();
+  const caseSlot = document.getElementById('caseSlot').value.trim();
+  const notes    = document.getElementById('notes').value.trim();
+  const prompt   = buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl);
+
+  try {
+    let d;
+    if (currentProvider === 'gemini') {
+      d = await callGemini(prompt, apiKey);
+    } else {
+      d = await callClaude(prompt, apiKey);
+    }
+
+    renderResult(d);
+
+    history.unshift({
+      date: new Date().toLocaleString('uk-UA'),
+      algorithm, contentType,
+      provider: currentProvider,
+      titleEN: d.titleEN,
+      titleUA: d.titleUA,
+      title: d.titleEN || d.titleUA,
+      full: d
+    });
+    if (history.length > 30) history.pop();
+    localStorage.setItem('bc_hist', JSON.stringify(history));
+    renderHist();
+
+  } catch(e) {
+    closeModal();
+    toast(`Помилка [${currentProvider}]: ${e.message}`, 'err');
+  }
+
+  document.getElementById('genBtn').disabled = false;
+}
+
+function renderResult(d) {
+  const showEN   = lang === 'en'   || lang === 'both';
+  const showUA   = lang === 'ua'   || lang === 'both';
+  const showBoth = lang === 'both';
+
+  document.getElementById('modalHead').textContent = d.titleEN || d.titleUA || 'Result';
+
+  // Titles
+  let titlesHtml = '';
+  if (showBoth) {
+    titlesHtml = `<div class="title-cards">
+      <div class="title-card en">
+        <div class="title-card-lang">EN — English</div>
+        <div class="title-card-text">${esc(d.titleEN)}</div>
+        ${d.titleTagsEN ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--muted)">${esc(d.titleTagsEN)}</div>` : ''}
+      </div>
+      <div class="title-card ua">
+        <div class="title-card-lang">UA — Українська</div>
+        <div class="title-card-text">${esc(d.titleUA)}</div>
+        ${d.titleTagsUA ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--teal)">${esc(d.titleTagsUA)}</div>` : ''}
+      </div>
+    </div>`;
+  } else if (showEN) {
+    titlesHtml = `<div class="title-cards"><div class="title-card en" style="grid-column:1/-1">
+      <div class="title-card-lang">EN — English</div>
+      <div class="title-card-text">${esc(d.titleEN)}</div>
+      ${d.titleTagsEN ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--muted)">${esc(d.titleTagsEN)}</div>` : ''}
+    </div></div>`;
+  } else {
+    titlesHtml = `<div class="title-cards"><div class="title-card ua" style="grid-column:1/-1">
+      <div class="title-card-lang">UA — Українська</div>
+      <div class="title-card-text">${esc(d.titleUA)}</div>
+      ${d.titleTagsUA ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--teal)">${esc(d.titleTagsUA)}</div>` : ''}
+    </div></div>`;
+  }
+
+  // Descriptions
+  let descHtml = '';
+  if (showBoth) {
+    descHtml = `<div class="desc-wrap">
+      <div class="desc-col">
+        <span class="desc-lang">EN — English</span>
+        <div class="desc-body">${esc(d.descriptionEN)}</div>
+      </div>
+      <div class="desc-col">
+        <span class="desc-lang">UA — Українська</span>
+        <div class="desc-body">${esc(d.descriptionUA)}</div>
+      </div>
+    </div>`;
+  } else {
+    const isEN = showEN;
+    descHtml = `<div class="desc-wrap"><div class="desc-col" style="grid-column:1/-1;border-right:none">
+      <span class="desc-lang">${isEN ? 'EN — English' : 'UA — Українська'}</span>
+      <div class="desc-body">${esc(isEN ? d.descriptionEN : d.descriptionUA)}</div>
+    </div></div>`;
+  }
+
+  // Scene rows
+  let rows = '';
+  for (let i = 0; i < 5; i++) {
+    const voiceEN  = esc(d.voiceEN?.[i]  || '');
+    const voiceUA  = esc(d.voiceUA?.[i]  || '');
+    const visual   = esc(d.visualsUA?.[i] || '');
+    const screenEN = esc(d.screenTextEN?.[i] || '');
+    const screenUA = esc(d.screenTextUA?.[i] || '');
+
+    rows += `<tr>
+      <td>${i+1}</td>
+      <td>
+        <div class="voice-pair">
+          <div><div class="vlang">EN</div><div class="voice-en">${voiceEN}</div></div>
+          <div><div class="vlang">UA</div><div class="voice-ua">${voiceUA}</div></div>
+        </div>
+      </td>
+      <td class="col-visual">${visual}</td>
+      <td>
+        <div class="screen-pair">
+          <div><div class="slang">EN — on screen</div><div class="screen-en">${screenEN}</div></div>
+          <div><div class="slang">UA — переклад</div><div class="screen-ua">${screenUA}</div></div>
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  // Checklist items
+  let voiceENItems = '', voiceUAItems = '';
+  let visualItems = '';
+  let screenENItems = '', screenUAItems = '';
+  for (let i = 0; i < 5; i++) {
+    const num = `<span class="chk-num">${i+1}</span>`;
+    voiceENItems  += `<li>${num}<span>${esc(d.voiceEN?.[i] || '')}</span></li>`;
+    voiceUAItems  += `<li>${num}<span>${esc(d.voiceUA?.[i] || '')}</span></li>`;
+    visualItems   += `<li>${num}<span>${esc(d.visualsUA?.[i] || '')}</span></li>`;
+    screenENItems += `<li>${num}<span>${esc(d.screenTextEN?.[i] || '')}</span></li>`;
+    screenUAItems += `<li>${num}<span>${esc(d.screenTextUA?.[i] || '')}</span></li>`;
+  }
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="out-section">
+      <div class="out-label"><span>Title</span></div>
+      ${titlesHtml}
+    </div>
+    <div class="out-section">
+      <div class="out-label"><span>Description</span></div>
+      ${descHtml}
+    </div>
+    <div class="out-section">
+      <div class="out-label"><span>Scene Script</span> — Rule of 5</div>
+      <div class="scene-wrap">
+        <table class="scene-tbl">
+          <thead><tr>
+            <th>#</th>
+            <th>Voice-over / Озвучка (EN + UA)</th>
+            <th>What to film / Що знімати</th>
+            <th>On-screen text / Текст на екрані</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="chk-section">
+      <div class="chk-head">
+        <span class="chk-icon">🎙️</span>
+        <div class="chk-title"><span>Voice-over</span> / Озвучка — 5 фраз</div>
+      </div>
+      <div class="chk-cols">
+        <div class="chk-col voice-col en">
+          <div class="chk-col-head">EN — English</div>
+          <ul class="chk-list">${voiceENItems}</ul>
+        </div>
+        <div class="chk-col voice-col ua">
+          <div class="chk-col-head">UA — Українська</div>
+          <ul class="chk-list">${voiceUAItems}</ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="chk-section">
+      <div class="chk-head">
+        <span class="chk-icon">🎥</span>
+        <div class="chk-title"><span>What to film</span> / Що знімати — 5 кадрів</div>
+      </div>
+      <div class="chk-cols">
+        <div class="chk-col visual-col" style="grid-column:1/-1">
+          <div class="chk-col-head">UA — Дія для кожного кадру</div>
+          <ul class="chk-list">${visualItems}</ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="chk-section">
+      <div class="chk-head">
+        <span class="chk-icon">📝</span>
+        <div class="chk-title"><span>On-screen text</span> / Текст на екрані — 5 кадрів</div>
+      </div>
+      <div class="chk-cols">
+        <div class="chk-col screen-col en">
+          <div class="chk-col-head">EN — English</div>
+          <ul class="chk-list">${screenENItems}</ul>
+        </div>
+        <div class="chk-col screen-col ua">
+          <div class="chk-col-head">UA — Переклад</div>
+          <ul class="chk-list">${screenUAItems}</ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="out-section">
+      <div class="seo-box">
+        <div>
+          <div class="seo-label">SEO Tip / Порада</div>
+          <div class="seo-text">${esc(d.seoTip)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHist() {
+  const el = document.getElementById('histList');
+  if (!history.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:16px">Empty / Поки пусто...</div>';
+    return;
+  }
+  el.innerHTML = history.map((h,i) => `
+    <div class="hist-item" onclick="showHistItem(${i})">
+      <div class="hist-item-top">
+        <div class="hist-title">${esc(h.titleEN || h.title || 'Untitled')}</div>
+        <span class="hist-badge">${h.date}</span>
+      </div>
+      <div class="hist-meta">${h.contentType.toUpperCase()} · ${h.algorithm || 'N/A'}${h.provider ? ' · ' + h.provider : ''}${h.titleUA ? ' · ' + esc(h.titleUA) : ''}</div>
+    </div>`).join('');
+}
+function showHistItem(i) { openModal(); renderResult(history[i].full); }
+function clearHist() {
+  if (!confirm('Clear all history? / Очистити всю історію?')) return;
+  history = []; localStorage.setItem('bc_hist', '[]'); renderHist();
+}
+
+function openModal() { document.getElementById('modal').classList.add('on'); document.body.style.overflow = 'hidden'; }
+function closeModal() { document.getElementById('modal').classList.remove('on'); document.body.style.overflow = ''; }
+function overlayClick(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+function resetModalBody() {
+  document.getElementById('modalHead').textContent = 'Generating... / Генерація...';
+  document.getElementById('modalBody').innerHTML =
+    '<div class="mloader"><div class="spin"></div><div>Analyzing... / Аналізую...</div></div>';
+}
+
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>');
+}
+function toast(msg, type) {
+  const el = document.getElementById('toastMsg');
+  el.textContent = msg;
+  el.className = 'toast ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.className = 'toast'; }, 3200);
+}
+</script>
+</body>
+</html>
