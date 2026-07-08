@@ -357,26 +357,6 @@ input[type=text]:focus, textarea:focus, select:focus {
 .field { margin-bottom: 12px; }
 .field:last-child { margin-bottom: 0; }
 
-/* ──────────── LANG TOGGLE ──────────── */
-.lang-group { display: flex; gap: 5px; }
-.lang-opt {
-  flex: 1;
-  padding: 8px 8px;
-  text-align: center;
-  border-radius: var(--r);
-  border: 1px solid var(--border);
-  background: var(--s2);
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: border-color 0.12s, color 0.12s, background-color 0.12s;
-  user-select: none;
-  letter-spacing: 0.4px;
-}
-.lang-opt:hover { border-color: var(--teal); color: var(--teal); }
-.lang-opt.on { border-color: var(--teal); color: var(--teal); background: rgba(59,34,204,0.06); }
-
 /* ──────────── UPLOAD ZONE ──────────── */
 .drop-zone {
   border: 1.5px dashed var(--border2);
@@ -791,6 +771,113 @@ input[type=text]:focus, textarea:focus, select:focus {
 .seo-label { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 4px; }
 .seo-text { font-size: 0.79rem; line-height: 1.57; color: var(--text); }
 
+/* TAGS BLOCK */
+.tags-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tags-group {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 12px 14px;
+}
+.tags-group-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.tags-group-label {
+  font-size: 0.59rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--dim);
+}
+.tags-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  color: var(--teal);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: border-color 0.12s, background-color 0.12s;
+  flex-shrink: 0;
+}
+.tags-copy-btn:hover { border-color: var(--teal); background: rgba(59,34,204,0.06); }
+.tags-copy-btn.copied { color: #1a7a45; border-color: rgba(34,180,100,0.4); background: rgba(34,180,100,0.08); }
+.tags-copybox {
+  width: 100%;
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 9px 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--text);
+  resize: vertical;
+  min-height: 46px;
+  cursor: text;
+}
+.tags-copybox:focus { border-color: var(--orange); outline: none; }
+.tags-copy-all { display: flex; justify-content: flex-end; }
+
+/* CORRECTIONS NOTICE */
+.fix-box {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(210, 140, 30, 0.06);
+  border: 1px solid rgba(210, 140, 30, 0.25);
+  border-radius: var(--r2);
+  padding: 12px 14px;
+}
+.fix-label { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #8a5a00; margin-bottom: 4px; }
+.fix-text { font-size: 0.79rem; line-height: 1.57; color: var(--text); }
+
+/* TOGGLE SWITCH */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  cursor: pointer;
+  user-select: none;
+  height: 100%;
+}
+.toggle-switch {
+  position: relative;
+  width: 34px; height: 19px;
+  flex-shrink: 0;
+  background: var(--border2);
+  border-radius: 20px;
+  transition: background-color 0.16s;
+}
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 15px; height: 15px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.16s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.toggle-row.on .toggle-switch { background: var(--orange); }
+.toggle-row.on .toggle-switch::after { transform: translateX(15px); }
+.toggle-text { font-size: 0.76rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+.toggle-text small { display: block; font-size: 0.63rem; font-weight: 500; color: var(--dim); margin-top: 1px; }
+
 /* ──────────── RESPONSIVE ──────────── */
 @media(max-width: 640px) {
   .hdr { padding: 0 16px; }
@@ -936,14 +1023,16 @@ input[type=text]:focus, textarea:focus, select:focus {
         </div>
 
         <div class="field">
-          <label>Output Language / Мова виводу</label>
-          <div class="lang-group" id="langGroup">
-            <div class="lang-opt on" onclick="setLang('en')">EN</div>
-            <div class="lang-opt" onclick="setLang('ua')">UA</div>
-            <div class="lang-opt" onclick="setLang('both')">Both</div>
+          <label>&nbsp;</label>
+          <div class="toggle-row on" id="webSearchToggle" onclick="toggleWebSearch()">
+            <div class="toggle-switch"></div>
+            <div class="toggle-text">
+              🌐 Актуальна інформація / Real-time info
+              <small>Пошук трендів, тегів і назв через веб-пошук</small>
+            </div>
           </div>
           <div style="margin-top:7px;font-size:0.63rem;color:var(--dim);line-height:1.45">
-            Screen text always EN + UA / Текст на екрані завжди EN + UA
+            Результат завжди англійською + українською / Output is always EN + UA
           </div>
         </div>
       </div>
@@ -1023,10 +1112,10 @@ input[type=text]:focus, textarea:focus, select:focus {
 </div>
 
 <script>
-let lang = 'en';
 let curTpl = null;
 let imgB64 = null;
 let currentProvider = 'gemini'; // 'gemini' | 'claude'
+let useWebSearch = true;
 let templates = JSON.parse(localStorage.getItem('bc_tpl') || '[]');
 let history   = JSON.parse(localStorage.getItem('bc_hist') || '[]');
 
@@ -1055,6 +1144,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Restore last used provider
   const lastProvider = localStorage.getItem('bc_provider');
   if (lastProvider) switchProvider(lastProvider);
+
+  // Restore web-search preference (defaults to ON)
+  const ws = localStorage.getItem('bc_websearch');
+  useWebSearch = ws === null ? true : ws === '1';
+  document.getElementById('webSearchToggle').classList.toggle('on', useWebSearch);
 
   renderTpls();
   renderHist();
@@ -1115,10 +1209,10 @@ function switchTab(id) {
   document.getElementById('pg-'+id).classList.add('on');
 }
 
-function setLang(l) {
-  lang = l;
-  const opts = document.querySelectorAll('.lang-opt');
-  ['en','ua','both'].forEach((x,i) => opts[i].classList.toggle('on', x === l));
+function toggleWebSearch() {
+  useWebSearch = !useWebSearch;
+  localStorage.setItem('bc_websearch', useWebSearch ? '1' : '0');
+  document.getElementById('webSearchToggle').classList.toggle('on', useWebSearch);
 }
 
 function handleImg(e) { const f = e.target.files[0]; if(f) loadFile(f); }
@@ -1218,17 +1312,21 @@ function historyContext() {
 }
 
 // ──────────── MAIN PROMPT builder ────────────
-function buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl) {
+function buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl, webSearchOn) {
   const seqMap = {
-    'hook_case_slow_fast_outro':    '1.Hook(preview) 2.Show case 3.Slow exec 4.Fast exec 5.Outro/CTA',
-    'hook_fast_slow_explain_outro': '1.Hook(preview) 2.Fast exec 3.Slow exec 4.Brief explain 5.Outro/CTA'
+    'hook_case_slow_fast_outro':    '1.Hook(preview) 2.Show case 3.SLOW-MOTION exec 4.Fast exec 5.Outro/CTA',
+    'hook_fast_slow_explain_outro': '1.Hook(preview) 2.Fast exec 3.SLOW-MOTION exec 4.Brief explain 5.Outro/CTA'
   };
   const seqRule = seqMap[tpl.sequence || 'hook_case_slow_fast_outro'];
   const hCtx    = historyContext();
 
+  const webSearchBlock = webSearchOn
+    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check what is CURRENTLY trending on YouTube Shorts / TikTok for speedcubing and CFOP content right now (trending sounds/formats, popular phrasing, currently-ranking hashtags and keywords). Let the titles, tags and SEO tip reflect what is actually working right now, not generic evergreen advice. If search is unavailable for some reason, fall back to strong evergreen best practice instead of guessing at "current" facts.`
+    : '';
+
   return `You are an expert YouTube Shorts producer for the speedcubing channel "${tpl.channel || 'BrainCube'}".
 
-Video details:
+Video details (raw user input — see AUTO-CORRECT rule below):
 - Type: ${contentType}
 - Algorithm: ${algorithm}
 - Case/Slot: ${caseSlot || 'N/A'}
@@ -1237,7 +1335,13 @@ Video details:
 - Title style: ${tpl.titleStyle || 'hook'}
 - CTA: ${tpl.cta || 'Subscribe for more CFOP tips!'}
 - Base hashtags: ${tpl.hashtags || '#Shorts #Speedcubing'}
-${hCtx}
+${hCtx}${webSearchBlock}
+
+AUTO-CORRECT RULE (very important):
+The fields above were typed quickly by a human and may contain typos, wrong WCA notation (missing apostrophes, wrong letters, stray spaces), misspelled cube model names, or Ukrainian/English mixed together in any field regardless of which field it is. Silently fix all of this yourself and use the corrected version everywhere in the output (title, description, algorithm shown on screen, cube name, etc). Do not ask the user anything — just produce the corrected result. If you made any non-trivial correction (e.g. fixed the algorithm notation, fixed a cube model name, fixed a typo that changes meaning), summarize briefly in Ukrainian in the "corrections" field what you fixed. If nothing needed fixing, return "corrections": "".
+
+LANGUAGE RULE (very important):
+Input fields may be written in English, Ukrainian, or a mix — this makes no difference. You must ALWAYS produce a complete, natural, correctly translated version in BOTH English and Ukrainian for every bilingual field below, regardless of what language the user typed in. Never leave an untranslated or half-translated phrase in either language version. The only exceptions are the algorithm notation itself (universal WCA notation, e.g. R U R' U') and cube brand/model names, which stay as-is in both languages.
 
 STRICT RULES:
 1. EXACTLY 5 frames. Sequence: [${seqRule}]
@@ -1246,11 +1350,16 @@ STRICT RULES:
 4. EN fields → English only. UA fields → Ukrainian only. visualsUA and seoTip → Ukrainian.
 5. Do NOT repeat topics/titles from history above.
 6. VOICE (voiceEN / voiceUA): 1 short sentence per frame, MAX 12 words. Talk about the CONCEPT and FEELING, NEVER read out the algorithm notation aloud. The algorithm is shown visually, not spoken.
-7. SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of screenTextEN.
+7. SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of the main line.
+   EXCEPTION — the frame marked SLOW-MOTION exec in the sequence above: its subtitle line (second line) MUST be the corrected algorithm notation itself (e.g. "R U R' U'"), NEVER a generic phrase like "Watch closely". The main line above it can still be a punchy ALL CAPS phrase (e.g. "SMOOTH INSERT"). In screenTextUA for this same frame, keep the main line translated to Ukrainian, but the subtitle stays the exact same algorithm notation (notation is not translated).
 8. VISUALS (visualsUA): 1 action sentence per frame only.
+9. TAGS (tagsUniversal / tagsSpecific): return each as a JSON ARRAY of separate short lowercase keyword strings, NO "#" symbol, one tag per array element (do NOT put several tags inside one string, do NOT run words together without separation).
+   - tagsUniversal: 15-20 broad tags that fit ANY speedcubing/CFOP Shorts video on this channel (e.g. "speedcubing", "rubik's cube", "cubing", "cfop", "wca", "cuber", "algorithm tutorial", "shorts").
+   - tagsSpecific: 10-15 tags specific to THIS exact video (the algorithm, the case/slot, the cube model, the content type: ${contentType}).
 
 Return ONLY valid JSON (no markdown, no extra text):
 {
+  "corrections": "Коротко що було виправлено, або порожній рядок",
   "titleEN": "Catchy English title 5-8 words",
   "titleUA": "Цікавий заголовок 5-8 слів",
   "titleTagsEN": "#Tag1 #Tag2 #Tag3",
@@ -1260,18 +1369,24 @@ Return ONLY valid JSON (no markdown, no extra text):
   "visualsUA": ["1 дія","1 дія","1 дія","1 дія","1 дія"],
   "voiceEN": ["1 short sentence","1 short sentence","1 short sentence","1 short sentence","1 short sentence"],
   "voiceUA": ["1 коротке речення","1 коротке речення","1 коротке речення","1 коротке речення","1 коротке речення"],
-  "screenTextEN": ["MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle"],
-  "screenTextUA": ["ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок"],
+  "screenTextEN": ["MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle (algorithm notation on the SLOW-MOTION frame)","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle"],
+  "screenTextUA": ["ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nAлгоритм (same notation, on the SLOW-MOTION frame)","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок"],
+  "tagsUniversal": ["speedcubing", "rubik's cube", "cubing", "cfop", "wca", "..."],
+  "tagsSpecific": ["f2l tips", "front right slot", "gan14", "..."],
   "seoTip": "Коротка SEO порада"
 }`;
 }
 
 // ──────────── GEMINI API call ────────────
-async function callGemini(prompt, apiKey) {
+async function callGemini(prompt, apiKey, webSearchOn) {
   const model = document.getElementById('geminiModel').value;
   const body = imgB64
     ? { contents: [{ parts: [{ inline_data: { mime_type: 'image/jpeg', data: imgB64 } }, { text: prompt }] }] }
     : { contents: [{ parts: [{ text: prompt }] }] };
+
+  if (webSearchOn) {
+    body.tools = [{ google_search: {} }];
+  }
 
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
@@ -1279,12 +1394,14 @@ async function callGemini(prompt, apiKey) {
   );
   if (!res.ok) throw new Error((await res.json()).error?.message || `Gemini HTTP ${res.status}`);
   const data = await res.json();
-  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  // With grounding enabled the model may return several parts (text + grounding refs) — join all text parts
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  const raw = parts.map(p => p.text || '').join('');
   return JSON.parse(raw.replace(/```json|```/g, '').trim());
 }
 
 // ──────────── CLAUDE API call ────────────
-async function callClaude(prompt, apiKey) {
+async function callClaude(prompt, apiKey, webSearchOn) {
   const model = document.getElementById('claudeModel').value;
 
   // Build message content — with or without image
@@ -1298,6 +1415,15 @@ async function callClaude(prompt, apiKey) {
     userContent = prompt;
   }
 
+  const reqBody = {
+    model,
+    max_tokens: 2000,
+    messages: [{ role: 'user', content: userContent }]
+  };
+  if (webSearchOn) {
+    reqBody.tools = [{ type: 'web_search_20250305', name: 'web_search' }];
+  }
+
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -1306,11 +1432,7 @@ async function callClaude(prompt, apiKey) {
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-calls': 'true'
     },
-    body: JSON.stringify({
-      model,
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: userContent }]
-    })
+    body: JSON.stringify(reqBody)
   });
 
   if (!res.ok) {
@@ -1318,7 +1440,9 @@ async function callClaude(prompt, apiKey) {
     throw new Error(err.error?.message || `Claude HTTP ${res.status}`);
   }
   const data = await res.json();
-  const raw = data.content?.[0]?.text || '';
+  // With web_search enabled, content can include tool_use/tool_result blocks alongside text —
+  // gather every text block (there may be several) instead of assuming content[0] is text.
+  const raw = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
   return JSON.parse(raw.replace(/```json|```/g, '').trim());
 }
 
@@ -1346,14 +1470,14 @@ async function generate() {
   const cubeUsed = document.getElementById('cubeUsed').value.trim();
   const caseSlot = document.getElementById('caseSlot').value.trim();
   const notes    = document.getElementById('notes').value.trim();
-  const prompt   = buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl);
+  const prompt   = buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl, useWebSearch);
 
   try {
     let d;
     if (currentProvider === 'gemini') {
-      d = await callGemini(prompt, apiKey);
+      d = await callGemini(prompt, apiKey, useWebSearch);
     } else {
-      d = await callClaude(prompt, apiKey);
+      d = await callClaude(prompt, apiKey, useWebSearch);
     }
 
     renderResult(d);
@@ -1380,16 +1504,23 @@ async function generate() {
 }
 
 function renderResult(d) {
-  const showEN   = lang === 'en'   || lang === 'both';
-  const showUA   = lang === 'ua'   || lang === 'both';
-  const showBoth = lang === 'both';
-
   document.getElementById('modalHead').textContent = d.titleEN || d.titleUA || 'Result';
 
-  // Titles
-  let titlesHtml = '';
-  if (showBoth) {
-    titlesHtml = `<div class="title-cards">
+  // Corrections notice (only if the AI actually fixed something)
+  let fixHtml = '';
+  if (d.corrections && String(d.corrections).trim()) {
+    fixHtml = `<div class="out-section">
+      <div class="fix-box">
+        <div>
+          <div class="fix-label">⚠ Автовиправлення / Auto-corrected</div>
+          <div class="fix-text">${esc(d.corrections)}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Titles — always both languages
+  let titlesHtml = `<div class="title-cards">
       <div class="title-card en">
         <div class="title-card-lang">EN — English</div>
         <div class="title-card-text">${esc(d.titleEN)}</div>
@@ -1401,24 +1532,9 @@ function renderResult(d) {
         ${d.titleTagsUA ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--teal)">${esc(d.titleTagsUA)}</div>` : ''}
       </div>
     </div>`;
-  } else if (showEN) {
-    titlesHtml = `<div class="title-cards"><div class="title-card en" style="grid-column:1/-1">
-      <div class="title-card-lang">EN — English</div>
-      <div class="title-card-text">${esc(d.titleEN)}</div>
-      ${d.titleTagsEN ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--muted)">${esc(d.titleTagsEN)}</div>` : ''}
-    </div></div>`;
-  } else {
-    titlesHtml = `<div class="title-cards"><div class="title-card ua" style="grid-column:1/-1">
-      <div class="title-card-lang">UA — Українська</div>
-      <div class="title-card-text">${esc(d.titleUA)}</div>
-      ${d.titleTagsUA ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--teal)">${esc(d.titleTagsUA)}</div>` : ''}
-    </div></div>`;
-  }
 
-  // Descriptions
-  let descHtml = '';
-  if (showBoth) {
-    descHtml = `<div class="desc-wrap">
+  // Descriptions — always both languages
+  let descHtml = `<div class="desc-wrap">
       <div class="desc-col">
         <span class="desc-lang">EN — English</span>
         <div class="desc-body">${esc(d.descriptionEN)}</div>
@@ -1428,13 +1544,37 @@ function renderResult(d) {
         <div class="desc-body">${esc(d.descriptionUA)}</div>
       </div>
     </div>`;
-  } else {
-    const isEN = showEN;
-    descHtml = `<div class="desc-wrap"><div class="desc-col" style="grid-column:1/-1;border-right:none">
-      <span class="desc-lang">${isEN ? 'EN — English' : 'UA — Українська'}</span>
-      <div class="desc-body">${esc(isEN ? d.descriptionEN : d.descriptionUA)}</div>
-    </div></div>`;
-  }
+
+  // Tags block — universal + specific, always shown as a plain comma-separated,
+  // easy-to-copy list (accepts array or comma-string from the AI, just in case).
+  const toTagArray = v => {
+    if (Array.isArray(v)) return v.map(t => String(t).trim()).filter(Boolean);
+    return String(v || '').split(',').map(t => t.trim()).filter(Boolean);
+  };
+  const universalTags = toTagArray(d.tagsUniversal);
+  const specificTags   = toTagArray(d.tagsSpecific);
+  const universalStr = universalTags.join(', ');
+  const specificStr  = specificTags.join(', ');
+
+  let tagsHtml = `<div class="tags-wrap">
+      <div class="tags-group">
+        <div class="tags-group-top">
+          <div class="tags-group-label">Універсальні / Universal (${universalTags.length})</div>
+          <button type="button" class="tags-copy-btn" onclick="copyTagsBox(this, 'tagsBoxUniversal')">⧉ Копіювати</button>
+        </div>
+        <textarea class="tags-copybox" id="tagsBoxUniversal" readonly rows="2" onclick="this.select()">${esc(universalStr)}</textarea>
+      </div>
+      <div class="tags-group">
+        <div class="tags-group-top">
+          <div class="tags-group-label">Для цього відео / Specific (${specificTags.length})</div>
+          <button type="button" class="tags-copy-btn" onclick="copyTagsBox(this, 'tagsBoxSpecific')">⧉ Копіювати</button>
+        </div>
+        <textarea class="tags-copybox" id="tagsBoxSpecific" readonly rows="2" onclick="this.select()">${esc(specificStr)}</textarea>
+      </div>
+      <div class="tags-copy-all">
+        <button type="button" class="tags-copy-btn" onclick="copyAllTags(this)">⧉ Копіювати всі разом / Copy all combined</button>
+      </div>
+    </div>`;
 
   // Scene rows
   let rows = '';
@@ -1477,6 +1617,7 @@ function renderResult(d) {
   }
 
   document.getElementById('modalBody').innerHTML = `
+    ${fixHtml}
     <div class="out-section">
       <div class="out-label"><span>Title</span></div>
       ${titlesHtml}
@@ -1484,6 +1625,10 @@ function renderResult(d) {
     <div class="out-section">
       <div class="out-label"><span>Description</span></div>
       ${descHtml}
+    </div>
+    <div class="out-section">
+      <div class="out-label"><span>Tags</span> / Теги</div>
+      ${tagsHtml}
     </div>
     <div class="out-section">
       <div class="out-label"><span>Scene Script</span> — Rule of 5</div>
@@ -1593,6 +1738,53 @@ function esc(s) {
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/\n/g,'<br>');
 }
+
+// ── COPY TO CLIPBOARD (tags) ──
+function copyTextToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  // Fallback for file:// or non-secure contexts where the Clipboard API is blocked
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      resolve();
+    } catch (e) {
+      reject(e);
+    } finally {
+      document.body.removeChild(ta);
+    }
+  });
+}
+function flashCopied(btn) {
+  const original = btn.textContent;
+  btn.classList.add('copied');
+  btn.textContent = '✓ Скопійовано';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 1600);
+}
+function copyTagsBox(btn, boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  copyTextToClipboard(box.value)
+    .then(() => flashCopied(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+function copyAllTags(btn) {
+  const u = document.getElementById('tagsBoxUniversal')?.value || '';
+  const s = document.getElementById('tagsBoxSpecific')?.value || '';
+  const combined = [u, s].filter(Boolean).join(', ');
+  copyTextToClipboard(combined)
+    .then(() => flashCopied(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+
 function toast(msg, type) {
   const el = document.getElementById('toastMsg');
   el.textContent = msg;
