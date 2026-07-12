@@ -617,6 +617,26 @@ input[type=text]:focus, textarea:focus, select:focus {
 .title-card-lang { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px; color: var(--dim); margin-bottom: 6px; }
 .title-card-text { font-weight: 700; font-size: 0.97rem; line-height: 1.35; color: var(--text); }
 .title-card.ua .title-card-text { color: var(--teal); }
+.title-card-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.title-card-actions .tags-copy-btn { font-size: 0.63rem; padding: 3px 9px; }
+
+/* Per-line copy button inside checklists */
+.line-copy-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background-color 0.12s;
+}
+.line-copy-btn:hover { border-color: var(--orange); color: var(--orange); }
+.line-copy-btn.copied { color: #1a7a45; border-color: rgba(34,180,100,0.4); background: rgba(34,180,100,0.08); }
 
 /* Descriptions */
 .desc-wrap {
@@ -878,6 +898,34 @@ input[type=text]:focus, textarea:focus, select:focus {
 .toggle-text { font-size: 0.76rem; font-weight: 600; color: var(--text); line-height: 1.3; }
 .toggle-text small { display: block; font-size: 0.63rem; font-weight: 500; color: var(--dim); margin-top: 1px; }
 
+/* MODE SWITCH (algorithm vs free-topic) */
+.mode-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.mode-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 12px;
+  border-radius: var(--r2);
+  border: 1.5px solid var(--border);
+  background: var(--s2);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background-color 0.12s;
+  user-select: none;
+  text-align: center;
+}
+.mode-tab:hover { border-color: var(--orange); color: var(--orange); }
+.mode-tab.on { border-color: var(--orange); background: rgba(92,61,245,0.08); color: var(--orange); }
+.mode-icon { font-size: 1rem; line-height: 1; }
+
 /* ──────────── RESPONSIVE ──────────── */
 @media(max-width: 640px) {
   .hdr { padding: 0 16px; }
@@ -892,6 +940,7 @@ input[type=text]:focus, textarea:focus, select:focus {
   .hdr-name .part-cube { font-size: 1rem; }
   .chk-cols { grid-template-columns: 1fr; }
   .provider-tabs { flex-wrap: wrap; }
+  .mode-tabs { flex-direction: column; }
 }
 </style>
 </head>
@@ -975,37 +1024,85 @@ input[type=text]:focus, textarea:focus, select:focus {
     <div class="panel">
       <div class="panel-head"><div class="pip"></div>Video Parameters / Параметри відео</div>
 
+      <div class="mode-tabs">
+        <div class="mode-tab on" id="modeTab-algo" onclick="switchMode('algo')">
+          <span class="mode-icon">🧩</span>Algorithm tutorial / Алгоритм
+        </div>
+        <div class="mode-tab" id="modeTab-topic" onclick="switchMode('topic')">
+          <span class="mode-icon">💬</span>Free topic / Довільна тема
+        </div>
+      </div>
+
+      <!-- ALGORITHM MODE FIELDS -->
+      <div id="algoFields">
+        <div class="row2">
+          <div class="field">
+            <label>Content Type / Тип контенту</label>
+            <select id="contentType">
+              <option value="f2l">F2L Tips</option>
+              <option value="oll">OLL</option>
+              <option value="pll">PLL</option>
+              <option value="fingertricks">Fingertricks</option>
+              <option value="method">Tutorial / Навчання</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Algorithm / Алгоритм</label>
+            <input type="text" id="algorithm" placeholder="(R U' R' U') R U R'..." />
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>Slot / Case — Слот / Кейс</label>
+            <input type="text" id="caseSlot" placeholder="front-right slot..." />
+          </div>
+          <div class="field">
+            <label>Cube / Кубик</label>
+            <input type="text" id="cubeUsed" placeholder="GAN 14, MoYu WRM..." />
+          </div>
+        </div>
+      </div>
+
+      <!-- FREE TOPIC MODE FIELDS -->
+      <div id="topicFields" style="display:none">
+        <div class="row2">
+          <div class="field">
+            <label>Topic Category / Категорія теми</label>
+            <select id="topicCategory">
+              <option value="qa">Q&amp;A / Питання-відповідь</option>
+              <option value="story">Story / Особиста історія</option>
+              <option value="opinion">Opinion / Думка</option>
+              <option value="challenge">Challenge / Челендж</option>
+              <option value="advice">Advice / Порада</option>
+              <option value="other">Other / Інше</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Topic / Тема відео</label>
+            <input type="text" id="topic" placeholder="Який був ваш перший кубик рубика?..." />
+          </div>
+        </div>
+        <div class="field">
+          <label>Cube (optional) / Кубик (не обов'язково)</label>
+          <input type="text" id="topicCube" placeholder="GAN 14, MoYu WRM... (якщо релевантно)" />
+        </div>
+      </div>
+
       <div class="row2">
         <div class="field">
-          <label>Content Type / Тип контенту</label>
-          <select id="contentType">
-            <option value="f2l">F2L Tips</option>
-            <option value="oll">OLL</option>
-            <option value="pll">PLL</option>
-            <option value="fingertricks">Fingertricks</option>
-            <option value="method">Tutorial / Навчання</option>
+          <label>Duration / Тривалість</label>
+          <select id="duration">
+            <option value="15">~15 сек · 3 кадри</option>
+            <option value="30" selected>~30 сек · 5 кадрів</option>
+            <option value="45">~45 сек · 6 кадрів</option>
+            <option value="60">~60 сек · 7 кадрів</option>
           </select>
         </div>
         <div class="field">
-          <label>Algorithm / Алгоритм</label>
-          <input type="text" id="algorithm" placeholder="(R U' R' U') R U R'..." />
+          <label>Notes / Нотатки</label>
+          <input type="text" id="notes" placeholder="effective trick, beginner-friendly..." />
         </div>
-      </div>
-
-      <div class="row2">
-        <div class="field">
-          <label>Slot / Case — Слот / Кейс</label>
-          <input type="text" id="caseSlot" placeholder="front-right slot..." />
-        </div>
-        <div class="field">
-          <label>Cube / Кубик</label>
-          <input type="text" id="cubeUsed" placeholder="GAN 14, MoYu WRM..." />
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Notes / Нотатки</label>
-        <input type="text" id="notes" placeholder="effective trick, beginner-friendly..." />
       </div>
 
       <div class="row2">
@@ -1060,7 +1157,7 @@ input[type=text]:focus, textarea:focus, select:focus {
             </select>
           </div>
           <div class="field">
-            <label>Sequence / Послідовність (5 frames)</label>
+            <label>Sequence / Послідовність (тільки для режиму "Алгоритм")</label>
             <select id="tplSequence">
               <option value="hook_case_slow_fast_outro">Hook→Case→Slow→Fast→Outro</option>
               <option value="hook_fast_slow_explain_outro">Hook→Fast→Slow→Explain→Outro</option>
@@ -1114,7 +1211,10 @@ input[type=text]:focus, textarea:focus, select:focus {
 <script>
 let curTpl = null;
 let imgB64 = null;
+let lastResult = null;
+let lastTitleEN = '', lastTitleUA = '', lastTitleHashtags = '';
 let currentProvider = 'gemini'; // 'gemini' | 'claude'
+let currentMode = 'algo'; // 'algo' | 'topic'
 let useWebSearch = true;
 let templates = JSON.parse(localStorage.getItem('bc_tpl') || '[]');
 let history   = JSON.parse(localStorage.getItem('bc_hist') || '[]');
@@ -1168,6 +1268,21 @@ function switchProvider(p) {
   document.getElementById('fields-claude').style.display = p === 'claude' ? 'flex' : 'none';
   document.getElementById('info-gemini').style.display   = p === 'gemini' ? 'flex' : 'none';
   document.getElementById('info-claude').style.display   = p === 'claude' ? 'flex' : 'none';
+}
+
+// ── MODE SWITCHING (algorithm tutorial vs free topic) ──
+function switchMode(m) {
+  currentMode = m;
+  document.getElementById('modeTab-algo').classList.toggle('on', m === 'algo');
+  document.getElementById('modeTab-topic').classList.toggle('on', m === 'topic');
+  document.getElementById('algoFields').style.display  = m === 'algo'  ? 'block' : 'none';
+  document.getElementById('topicFields').style.display = m === 'topic' ? 'block' : 'none';
+}
+
+// ── DURATION → FRAME COUNT ──
+function frameCountForDuration(sec) {
+  const map = { 15: 3, 30: 5, 45: 6, 60: 7 };
+  return map[sec] || 5;
 }
 
 function updateKeyHint(provider, saved) {
@@ -1305,74 +1420,115 @@ function renderTpls() {
 
 function historyContext() {
   if (!history.length) return '';
-  const list = history.slice(0, 10).map((h,i) =>
-    `${i+1}. "${h.titleUA || h.titleEN}" (${h.contentType}, algo: ${h.algorithm || 'N/A'})`
-  ).join('\n');
+  const list = history.slice(0, 10).map((h,i) => {
+    const subject = h.mode === 'topic' ? `topic: ${h.topic || 'N/A'}` : `algo: ${h.algorithm || 'N/A'}`;
+    return `${i+1}. "${h.titleUA || h.titleEN}" (${h.contentType || h.mode}, ${subject})`;
+  }).join('\n');
   return `\n\nIMPORTANT — LAST ${Math.min(history.length,10)} GENERATED VIDEOS (do NOT repeat these topics or titles):\n${list}`;
 }
 
 // ──────────── MAIN PROMPT builder ────────────
-function buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl, webSearchOn) {
-  const seqMap = {
-    'hook_case_slow_fast_outro':    '1.Hook(preview) 2.Show case 3.SLOW-MOTION exec 4.Fast exec 5.Outro/CTA',
-    'hook_fast_slow_explain_outro': '1.Hook(preview) 2.Fast exec 3.SLOW-MOTION exec 4.Brief explain 5.Outro/CTA'
-  };
-  const seqRule = seqMap[tpl.sequence || 'hook_case_slow_fast_outro'];
-  const hCtx    = historyContext();
+function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
+  const hCtx = historyContext();
+  const isAlgo = mode === 'algo';
 
   const webSearchBlock = webSearchOn
-    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check what is CURRENTLY trending on YouTube Shorts / TikTok for speedcubing and CFOP content right now (trending sounds/formats, popular phrasing, currently-ranking hashtags and keywords). Let the titles, tags and SEO tip reflect what is actually working right now, not generic evergreen advice. If search is unavailable for some reason, fall back to strong evergreen best practice instead of guessing at "current" facts.`
+    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check what is CURRENTLY trending on YouTube Shorts / TikTok for speedcubing content right now (trending sounds/formats, popular phrasing, currently-ranking hashtags and keywords). Let the titles, tags and SEO tip reflect what is actually working right now, not generic evergreen advice. If search is unavailable for some reason, fall back to strong evergreen best practice instead of guessing at "current" facts.`
     : '';
+
+  // ── Sequence / structure rule — DIFFERS by mode ──
+  let seqRule;
+  if (isAlgo) {
+    const seqMap = {
+      'hook_case_slow_fast_outro':    'Hook(preview) → Show case → SLOW-MOTION exec → Fast exec → Outro/CTA',
+      'hook_fast_slow_explain_outro': 'Hook(preview) → Fast exec → SLOW-MOTION exec → Brief explain → Outro/CTA'
+    };
+    const baseSeq = seqMap[tpl.sequence || 'hook_case_slow_fast_outro'];
+    seqRule = `Use EXACTLY ${frameCount} frames. This IS an algorithm tutorial: the sequence MUST include one frame that is an explicit SLOW-MOTION execution of the algorithm and one frame that is a normal-speed/fast execution of the algorithm, framed by a Hook (first frame) and an Outro/CTA (last frame). Base pattern for 5 frames: [${baseSeq}]. If ${frameCount} is not 5, keep the same spirit (hook → case/context → slow-motion exec → fast exec → any extra detail/explain frames → outro) and distribute it evenly across exactly ${frameCount} frames.`;
+  } else {
+    seqRule = `Use EXACTLY ${frameCount} frames. This is a FREE-TOPIC / talking-point video, NOT an algorithm tutorial — do NOT use a "slow motion vs fast execution" demonstration structure, there is no algorithm being demonstrated. Instead use a natural narrative arc: Hook (first frame) → develop the topic/answer/story naturally across the middle frames → Outro/CTA (last frame). Frames should feel like a personal, conversational short, not a technique breakdown.`;
+  }
+
+  // ── Subject-specific input block ──
+  let subjectBlock, autoCorrectNote, descAlgoLine;
+  if (isAlgo) {
+    subjectBlock = `- Type: ${fields.contentType}
+- Algorithm: ${fields.algorithm}
+- Case/Slot: ${fields.caseSlot || 'N/A'}
+- Cube: ${fields.cubeUsed || 'N/A'}
+- Notes: ${fields.notes || 'N/A'}`;
+    autoCorrectNote = `The fields above were typed quickly by a human and may contain typos, wrong WCA notation (missing apostrophes, wrong letters, stray spaces), misspelled cube model names, or Ukrainian/English mixed together in any field regardless of which field it is.`;
+    descAlgoLine = `\\nAlgorithm: ${fields.algorithm}\\nCube: ${fields.cubeUsed || 'N/A'}`;
+  } else {
+    subjectBlock = `- Topic category: ${fields.topicCategory}
+- Topic: ${fields.topic}
+- Cube mentioned (optional): ${fields.topicCube || 'N/A'}
+- Notes: ${fields.notes || 'N/A'}`;
+    autoCorrectNote = `The fields above were typed quickly by a human and may contain typos or Ukrainian/English mixed together in any field regardless of which field it is.`;
+    descAlgoLine = fields.topicCube ? `\\nCube: ${fields.topicCube}` : '';
+  }
+
+  // ── Voice/screen-text rule — the SLOW-MOTION notation exception only applies to algo mode ──
+  const screenTextRule = isAlgo
+    ? `SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of the main line.
+   EXCEPTION — the frame that is the SLOW-MOTION exec in the sequence: its subtitle line (second line) MUST be the corrected algorithm notation itself (e.g. "R U R' U'"), NEVER a generic phrase like "Watch closely". The main line above it can still be a punchy ALL CAPS phrase (e.g. "SMOOTH INSERT"). In screenTextUA for this same frame, keep the main line translated to Ukrainian, but the subtitle stays the exact same algorithm notation (notation is not translated).`
+    : `SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle per frame. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of both lines (no algorithm notation involved in this mode — everything gets translated normally).`;
+
+  const voiceRule = isAlgo
+    ? `VOICE (voiceEN / voiceUA): 1 short sentence per frame, MAX 12 words. Talk about the CONCEPT and FEELING, NEVER read out the algorithm notation aloud. The algorithm is shown visually, not spoken.`
+    : `VOICE (voiceEN / voiceUA): 1 short, natural, conversational sentence per frame, MAX 14 words, as if talking directly to camera about the topic.`;
+
+  const tagsSpecificHint = isAlgo
+    ? `tagsSpecific: 10-15 tags specific to THIS exact video (the algorithm, the case/slot, the cube model, the content type: ${fields.contentType}).`
+    : `tagsSpecific: 10-15 tags specific to THIS exact video (the topic itself, the topic category: ${fields.topicCategory}, and the cube model if one was mentioned).`;
+
+  // Build placeholder arrays of the right length for the example JSON block
+  const arr = (val) => JSON.stringify(Array.from({ length: frameCount }, () => val));
 
   return `You are an expert YouTube Shorts producer for the speedcubing channel "${tpl.channel || 'BrainCube'}".
 
+Video mode: ${isAlgo ? 'ALGORITHM TUTORIAL' : 'FREE TOPIC (no algorithm)'}
+
 Video details (raw user input — see AUTO-CORRECT rule below):
-- Type: ${contentType}
-- Algorithm: ${algorithm}
-- Case/Slot: ${caseSlot || 'N/A'}
-- Cube: ${cubeUsed || 'N/A'}
-- Notes: ${notes || 'N/A'}
+${subjectBlock}
 - Title style: ${tpl.titleStyle || 'hook'}
 - CTA: ${tpl.cta || 'Subscribe for more CFOP tips!'}
 - Base hashtags: ${tpl.hashtags || '#Shorts #Speedcubing'}
 ${hCtx}${webSearchBlock}
 
 AUTO-CORRECT RULE (very important):
-The fields above were typed quickly by a human and may contain typos, wrong WCA notation (missing apostrophes, wrong letters, stray spaces), misspelled cube model names, or Ukrainian/English mixed together in any field regardless of which field it is. Silently fix all of this yourself and use the corrected version everywhere in the output (title, description, algorithm shown on screen, cube name, etc). Do not ask the user anything — just produce the corrected result. If you made any non-trivial correction (e.g. fixed the algorithm notation, fixed a cube model name, fixed a typo that changes meaning), summarize briefly in Ukrainian in the "corrections" field what you fixed. If nothing needed fixing, return "corrections": "".
+${autoCorrectNote} Silently fix all of this yourself and use the corrected version everywhere in the output. Do not ask the user anything — just produce the corrected result. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field what you fixed. If nothing needed fixing, return "corrections": "".
 
 LANGUAGE RULE (very important):
-Input fields may be written in English, Ukrainian, or a mix — this makes no difference. You must ALWAYS produce a complete, natural, correctly translated version in BOTH English and Ukrainian for every bilingual field below, regardless of what language the user typed in. Never leave an untranslated or half-translated phrase in either language version. The only exceptions are the algorithm notation itself (universal WCA notation, e.g. R U R' U') and cube brand/model names, which stay as-is in both languages.
+Input fields may be written in English, Ukrainian, or a mix — this makes no difference. You must ALWAYS produce a complete, natural, correctly translated version in BOTH English and Ukrainian for every bilingual field below, regardless of what language the user typed in. Never leave an untranslated or half-translated phrase in either language version.${isAlgo ? ' The only exceptions are the algorithm notation itself (universal WCA notation, e.g. R U R\' U\') and cube brand/model names, which stay as-is in both languages.' : ' The only exception is cube brand/model names, which stay as-is in both languages.'}
 
 STRICT RULES:
-1. EXACTLY 5 frames. Sequence: [${seqRule}]
-2. Title: 5-8 words, catchy. NEVER include the algorithm notation in the title.
+1. STRUCTURE: ${seqRule}
+2. Title: 5-8 words, catchy.${isAlgo ? ' NEVER include the algorithm notation in the title.' : ''}
 3. descriptionEN and descriptionUA must end with 6-8 hashtags.
 4. EN fields → English only. UA fields → Ukrainian only. visualsUA and seoTip → Ukrainian.
 5. Do NOT repeat topics/titles from history above.
-6. VOICE (voiceEN / voiceUA): 1 short sentence per frame, MAX 12 words. Talk about the CONCEPT and FEELING, NEVER read out the algorithm notation aloud. The algorithm is shown visually, not spoken.
-7. SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of the main line.
-   EXCEPTION — the frame marked SLOW-MOTION exec in the sequence above: its subtitle line (second line) MUST be the corrected algorithm notation itself (e.g. "R U R' U'"), NEVER a generic phrase like "Watch closely". The main line above it can still be a punchy ALL CAPS phrase (e.g. "SMOOTH INSERT"). In screenTextUA for this same frame, keep the main line translated to Ukrainian, but the subtitle stays the exact same algorithm notation (notation is not translated).
-8. VISUALS (visualsUA): 1 action sentence per frame only.
+6. ${voiceRule}
+7. ${screenTextRule}
+8. VISUALS (visualsUA): 1 action/shot-description sentence per frame only — what to actually film.
 9. TAGS (tagsUniversal / tagsSpecific): return each as a JSON ARRAY of separate short lowercase keyword strings, NO "#" symbol, one tag per array element (do NOT put several tags inside one string, do NOT run words together without separation).
-   - tagsUniversal: 15-20 broad tags that fit ANY speedcubing/CFOP Shorts video on this channel (e.g. "speedcubing", "rubik's cube", "cubing", "cfop", "wca", "cuber", "algorithm tutorial", "shorts").
-   - tagsSpecific: 10-15 tags specific to THIS exact video (the algorithm, the case/slot, the cube model, the content type: ${contentType}).
+   - tagsUniversal: 15-20 broad tags that fit ANY Shorts video on this channel (e.g. "speedcubing", "rubik's cube", "cubing", "cuber", "shorts").
+   - ${tagsSpecificHint}
 
-Return ONLY valid JSON (no markdown, no extra text):
+Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA MUST each contain EXACTLY ${frameCount} elements (one per frame):
 {
   "corrections": "Коротко що було виправлено, або порожній рядок",
   "titleEN": "Catchy English title 5-8 words",
   "titleUA": "Цікавий заголовок 5-8 слів",
-  "titleTagsEN": "#Tag1 #Tag2 #Tag3",
-  "titleTagsUA": "#Тег1 #Тег2 #Тег3",
-  "descriptionEN": "Hook line.\\n\\nAlgorithm: ${algorithm}\\nCube: ${cubeUsed || 'N/A'}\\n${tpl.cta || 'Subscribe!'}\\n\\n#Hashtags",
-  "descriptionUA": "Гачок.\\n\\nАлгоритм: ${algorithm}\\nКубик: ${cubeUsed || 'N/A'}\\n${tpl.cta || 'Subscribe!'}\\n\\n#Хештеги",
-  "visualsUA": ["1 дія","1 дія","1 дія","1 дія","1 дія"],
-  "voiceEN": ["1 short sentence","1 short sentence","1 short sentence","1 short sentence","1 short sentence"],
-  "voiceUA": ["1 коротке речення","1 коротке речення","1 коротке речення","1 коротке речення","1 коротке речення"],
-  "screenTextEN": ["MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle (algorithm notation on the SLOW-MOTION frame)","MAIN LINE\\nSubtitle","MAIN LINE\\nSubtitle"],
-  "screenTextUA": ["ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nAлгоритм (same notation, on the SLOW-MOTION frame)","ГОЛОВНИЙ\\nПідзаголовок","ГОЛОВНИЙ\\nПідзаголовок"],
-  "tagsUniversal": ["speedcubing", "rubik's cube", "cubing", "cfop", "wca", "..."],
-  "tagsSpecific": ["f2l tips", "front right slot", "gan14", "..."],
+  "descriptionEN": "Hook line.\\n\\n${descAlgoLine}\\n${tpl.cta || 'Subscribe!'}\\n\\n#Hashtags",
+  "descriptionUA": "Гачок.\\n\\n${descAlgoLine}\\n${tpl.cta || 'Subscribe!'}\\n\\n#Хештеги",
+  "visualsUA": ${arr('1 дія для цього кадру')},
+  "voiceEN": ${arr('1 short sentence')},
+  "voiceUA": ${arr('1 коротке речення')},
+  "screenTextEN": ${arr('MAIN LINE\\nSubtitle')},
+  "screenTextUA": ${arr('ГОЛОВНИЙ\\nПідзаголовок')},
+  "tagsUniversal": ["speedcubing", "rubik's cube", "cubing", "cuber", "shorts", "..."],
+  "tagsSpecific": ["...", "...", "..."],
   "seoTip": "Коротка SEO порада"
 }`;
 }
@@ -1448,9 +1604,23 @@ async function callClaude(prompt, apiKey, webSearchOn) {
 
 // ──────────── GENERATE ────────────
 async function generate() {
-  const algorithm   = document.getElementById('algorithm').value.trim();
-  const contentType = document.getElementById('contentType').value;
-  if (!algorithm) { toast('Введи алгоритм', 'err'); return; }
+  const notes   = document.getElementById('notes').value.trim();
+  const isAlgo  = currentMode === 'algo';
+
+  // Mode-specific fields + validation
+  let fields = { notes };
+  if (isAlgo) {
+    fields.algorithm   = document.getElementById('algorithm').value.trim();
+    fields.contentType = document.getElementById('contentType').value;
+    fields.caseSlot    = document.getElementById('caseSlot').value.trim();
+    fields.cubeUsed    = document.getElementById('cubeUsed').value.trim();
+    if (!fields.algorithm) { toast('Введи алгоритм', 'err'); return; }
+  } else {
+    fields.topic         = document.getElementById('topic').value.trim();
+    fields.topicCategory = document.getElementById('topicCategory').value;
+    fields.topicCube     = document.getElementById('topicCube').value.trim();
+    if (!fields.topic) { toast('Введи тему відео', 'err'); return; }
+  }
 
   // Get active API key
   let apiKey;
@@ -1466,11 +1636,10 @@ async function generate() {
   resetModalBody();
   document.getElementById('genBtn').disabled = true;
 
-  const tpl      = curTpl || {};
-  const cubeUsed = document.getElementById('cubeUsed').value.trim();
-  const caseSlot = document.getElementById('caseSlot').value.trim();
-  const notes    = document.getElementById('notes').value.trim();
-  const prompt   = buildPrompt(algorithm, contentType, caseSlot, cubeUsed, notes, tpl, useWebSearch);
+  const tpl         = curTpl || {};
+  const durationSec  = parseInt(document.getElementById('duration').value, 10) || 30;
+  const frameCount   = frameCountForDuration(durationSec);
+  const prompt       = buildPrompt(currentMode, fields, tpl, useWebSearch, frameCount);
 
   try {
     let d;
@@ -1484,7 +1653,11 @@ async function generate() {
 
     history.unshift({
       date: new Date().toLocaleString('uk-UA'),
-      algorithm, contentType,
+      mode: currentMode,
+      algorithm: fields.algorithm || '',
+      topic: fields.topic || '',
+      contentType: fields.contentType || fields.topicCategory || '',
+      durationSec,
       provider: currentProvider,
       titleEN: d.titleEN,
       titleUA: d.titleUA,
@@ -1504,6 +1677,7 @@ async function generate() {
 }
 
 function renderResult(d) {
+  lastResult = d;
   document.getElementById('modalHead').textContent = d.titleEN || d.titleUA || 'Result';
 
   // Corrections notice (only if the AI actually fixed something)
@@ -1519,18 +1693,48 @@ function renderResult(d) {
     </div>`;
   }
 
-  // Titles — always both languages
+  // Tags — merge universal + specific into ONE deduped list (used both for the
+  // standalone tags block and for the "title + tags" copy variant).
+  const toTagArray = v => {
+    if (Array.isArray(v)) return v.map(t => String(t).trim()).filter(Boolean);
+    return String(v || '').split(',').map(t => t.trim()).filter(Boolean);
+  };
+  const seen = new Set();
+  const allTags = [...toTagArray(d.tagsUniversal), ...toTagArray(d.tagsSpecific)]
+    .filter(t => { const k = t.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; });
+  const tagsPlainStr = allTags.join(', ');
+  const hashify = t => '#' + t.replace(/\s+/g, '');
+  const titleHashtags = allTags.slice(0, 5).map(hashify).join(' ');
+
+  lastTitleEN = d.titleEN || '';
+  lastTitleUA = d.titleUA || '';
+  lastTitleHashtags = titleHashtags;
+
+  // Titles — always both languages, each with "copy title" / "copy title + tags"
   let titlesHtml = `<div class="title-cards">
       <div class="title-card en">
         <div class="title-card-lang">EN — English</div>
         <div class="title-card-text">${esc(d.titleEN)}</div>
-        ${d.titleTagsEN ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--muted)">${esc(d.titleTagsEN)}</div>` : ''}
+        <div class="title-card-actions">
+          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('EN', false, this)">⧉ Назва</button>
+          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('EN', true, this)">⧉ Назва + теги</button>
+        </div>
       </div>
       <div class="title-card ua">
         <div class="title-card-lang">UA — Українська</div>
         <div class="title-card-text">${esc(d.titleUA)}</div>
-        ${d.titleTagsUA ? `<div style="margin-top:5px;font-size:0.68rem;color:var(--teal)">${esc(d.titleTagsUA)}</div>` : ''}
+        <div class="title-card-actions">
+          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('UA', false, this)">⧉ Назва</button>
+          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('UA', true, this)">⧉ Назва + теги</button>
+        </div>
       </div>
+    </div>
+    <div class="tags-group" style="margin-top:10px">
+      <div class="tags-group-top">
+        <div class="tags-group-label">Всі теги / All tags (${allTags.length})</div>
+        <button type="button" class="tags-copy-btn" onclick="copyTagsBox(this, 'tagsBoxAll')">⧉ Копіювати</button>
+      </div>
+      <textarea class="tags-copybox" id="tagsBoxAll" readonly rows="2" onclick="this.select()">${esc(tagsPlainStr)}</textarea>
     </div>`;
 
   // Descriptions — always both languages
@@ -1545,40 +1749,10 @@ function renderResult(d) {
       </div>
     </div>`;
 
-  // Tags block — universal + specific, always shown as a plain comma-separated,
-  // easy-to-copy list (accepts array or comma-string from the AI, just in case).
-  const toTagArray = v => {
-    if (Array.isArray(v)) return v.map(t => String(t).trim()).filter(Boolean);
-    return String(v || '').split(',').map(t => t.trim()).filter(Boolean);
-  };
-  const universalTags = toTagArray(d.tagsUniversal);
-  const specificTags   = toTagArray(d.tagsSpecific);
-  const universalStr = universalTags.join(', ');
-  const specificStr  = specificTags.join(', ');
-
-  let tagsHtml = `<div class="tags-wrap">
-      <div class="tags-group">
-        <div class="tags-group-top">
-          <div class="tags-group-label">Універсальні / Universal (${universalTags.length})</div>
-          <button type="button" class="tags-copy-btn" onclick="copyTagsBox(this, 'tagsBoxUniversal')">⧉ Копіювати</button>
-        </div>
-        <textarea class="tags-copybox" id="tagsBoxUniversal" readonly rows="2" onclick="this.select()">${esc(universalStr)}</textarea>
-      </div>
-      <div class="tags-group">
-        <div class="tags-group-top">
-          <div class="tags-group-label">Для цього відео / Specific (${specificTags.length})</div>
-          <button type="button" class="tags-copy-btn" onclick="copyTagsBox(this, 'tagsBoxSpecific')">⧉ Копіювати</button>
-        </div>
-        <textarea class="tags-copybox" id="tagsBoxSpecific" readonly rows="2" onclick="this.select()">${esc(specificStr)}</textarea>
-      </div>
-      <div class="tags-copy-all">
-        <button type="button" class="tags-copy-btn" onclick="copyAllTags(this)">⧉ Копіювати всі разом / Copy all combined</button>
-      </div>
-    </div>`;
-
-  // Scene rows
+  // Scene rows — frame count is derived from what the AI actually returned
+  const frameCount = (Array.isArray(d.voiceEN) && d.voiceEN.length) || (Array.isArray(d.visualsUA) && d.visualsUA.length) || 5;
   let rows = '';
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < frameCount; i++) {
     const voiceEN  = esc(d.voiceEN?.[i]  || '');
     const voiceUA  = esc(d.voiceUA?.[i]  || '');
     const visual   = esc(d.visualsUA?.[i] || '');
@@ -1607,19 +1781,20 @@ function renderResult(d) {
   let voiceENItems = '', voiceUAItems = '';
   let visualItems = '';
   let screenENItems = '', screenUAItems = '';
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < frameCount; i++) {
     const num = `<span class="chk-num">${i+1}</span>`;
-    voiceENItems  += `<li>${num}<span>${esc(d.voiceEN?.[i] || '')}</span></li>`;
-    voiceUAItems  += `<li>${num}<span>${esc(d.voiceUA?.[i] || '')}</span></li>`;
+    const cpBtn = (field, idx) => `<button type="button" class="line-copy-btn" onclick="copyChecklistLine('${field}', ${idx}, this)" title="Copy / Копіювати">⧉</button>`;
+    voiceENItems  += `<li>${num}<span>${esc(d.voiceEN?.[i] || '')}</span>${cpBtn('voiceEN', i)}</li>`;
+    voiceUAItems  += `<li>${num}<span>${esc(d.voiceUA?.[i] || '')}</span>${cpBtn('voiceUA', i)}</li>`;
     visualItems   += `<li>${num}<span>${esc(d.visualsUA?.[i] || '')}</span></li>`;
-    screenENItems += `<li>${num}<span>${esc(d.screenTextEN?.[i] || '')}</span></li>`;
-    screenUAItems += `<li>${num}<span>${esc(d.screenTextUA?.[i] || '')}</span></li>`;
+    screenENItems += `<li>${num}<span>${esc(d.screenTextEN?.[i] || '')}</span>${cpBtn('screenTextEN', i)}</li>`;
+    screenUAItems += `<li>${num}<span>${esc(d.screenTextUA?.[i] || '')}</span>${cpBtn('screenTextUA', i)}</li>`;
   }
 
   document.getElementById('modalBody').innerHTML = `
     ${fixHtml}
     <div class="out-section">
-      <div class="out-label"><span>Title</span></div>
+      <div class="out-label"><span>Title</span> &amp; Tags</div>
       ${titlesHtml}
     </div>
     <div class="out-section">
@@ -1627,11 +1802,7 @@ function renderResult(d) {
       ${descHtml}
     </div>
     <div class="out-section">
-      <div class="out-label"><span>Tags</span> / Теги</div>
-      ${tagsHtml}
-    </div>
-    <div class="out-section">
-      <div class="out-label"><span>Scene Script</span> — Rule of 5</div>
+      <div class="out-label"><span>Scene Script</span> — ${frameCount} frames / кадрів</div>
       <div class="scene-wrap">
         <table class="scene-tbl">
           <thead><tr>
@@ -1648,7 +1819,7 @@ function renderResult(d) {
     <div class="chk-section">
       <div class="chk-head">
         <span class="chk-icon">🎙️</span>
-        <div class="chk-title"><span>Voice-over</span> / Озвучка — 5 фраз</div>
+        <div class="chk-title"><span>Voice-over</span> / Озвучка — ${frameCount} фраз</div>
       </div>
       <div class="chk-cols">
         <div class="chk-col voice-col en">
@@ -1665,7 +1836,7 @@ function renderResult(d) {
     <div class="chk-section">
       <div class="chk-head">
         <span class="chk-icon">🎥</span>
-        <div class="chk-title"><span>What to film</span> / Що знімати — 5 кадрів</div>
+        <div class="chk-title"><span>What to film</span> / Що знімати — ${frameCount} кадрів</div>
       </div>
       <div class="chk-cols">
         <div class="chk-col visual-col" style="grid-column:1/-1">
@@ -1678,7 +1849,7 @@ function renderResult(d) {
     <div class="chk-section">
       <div class="chk-head">
         <span class="chk-icon">📝</span>
-        <div class="chk-title"><span>On-screen text</span> / Текст на екрані — 5 кадрів</div>
+        <div class="chk-title"><span>On-screen text</span> / Текст на екрані — ${frameCount} кадрів</div>
       </div>
       <div class="chk-cols">
         <div class="chk-col screen-col en">
@@ -1709,14 +1880,20 @@ function renderHist() {
     el.innerHTML = '<div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:16px">Empty / Поки пусто...</div>';
     return;
   }
-  el.innerHTML = history.map((h,i) => `
+  el.innerHTML = history.map((h,i) => {
+    const modeLabel = h.mode === 'topic' ? '💬 TOPIC' : '🧩 ALGO';
+    const subject    = h.mode === 'topic' ? (h.topic || 'N/A') : (h.algorithm || 'N/A');
+    const typeLabel  = (h.contentType || '').toString().toUpperCase();
+    const durLabel   = h.durationSec ? `${h.durationSec}s` : '';
+    return `
     <div class="hist-item" onclick="showHistItem(${i})">
       <div class="hist-item-top">
         <div class="hist-title">${esc(h.titleEN || h.title || 'Untitled')}</div>
         <span class="hist-badge">${h.date}</span>
       </div>
-      <div class="hist-meta">${h.contentType.toUpperCase()} · ${h.algorithm || 'N/A'}${h.provider ? ' · ' + h.provider : ''}${h.titleUA ? ' · ' + esc(h.titleUA) : ''}</div>
-    </div>`).join('');
+      <div class="hist-meta">${modeLabel}${typeLabel ? ' · ' + typeLabel : ''} · ${esc(subject)}${durLabel ? ' · ' + durLabel : ''}${h.provider ? ' · ' + h.provider : ''}${h.titleUA ? ' · ' + esc(h.titleUA) : ''}</div>
+    </div>`;
+  }).join('');
 }
 function showHistItem(i) { openModal(); renderResult(history[i].full); }
 function clearHist() {
@@ -1776,13 +1953,25 @@ function copyTagsBox(btn, boxId) {
     .then(() => flashCopied(btn))
     .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
 }
-function copyAllTags(btn) {
-  const u = document.getElementById('tagsBoxUniversal')?.value || '';
-  const s = document.getElementById('tagsBoxSpecific')?.value || '';
-  const combined = [u, s].filter(Boolean).join(', ');
-  copyTextToClipboard(combined)
+function copyTitleVariant(lang, withTags, btn) {
+  const title = lang === 'EN' ? lastTitleEN : lastTitleUA;
+  const text = withTags && lastTitleHashtags ? `${title} ${lastTitleHashtags}` : title;
+  copyTextToClipboard(text)
     .then(() => flashCopied(btn))
     .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+function copyChecklistLine(field, idx, btn) {
+  if (!lastResult) return;
+  const val = lastResult[field]?.[idx] || '';
+  copyTextToClipboard(val)
+    .then(() => flashCopiedIcon(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+function flashCopiedIcon(btn) {
+  const original = btn.textContent;
+  btn.classList.add('copied');
+  btn.textContent = '✓';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 1200);
 }
 
 function toast(msg, type) {
