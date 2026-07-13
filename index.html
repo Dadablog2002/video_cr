@@ -1554,7 +1554,7 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
 
   const voiceRule = isAlgo
     ? `VOICE (voiceEN / voiceUA): 1 short sentence per frame, MAX 12 words. Talk about the CONCEPT and FEELING, NEVER read out the algorithm notation aloud. The algorithm is shown visually, not spoken.`
-    : `VOICE (voiceEN / voiceUA): 1 short, natural, conversational sentence per frame, MAX 14 words, as if talking directly to camera about the topic.`;
+    : `VOICE (voiceEN / voiceUA): 1 short, natural, conversational sentence per frame, MAX 14 words — narrated in voice-over ONLY (the creator's face is never shown, see FACELESS RULE), as if speaking directly to the viewer through narration, not on-camera.`;
 
   const tagsSpecificHint = isAlgo
     ? `tagsSpecific: 10-15 tags specific to THIS exact video (the algorithm, the case/slot, the cube model, the content type: ${fields.contentType}).`
@@ -1580,6 +1580,9 @@ ${autoCorrectNote} Silently fix all of this yourself and use the corrected versi
 LANGUAGE RULE (very important):
 Input fields may be written in English, Ukrainian, or a mix — this makes no difference. You must ALWAYS produce a complete, natural, correctly translated version in BOTH English and Ukrainian for every bilingual field below, regardless of what language the user typed in. Never leave an untranslated or half-translated phrase in either language version.${isAlgo ? ' The only exceptions are the algorithm notation itself (universal WCA notation, e.g. R U R\' U\') and cube brand/model names, which stay as-is in both languages.' : ' The only exception is cube brand/model names, which stay as-is in both languages.'}
 
+FACELESS RULE (very important, applies to EVERY frame without exception):
+This is a 100% FACELESS channel. The creator's face, mouth, or any talking-head / on-camera-selfie shot must NEVER appear or be implied. Every VISUALS (visualsUA) entry must describe a shot that shows ONLY: hands + cube close-ups, the cube itself, a table/desk surface, a screen recording/timer, text/graphics overlays, or other objects/b-roll — never "look at the camera", "show your face", "talk to viewer on camera", "selfie", "vlog-style shot", etc. All narration (voiceEN/voiceUA) is heard as voice-over only, never delivered on-camera.
+
 STRICT RULES:
 1. STRUCTURE: ${seqRule}
 2. Title: 5-8 words, catchy.${isAlgo ? ' NEVER include the algorithm notation in the title.' : ''}
@@ -1588,7 +1591,7 @@ STRICT RULES:
 5. Do NOT repeat topics/titles from history above.
 6. ${voiceRule}
 7. ${screenTextRule}
-8. VISUALS (visualsUA): 1 action/shot-description sentence per frame only — what to actually film.
+8. VISUALS (visualsUA): 1 action/shot-description sentence per frame only — what to actually film. MUST follow the FACELESS RULE above — no face/on-camera shots, ever.
 9. TAGS (tagsUniversal / tagsSpecific): return each as a JSON ARRAY of separate short lowercase keyword strings, NO "#" symbol, one tag per array element (do NOT put several tags inside one string, do NOT run words together without separation).
    - tagsUniversal: 15-20 broad tags that fit ANY Shorts video on this channel (e.g. "speedcubing", "rubik's cube", "cubing", "cuber", "shorts").
    - ${tagsSpecificHint}
@@ -1708,6 +1711,8 @@ CURRENT MOMENT (treat this as ground truth — it is happening right now, do NOT
 - ISO timestamp: ${iso}
 
 NICHE / FOCUS for these ideas: ${nicheLine}
+
+FACELESS CHANNEL (very important): This creator NEVER shows their face — no talking-head, no on-camera selfie shots, no "react on camera" formats. Every idea must be filmable using only hands + cube close-ups, screen recordings, text/graphics overlays, and voice-over narration. Do not propose ideas that require the creator to be visibly on camera.
 
 TASK: You have web search available — actually use it. Search the internet for what is happening RIGHT NOW (as close as possible to ${iso}) that is relevant to this niche: recent product launches (new cube models), upcoming or just-finished WCA competitions/events, viral TikTok/YouTube Shorts trends, sounds, challenges, hashtags, community news, records, controversies, or general short-form-video trends that a speedcubing creator could jump on TODAY. Prioritize genuinely current, dated information over generic evergreen ideas.
 
