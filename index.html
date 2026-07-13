@@ -478,6 +478,48 @@ input[type=text]:focus, textarea:focus, select:focus {
 }
 .hist-meta { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
 
+/* ──────────── IDEAS ──────────── */
+#pg-ideas .panel + .panel { margin-top: 14px; }
+.idea-card {
+  padding: 14px 16px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  margin-bottom: 10px;
+}
+.idea-card:last-child { margin-bottom: 0; }
+.idea-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+.idea-card-titles { flex: 1; min-width: 0; }
+.idea-title-en { font-weight: 800; font-size: 0.92rem; color: var(--text); }
+.idea-title-ua { font-weight: 600; font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+.idea-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background: rgba(124,58,237,0.09);
+  border: 1px solid rgba(124,58,237,0.24);
+  color: var(--blue);
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.idea-hook { font-size: 0.8rem; line-height: 1.5; margin: 8px 0; color: var(--text); }
+.idea-why {
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--muted);
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 8px 10px;
+  margin-bottom: 10px;
+}
+.idea-why strong { color: var(--orange); }
+.idea-tags { font-size: 0.68rem; color: var(--dim); margin-bottom: 10px; }
+.idea-card-actions { display: flex; gap: 7px; }
+
 /* ──────────── MODAL ──────────── */
 .overlay {
   display: none;
@@ -1017,6 +1059,7 @@ input[type=text]:focus, textarea:focus, select:focus {
     <div class="nav-tab on" onclick="switchTab('gen')">Generate / Генерація</div>
     <div class="nav-tab" onclick="switchTab('tpl')">Template / Шаблон</div>
     <div class="nav-tab" onclick="switchTab('hist')">History / Історія</div>
+    <div class="nav-tab" onclick="switchTab('ideas')">Ideas / Ідеї</div>
   </div>
 
   <!-- GENERATE PAGE -->
@@ -1190,6 +1233,39 @@ input[type=text]:focus, textarea:focus, select:focus {
     </div>
   </div>
 
+  <!-- IDEAS PAGE -->
+  <div class="pg" id="pg-ideas">
+    <div class="panel">
+      <div class="panel-head"><div class="pip" style="background:var(--blue)"></div>Content Ideas / Ідеї для контенту</div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Niche / focus / Ніша (необов'язково)</label>
+          <input type="text" id="ideasNiche" placeholder="speedcubing, F2L, GAN cubes... (порожньо = загальний спідкубінг)" />
+        </div>
+        <div class="field">
+          <label>How many ideas / Скільки ідей</label>
+          <select id="ideasCount">
+            <option value="5" selected>5</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="font-size:0.68rem;color:var(--dim);line-height:1.5;margin-bottom:10px">
+        🌐 Пошук завжди йде через весь інтернет і прив'язується до <strong id="ideasNowLabel"></strong> — щоб ідеї були максимально актуальні саме на цей момент.
+      </div>
+
+      <button class="btn btn-gen" id="ideasBtn" onclick="generateIdeas()">Generate Ideas / Згенерувати ідеї</button>
+    </div>
+
+    <div class="panel" id="ideasResultsPanel" style="display:none">
+      <div class="panel-head"><div class="pip" style="background:var(--blue)"></div>Suggestions / Пропозиції <span id="ideasStamp" style="margin-left:auto;font-weight:500;color:var(--muted);font-size:0.68rem"></span></div>
+      <div id="ideasResults"></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- MODAL -->
@@ -1222,6 +1298,8 @@ let history   = JSON.parse(localStorage.getItem('bc_hist') || '[]');
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('dateBadge').textContent =
     new Date().toLocaleDateString('uk-UA', {day:'numeric', month:'long', year:'numeric'});
+  document.getElementById('ideasNowLabel').textContent =
+    new Date().toLocaleString('uk-UA', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'});
 
   // Restore Gemini settings
   const gm = localStorage.getItem('bc_model');
@@ -1318,7 +1396,7 @@ function saveClaudeModel() {
 }
 
 function switchTab(id) {
-  const tabs = ['gen','tpl','hist'];
+  const tabs = ['gen','tpl','hist','ideas'];
   document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('on', tabs[i] === id));
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   document.getElementById('pg-'+id).classList.add('on');
@@ -1602,6 +1680,152 @@ async function callClaude(prompt, apiKey, webSearchOn) {
   return JSON.parse(raw.replace(/```json|```/g, '').trim());
 }
 
+// ──────────── IDEAS TAB ────────────
+let lastIdeas = [];
+
+function ideasHistoryContext() {
+  if (!history.length) return '';
+  const list = history.slice(0, 15).map((h,i) => `${i+1}. "${h.titleUA || h.titleEN}"`).join('\n');
+  return `\n\nDO NOT repeat these already-made videos:\n${list}`;
+}
+
+function nowStampForIdeas() {
+  const now = new Date();
+  const dateHuman = now.toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
+  const timeHuman = now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+  return { now, dateHuman, timeHuman, iso: now.toISOString() };
+}
+
+function buildIdeasPrompt(niche, count) {
+  const { dateHuman, timeHuman, iso } = nowStampForIdeas();
+  const nicheLine = niche ? niche : 'speedcubing / Rubik\'s cube (загальна тема каналу)';
+
+  return `You are a YouTube Shorts / TikTok content strategist for a speedcubing channel called "BrainCube Studio".
+
+CURRENT MOMENT (treat this as ground truth — it is happening right now, do NOT rely only on older training knowledge):
+- Date: ${dateHuman}
+- Time: ${timeHuman} (Europe/Kyiv)
+- ISO timestamp: ${iso}
+
+NICHE / FOCUS for these ideas: ${nicheLine}
+
+TASK: You have web search available — actually use it. Search the internet for what is happening RIGHT NOW (as close as possible to ${iso}) that is relevant to this niche: recent product launches (new cube models), upcoming or just-finished WCA competitions/events, viral TikTok/YouTube Shorts trends, sounds, challenges, hashtags, community news, records, controversies, or general short-form-video trends that a speedcubing creator could jump on TODAY. Prioritize genuinely current, dated information over generic evergreen ideas.
+
+Propose EXACTLY ${count} distinct video ideas. Each idea must be something that makes sense to film specifically around ${dateHuman} — explain in "whyNow" exactly which real, current fact/trend/event it is tied to (name it concretely; do not just say "trends"). If truly nothing timely can be found for a couple of the ideas, you may include strong evergreen ideas but you MUST say so honestly in "whyNow" (e.g. "evergreen idea — no specific current trend found").${ideasHistoryContext()}
+
+For each idea return:
+- titleEN, titleUA: catchy Shorts-style titles (5-9 words)
+- hook: 1 punchy sentence (English) describing the opening hook of the video
+- whyNow: 1-2 sentences (Ukrainian) explaining concretely why this idea is relevant RIGHT NOW, citing the specific real thing found via search (news/event/trend/release)
+- category: one of "algo" (algorithm tutorial), "qa", "story", "opinion", "challenge", "advice", "other" — whichever the "Generate" tab modes/categories support
+- suggestedTopic: a ready-to-paste short string for the app's "Topic" field (Ukrainian or English, whichever fits), OR if category is "algo", a ready-to-paste algorithm/case description
+- hashtags: array of 3-6 relevant hashtag words (no # symbol)
+
+Return ONLY valid JSON, no markdown, no extra text:
+{
+  "generatedForDate": "${dateHuman}, ${timeHuman}",
+  "ideas": [
+    { "titleEN": "...", "titleUA": "...", "hook": "...", "whyNow": "...", "category": "qa", "suggestedTopic": "...", "hashtags": ["...", "..."] }
+  ]
+}`;
+}
+
+async function generateIdeas() {
+  const niche = document.getElementById('ideasNiche').value.trim();
+  const count = document.getElementById('ideasCount').value;
+
+  let apiKey;
+  if (currentProvider === 'gemini') {
+    apiKey = document.getElementById('geminiKey').value.trim() || localStorage.getItem('bc_apikey') || '';
+    if (!apiKey) { toast('Введи Gemini API ключ', 'err'); return; }
+  } else {
+    apiKey = document.getElementById('claudeKey').value.trim() || localStorage.getItem('bc_claude_key') || '';
+    if (!apiKey) { toast('Введи Claude (Anthropic) API ключ', 'err'); return; }
+  }
+
+  const btn = document.getElementById('ideasBtn');
+  btn.disabled = true;
+  btn.textContent = 'Searching the web... / Пошук в інтернеті...';
+
+  const prompt = buildIdeasPrompt(niche, count);
+
+  try {
+    // Ideas ALWAYS use live web search, regardless of the toggle on the Generate tab —
+    // freshness is the entire point of this tab.
+    let d;
+    if (currentProvider === 'gemini') {
+      d = await callGemini(prompt, apiKey, true);
+    } else {
+      d = await callClaude(prompt, apiKey, true);
+    }
+    lastIdeas = Array.isArray(d.ideas) ? d.ideas : [];
+    renderIdeas(d);
+    toast('Ідеї згенеровано ✓', 'ok');
+  } catch (e) {
+    toast(`Помилка [${currentProvider}]: ${e.message}`, 'err');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Generate Ideas / Згенерувати ідеї';
+}
+
+const IDEA_CATEGORY_LABEL = {
+  algo: '🧩 ALGO', qa: '💬 Q&A', story: '📖 STORY', opinion: '🗣 OPINION',
+  challenge: '🏆 CHALLENGE', advice: '💡 ADVICE', other: '✨ OTHER'
+};
+
+function renderIdeas(d) {
+  const panel = document.getElementById('ideasResultsPanel');
+  const stamp = document.getElementById('ideasStamp');
+  const el = document.getElementById('ideasResults');
+  panel.style.display = 'block';
+  stamp.textContent = d.generatedForDate ? `on ${d.generatedForDate}` : '';
+
+  if (!lastIdeas.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:0.8rem;text-align:center;padding:16px">No ideas returned / Ідей не отримано</div>';
+    return;
+  }
+
+  el.innerHTML = lastIdeas.map((idea, i) => {
+    const badge = IDEA_CATEGORY_LABEL[idea.category] || '✨ OTHER';
+    const tags = Array.isArray(idea.hashtags) ? idea.hashtags.map(t => '#' + String(t).replace(/^#/, '')).join(' ') : '';
+    return `<div class="idea-card">
+      <div class="idea-card-top">
+        <div class="idea-card-titles">
+          <div class="idea-title-en">${esc(idea.titleEN)}</div>
+          <div class="idea-title-ua">${esc(idea.titleUA)}</div>
+        </div>
+        <span class="idea-badge">${badge}</span>
+      </div>
+      <div class="idea-hook">🎬 ${esc(idea.hook)}</div>
+      <div class="idea-why"><strong>Чому саме зараз:</strong> ${esc(idea.whyNow)}</div>
+      ${tags ? `<div class="idea-tags">${esc(tags)}</div>` : ''}
+      <div class="idea-card-actions">
+        <button type="button" class="btn btn-teal" style="flex:1;font-size:0.72rem;padding:7px 10px" onclick="useIdea(${i})">Use this idea / Використати</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function useIdea(i) {
+  const idea = lastIdeas[i];
+  if (!idea) return;
+  const isAlgo = idea.category === 'algo';
+  switchTab('gen');
+  switchMode(isAlgo ? 'algo' : 'topic');
+  if (isAlgo) {
+    document.getElementById('algorithm').value = idea.suggestedTopic || '';
+    document.getElementById('caseSlot').value = '';
+  } else {
+    const catSelect = document.getElementById('topicCategory');
+    const validCats = Array.from(catSelect.options).map(o => o.value);
+    catSelect.value = validCats.includes(idea.category) ? idea.category : 'other';
+    document.getElementById('topic').value = idea.suggestedTopic || idea.titleEN || '';
+  }
+  document.getElementById('notes').value = idea.hook || '';
+  toast('Ідею підставлено у форму ✓', 'ok');
+}
+
 // ──────────── GENERATE ────────────
 async function generate() {
   const notes   = document.getElementById('notes').value.trim();
@@ -1749,33 +1973,8 @@ function renderResult(d) {
       </div>
     </div>`;
 
-  // Scene rows — frame count is derived from what the AI actually returned
+  // Frame count is derived from what the AI actually returned
   const frameCount = (Array.isArray(d.voiceEN) && d.voiceEN.length) || (Array.isArray(d.visualsUA) && d.visualsUA.length) || 5;
-  let rows = '';
-  for (let i = 0; i < frameCount; i++) {
-    const voiceEN  = esc(d.voiceEN?.[i]  || '');
-    const voiceUA  = esc(d.voiceUA?.[i]  || '');
-    const visual   = esc(d.visualsUA?.[i] || '');
-    const screenEN = esc(d.screenTextEN?.[i] || '');
-    const screenUA = esc(d.screenTextUA?.[i] || '');
-
-    rows += `<tr>
-      <td>${i+1}</td>
-      <td>
-        <div class="voice-pair">
-          <div><div class="vlang">EN</div><div class="voice-en">${voiceEN}</div></div>
-          <div><div class="vlang">UA</div><div class="voice-ua">${voiceUA}</div></div>
-        </div>
-      </td>
-      <td class="col-visual">${visual}</td>
-      <td>
-        <div class="screen-pair">
-          <div><div class="slang">EN — on screen</div><div class="screen-en">${screenEN}</div></div>
-          <div><div class="slang">UA — переклад</div><div class="screen-ua">${screenUA}</div></div>
-        </div>
-      </td>
-    </tr>`;
-  }
 
   // Checklist items
   let voiceENItems = '', voiceUAItems = '';
@@ -1801,21 +2000,6 @@ function renderResult(d) {
       <div class="out-label"><span>Description</span></div>
       ${descHtml}
     </div>
-    <div class="out-section">
-      <div class="out-label"><span>Scene Script</span> — ${frameCount} frames / кадрів</div>
-      <div class="scene-wrap">
-        <table class="scene-tbl">
-          <thead><tr>
-            <th>#</th>
-            <th>Voice-over / Озвучка (EN + UA)</th>
-            <th>What to film / Що знімати</th>
-            <th>On-screen text / Текст на екрані</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>
-
     <div class="chk-section">
       <div class="chk-head">
         <span class="chk-icon">🎙️</span>
