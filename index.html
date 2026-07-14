@@ -8,29 +8,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 
 :root {
-  --bg:      #eeedf8;
+  --bg:      #eef2f6;
   --s1:      #ffffff;
-  --s2:      #f4f3fc;
-  --s3:      #edeaf8;
-  --border:  #dcdaf0;
-  --border2: #bdb9e0;
-  --text:    #0f0e2a;
-  --muted:   #6b67a0;
-  --dim:     #a09ccc;
+  --s2:      #f1f5f9;
+  --s3:      #e7edf3;
+  --border:  #dde4ec;
+  --border2: #c2ccd9;
+  --text:    #12192a;
+  --muted:   #64738a;
+  --dim:     #97a4b8;
 
-  --orange:  #5c3df5;
-  --orange2: #7358f7;
-  --teal:    #3b22cc;
-  --teal2:   #4e34e0;
-  --blue:    #7c3aed;
-  --yellow:  #8b5cf6;
+  --orange:  #0e7490;
+  --orange2: #0891b2;
+  --teal:    #1d4ed8;
+  --teal2:   #2563eb;
+  --blue:    #475569;
+  --yellow:  #0369a1;
 
   --r:  6px;
   --r2: 10px;
   --r3: 14px;
 
-  --sh:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.03);
-  --sh2: 0 8px 36px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
+  --sh:  0 1px 3px rgba(10,20,35,0.07), 0 1px 2px rgba(10,20,35,0.04);
+  --sh2: 0 8px 36px rgba(10,20,35,0.18), 0 2px 8px rgba(10,20,35,0.08);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -152,7 +152,7 @@ body {
   user-select: none;
 }
 .provider-tab:hover { border-color: var(--orange); color: var(--orange); }
-.provider-tab.on { border-color: var(--orange); background: rgba(92,61,245,0.07); color: var(--orange); }
+.provider-tab.on { border-color: var(--orange); background: rgba(14,116,144,0.07); color: var(--orange); }
 .provider-dot {
   width: 7px; height: 7px;
   border-radius: 50%;
@@ -167,7 +167,7 @@ body {
   letter-spacing: 0.7px;
   padding: 1px 5px;
   border-radius: 4px;
-  background: rgba(139,92,246,0.1);
+  background: rgba(3,105,161,0.1);
   color: var(--yellow);
   text-transform: uppercase;
 }
@@ -224,8 +224,8 @@ body {
   gap: 5px;
 }
 .key-hint .saved-badge {
-  background: rgba(59,34,204,0.07);
-  border: 1px solid rgba(59,34,204,0.2);
+  background: rgba(29,78,216,0.07);
+  border: 1px solid rgba(29,78,216,0.2);
   color: var(--teal);
   padding: 1px 7px;
   border-radius: 10px;
@@ -395,11 +395,11 @@ input[type=text]:focus, textarea:focus, select:focus {
 }
 .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
 .btn-teal {
-  background: rgba(59,34,204,0.07);
-  border: 1px solid rgba(59,34,204,0.2);
+  background: rgba(29,78,216,0.07);
+  border: 1px solid rgba(29,78,216,0.2);
   color: var(--teal);
 }
-.btn-teal:hover { background: rgba(59,34,204,0.14); }
+.btn-teal:hover { background: rgba(29,78,216,0.14); }
 .btn-red {
   background: rgba(210,50,50,0.05);
   border: 1px solid rgba(210,50,50,0.15);
@@ -433,25 +433,7 @@ input[type=text]:focus, textarea:focus, select:focus {
   margin-bottom: 12px;
 }
 .toast.err { background: rgba(210,50,50,0.06); border: 1px solid rgba(210,50,50,0.18); color: #b02020; display: block; }
-.toast.ok  { background: rgba(59,34,204,0.06); border: 1px solid rgba(59,34,204,0.18); color: var(--teal); display: block; }
-
-/* ──────────── TEMPLATE LIST ──────────── */
-.tpl-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  background: var(--s2);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  margin-bottom: 5px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: border-color 0.12s;
-}
-.tpl-item:hover, .tpl-item.on { border-color: var(--orange); }
-.tpl-item.on { background: rgba(92,61,245,0.04); }
-.tpl-name { flex: 1; font-weight: 600; }
+.toast.ok  { background: rgba(29,78,216,0.06); border: 1px solid rgba(29,78,216,0.18); color: var(--teal); display: block; }
 
 /* ──────────── HISTORY ──────────── */
 .hist-item {
@@ -469,8 +451,8 @@ input[type=text]:focus, textarea:focus, select:focus {
 .hist-badge {
   font-size: 0.61rem;
   font-weight: 700;
-  background: rgba(139,92,246,0.08);
-  border: 1px solid rgba(139,92,246,0.22);
+  background: rgba(3,105,161,0.08);
+  border: 1px solid rgba(3,105,161,0.22);
   color: var(--yellow);
   padding: 2px 9px;
   border-radius: 20px;
@@ -497,8 +479,8 @@ input[type=text]:focus, textarea:focus, select:focus {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  background: rgba(124,58,237,0.09);
-  border: 1px solid rgba(124,58,237,0.24);
+  background: rgba(71,85,105,0.09);
+  border: 1px solid rgba(71,85,105,0.24);
   color: var(--blue);
   padding: 3px 9px;
   border-radius: 20px;
@@ -543,6 +525,7 @@ input[type=text]:focus, textarea:focus, select:focus {
   flex-direction: column;
   box-shadow: var(--sh2);
   overflow: hidden;
+  position: relative;
 }
 .modal-top {
   display: flex;
@@ -615,6 +598,32 @@ input[type=text]:focus, textarea:focus, select:focus {
   scrollbar-width: thin;
   scrollbar-color: var(--border2) transparent;
 }
+.refine-bar {
+  display: flex;
+  gap: 8px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--s2);
+  flex-shrink: 0;
+}
+.refine-bar input[type=text] {
+  flex: 1;
+  min-width: 0;
+  background: var(--s1);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r);
+  padding: 8px 11px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  outline: none;
+  transition: border-color 0.14s;
+}
+.refine-bar input[type=text]:focus { border-color: var(--orange); }
+.refine-bar button { flex-shrink: 0; white-space: nowrap; }
+@media (max-width: 640px) {
+  .refine-bar { flex-direction: column; }
+}
 
 /* ──────────── LOADER ──────────── */
 .mloader {
@@ -633,6 +642,39 @@ input[type=text]:focus, textarea:focus, select:focus {
 }
 @keyframes rot { to { transform: rotate(360deg); } }
 
+/* ──────────── REFINE (AI edit) LOADING OVERLAY ──────────── */
+.refine-loading {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 8, 26, 0.72);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 14px;
+  text-align: center;
+  padding: 20px;
+}
+.refine-loading.on { display: flex; }
+.refine-loading .spin {
+  width: 32px; height: 32px;
+  border-width: 3px;
+}
+.refine-loading-text {
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+.refine-loading-sub {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 500;
+  max-width: 320px;
+}
+
 /* ──────────── OUTPUT SECTIONS ──────────── */
 .out-section { margin-bottom: 16px; }
 .out-label {
@@ -648,21 +690,94 @@ input[type=text]:focus, textarea:focus, select:focus {
 }
 .out-label span { color: var(--orange); }
 
-/* Titles */
-.title-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.title-card {
+/* Section head — used above every result block (Title&Tags, Description, Voice-over, etc) */
+.res-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.res-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.res-title span { color: var(--orange); }
+.res-count { margin-left: auto; font-size: 0.63rem; color: var(--dim); font-weight: 600; text-transform: none; letter-spacing: 0; }
+
+/* Unified two/one-column card — the single visual pattern every result block uses */
+.res-card {
+  display: grid;
   background: var(--s2);
   border: 1px solid var(--border);
   border-radius: var(--r2);
-  padding: 12px 14px;
+  overflow: hidden;
 }
-.title-card-lang { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px; color: var(--dim); margin-bottom: 6px; }
-.title-card-text { font-weight: 700; font-size: 0.97rem; line-height: 1.35; color: var(--text); }
-.title-card.ua .title-card-text { color: var(--teal); }
-.title-card-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-.title-card-actions .tags-copy-btn { font-size: 0.63rem; padding: 3px 9px; }
+.res-card.cols-2 { grid-template-columns: 1fr 1fr; }
+.res-col { padding: 12px 14px; min-width: 0; }
+.res-card.cols-2 .res-col:first-child { border-right: 1px solid var(--border); }
+.res-col-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.res-col-lang {
+  font-size: 0.59rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--dim);
+}
+.res-col.en .res-col-lang { color: var(--blue); }
+.res-col.ua .res-col-lang { color: var(--teal); }
+.res-copy-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background-color 0.12s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.res-copy-all-btn:hover { border-color: var(--orange); color: var(--orange); }
+.res-copy-all-btn.copied { color: #1a7a45; border-color: rgba(34,180,100,0.4); background: rgba(34,180,100,0.08); }
 
-/* Per-line copy button inside checklists */
+/* Plain text body (Description) */
+.res-body-text { font-size: 0.78rem; line-height: 1.62; white-space: pre-wrap; color: var(--text); }
+.res-col.ua .res-body-text { color: var(--teal); }
+
+/* Numbered line lists (Voice-over / What to film / On-screen text) */
+.res-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.res-list li { display: flex; gap: 8px; align-items: flex-start; font-size: 0.78rem; line-height: 1.45; }
+.res-num {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--s3);
+  border: 1px solid var(--border2);
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.res-col.ua .res-list li { color: var(--teal); font-style: italic; }
+.res-list.mono li { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; white-space: pre-line; line-height: 1.4; }
+.res-list.mono li span { color: var(--orange); }
+.res-col.ua .res-list.mono li span { color: var(--muted); font-style: italic; }
+
+/* Per-line copy button inside the lists */
 .line-copy-btn {
   margin-left: auto;
   flex-shrink: 0;
@@ -680,218 +795,139 @@ input[type=text]:focus, textarea:focus, select:focus {
 .line-copy-btn:hover { border-color: var(--orange); color: var(--orange); }
 .line-copy-btn.copied { color: #1a7a45; border-color: rgba(34,180,100,0.4); background: rgba(34,180,100,0.08); }
 
-/* Descriptions */
-.desc-wrap {
-  display: grid; grid-template-columns: 1fr 1fr;
-  background: var(--s2);
-  border: 1px solid var(--border);
-  border-radius: var(--r2);
-  overflow: hidden;
-}
-.desc-col { padding: 12px 14px; }
-.desc-col:first-child { border-right: 1px solid var(--border); }
-.desc-lang { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px; color: var(--dim); margin-bottom: 7px; display: block; }
-.desc-body { font-size: 0.78rem; line-height: 1.62; white-space: pre-wrap; color: var(--text); }
-.desc-col:last-child .desc-body { color: var(--teal); }
-
-/* SCENE TABLE */
-.scene-wrap {
+/* Titles + inline hashtag preview (so you SEE what "Title + tags" will copy) */
+.title-text { font-weight: 700; font-size: 0.97rem; line-height: 1.35; color: var(--text); margin-bottom: 8px; }
+.res-col.ua .title-text { color: var(--teal); }
+.title-tag-preview {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  line-height: 1.6;
+  color: var(--muted);
   background: var(--s1);
   border: 1px solid var(--border);
-  border-radius: var(--r2);
-  overflow: hidden;
+  border-radius: 7px;
+  padding: 7px 9px;
+  margin-bottom: 9px;
+  word-break: break-word;
 }
-.scene-tbl { width: 100%; border-collapse: collapse; }
-.scene-tbl thead { background: var(--s2); }
-.scene-tbl thead th {
-  padding: 9px 12px;
-  font-size: 0.59rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.9px;
-  color: var(--muted);
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-.scene-tbl thead th:first-child { width: 36px; text-align: center; }
-.scene-tbl tbody tr { border-bottom: 1px solid var(--border); }
-.scene-tbl tbody tr:last-child { border-bottom: none; }
-.scene-tbl tbody tr:hover { background: var(--s2); }
-.scene-tbl tbody td { padding: 10px 12px; font-size: 0.78rem; line-height: 1.46; vertical-align: top; }
-.scene-tbl tbody td:first-child {
-  text-align: center;
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: var(--orange);
-  width: 36px;
-}
+.title-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.title-card-actions .res-copy-all-btn { font-size: 0.63rem; padding: 4px 10px; }
 
-/* Voice pair */
-.voice-pair { display: flex; flex-direction: column; gap: 6px; }
-.voice-en { color: var(--text); font-size: 0.77rem; }
-.voice-ua { color: var(--teal); font-size: 0.77rem; font-style: italic; }
-.vlang { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.5px; color: var(--dim); text-transform: uppercase; margin-bottom: 2px; }
-
-.col-visual { color: var(--blue); }
-
-/* Screen text */
-.screen-pair { display: flex; flex-direction: column; gap: 6px; }
-.screen-en { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #5c3df5; white-space: pre-line; line-height: 1.4; }
-.screen-ua { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); white-space: pre-line; font-style: italic; line-height: 1.4; }
-.slang { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.5px; color: var(--dim); text-transform: uppercase; margin-bottom: 2px; }
-
-/* ──────────── CHECKLIST SECTIONS ──────────── */
-.chk-section {
-  margin-bottom: 14px;
-}
-.chk-head {
+/* ──────────── LONG VIDEO: sections & scene cards ──────────── */
+.lv-section { margin-bottom: 20px; }
+.lv-section-bar {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--s3);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  border-radius: var(--r);
+  padding: 8px 12px;
+  margin-bottom: 10px;
 }
-.chk-icon {
-  font-size: 1rem;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.chk-title {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 1.3px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.chk-title span { color: var(--orange); }
-.chk-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.chk-col {
+.lv-section-title { font-size: 0.82rem; font-weight: 800; color: var(--text); }
+.lv-section-music { font-size: 0.66rem; color: var(--muted); font-style: italic; }
+.lv-scene-card {
   background: var(--s2);
   border: 1px solid var(--border);
   border-radius: var(--r2);
-  overflow: hidden;
+  padding: 12px 14px;
+  margin-bottom: 9px;
 }
-.chk-col-head {
-  padding: 6px 12px;
-  font-size: 0.57rem;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--dim);
-  border-bottom: 1px solid var(--border);
-  background: var(--s3);
-}
-.chk-col.en .chk-col-head { color: var(--blue); }
-.chk-col.ua .chk-col-head { color: var(--teal); }
-.chk-list {
-  list-style: none;
-  padding: 8px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.chk-list li {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  font-size: 0.78rem;
-  line-height: 1.45;
-}
-.chk-num {
-  width: 18px;
-  height: 18px;
+.lv-scene-card:last-child { margin-bottom: 0; }
+.lv-scene-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.lv-scene-num {
+  width: 20px; height: 20px;
   border-radius: 50%;
   background: var(--s3);
   border: 1px solid var(--border2);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 800;
   color: var(--orange);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  margin-top: 1px;
 }
-.chk-col.voice-col li { color: var(--text); }
-.chk-col.voice-col.ua li { color: var(--teal); font-style: italic; }
-.chk-col.visual-col li { color: var(--blue); }
-.chk-col.screen-col li { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; white-space: pre-line; color: #5c3df5; line-height: 1.4; }
-.chk-col.screen-col.ua li { color: var(--muted); font-style: italic; }
+.lv-scene-action {
+  flex: 1;
+  font-size: 0.73rem;
+  color: var(--muted);
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 11px;
+  line-height: 1.4;
+}
+.lv-scene-voice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+.lv-scene-voice .en { color: var(--blue); font-size: 0.78rem; line-height: 1.5; }
+.lv-scene-voice .ua { color: var(--teal); font-size: 0.78rem; line-height: 1.5; font-style: italic; }
+.lv-scene-voice-lang { font-size: 0.57rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--dim); display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 3px; }
+.lv-scene-screen {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--orange);
+  background: var(--s1);
+  border: 1px dashed var(--border2);
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+.lv-cat-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(14,116,144,0.09);
+  color: var(--orange);
+  margin-left: 6px;
+}
+@media (max-width: 640px) {
+  .lv-scene-voice { grid-template-columns: 1fr; }
+}
 
 /* SEO */
 .seo-box {
   display: flex; gap: 10px; align-items: flex-start;
-  background: rgba(59,34,204,0.04);
-  border: 1px solid rgba(59,34,204,0.14);
+  background: rgba(29,78,216,0.04);
+  border: 1px solid rgba(29,78,216,0.14);
   border-radius: var(--r2);
   padding: 12px 14px;
 }
 .seo-label { font-size: 0.59rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 4px; }
 .seo-text { font-size: 0.79rem; line-height: 1.57; color: var(--text); }
 
-/* TAGS BLOCK */
-.tags-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.tags-group {
+/* ALL-TAGS BLOCK — full text always visible, no clipped/scrolling textarea */
+.tags-allbox {
   background: var(--s2);
   border: 1px solid var(--border);
   border-radius: var(--r2);
   padding: 12px 14px;
 }
-.tags-group-top {
+.tags-allbox-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   margin-bottom: 8px;
 }
-.tags-group-label {
-  font-size: 0.59rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.9px;
-  color: var(--dim);
-}
-.tags-copy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--s1);
-  border: 1px solid var(--border2);
-  color: var(--teal);
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: border-color 0.12s, background-color 0.12s;
-  flex-shrink: 0;
-}
-.tags-copy-btn:hover { border-color: var(--teal); background: rgba(59,34,204,0.06); }
-.tags-copy-btn.copied { color: #1a7a45; border-color: rgba(34,180,100,0.4); background: rgba(34,180,100,0.08); }
-.tags-copybox {
-  width: 100%;
+.tags-allbox-body {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
   background: var(--s1);
   border: 1px solid var(--border);
   border-radius: var(--r);
   padding: 9px 11px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.74rem;
-  line-height: 1.55;
-  color: var(--text);
-  resize: vertical;
-  min-height: 46px;
-  cursor: text;
 }
-.tags-copybox:focus { border-color: var(--orange); outline: none; }
-.tags-copy-all { display: flex; justify-content: flex-end; }
 
 /* CORRECTIONS NOTICE */
 .fix-box {
@@ -965,7 +1001,7 @@ input[type=text]:focus, textarea:focus, select:focus {
   text-align: center;
 }
 .mode-tab:hover { border-color: var(--orange); color: var(--orange); }
-.mode-tab.on { border-color: var(--orange); background: rgba(92,61,245,0.08); color: var(--orange); }
+.mode-tab.on { border-color: var(--orange); background: rgba(14,116,144,0.08); color: var(--orange); }
 .mode-icon { font-size: 1rem; line-height: 1; }
 
 /* ──────────── RESPONSIVE ──────────── */
@@ -973,14 +1009,10 @@ input[type=text]:focus, textarea:focus, select:focus {
   .hdr { padding: 0 16px; }
   .wrap { padding: 16px 14px; }
   .row2 { grid-template-columns: 1fr; }
-  .title-cards { grid-template-columns: 1fr; }
-  .desc-wrap { grid-template-columns: 1fr; }
-  .desc-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
-  .scene-tbl thead th:nth-child(3),
-  .scene-tbl tbody td:nth-child(3) { display: none; }
+  .res-card.cols-2 { grid-template-columns: 1fr; }
+  .res-card.cols-2 .res-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
   .hdr-name .part-brain,
   .hdr-name .part-cube { font-size: 1rem; }
-  .chk-cols { grid-template-columns: 1fr; }
   .provider-tabs { flex-wrap: wrap; }
   .mode-tabs { flex-direction: column; }
 }
@@ -1023,9 +1055,9 @@ input[type=text]:focus, textarea:focus, select:focus {
       <label>Gemini API Key</label>
       <input type="password" id="geminiKey" placeholder="AIzaSy..." />
       <select id="geminiModel" onchange="saveGeminiModel()">
-        <option value="gemini-2.5-flash">gemini-2.5-flash ⚡ БЕЗКОШТОВНО (рекомендовано)</option>
-        <option value="gemini-2.5-flash-lite-preview-06-17">gemini-2.5-flash-lite 💨 БЕЗКОШТОВНО (найшвидший)</option>
-        <option value="gemini-2.5-pro">gemini-2.5-pro 🧠 БЕЗКОШТОВНО ліміт 50/день</option>
+        <option value="gemini-2.5-flash">gemini-2.5-flash — БЕЗКОШТОВНО (рекомендовано)</option>
+        <option value="gemini-2.5-flash-lite-preview-06-17">gemini-2.5-flash-lite — БЕЗКОШТОВНО (найшвидший)</option>
+        <option value="gemini-2.5-pro">gemini-2.5-pro — БЕЗКОШТОВНО ліміт 50/день</option>
       </select>
       <button class="btn btn-teal" onclick="saveGeminiKey()">Зберегти</button>
       <div class="key-hint" id="geminiHint"></div>
@@ -1040,8 +1072,8 @@ input[type=text]:focus, textarea:focus, select:focus {
       <label>Anthropic API Key</label>
       <input type="password" id="claudeKey" placeholder="sk-ant-..." />
       <select id="claudeModel" onchange="saveClaudeModel()">
-        <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 💨 ~$0.000006/запит (найдешевший)</option>
-        <option value="claude-sonnet-4-6">claude-sonnet-4-6 ⚡ ~$0.00003/запит (балансований)</option>
+        <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 — ~$0.000006/запит (найдешевший)</option>
+        <option value="claude-sonnet-4-6">claude-sonnet-4-6 — ~$0.00003/запит (балансований)</option>
       </select>
       <button class="btn btn-teal" onclick="saveClaudeKey()">Зберегти</button>
       <div class="key-hint" id="claudeHint"></div>
@@ -1056,8 +1088,8 @@ input[type=text]:focus, textarea:focus, select:focus {
 
   <!-- TABS -->
   <div class="nav">
-    <div class="nav-tab on" onclick="switchTab('gen')">Generate / Генерація</div>
-    <div class="nav-tab" onclick="switchTab('tpl')">Template / Шаблон</div>
+    <div class="nav-tab on" onclick="switchTab('gen')">Shorts / Генерація</div>
+    <div class="nav-tab" onclick="switchTab('long')">Main video / Основне відео</div>
     <div class="nav-tab" onclick="switchTab('hist')">History / Історія</div>
     <div class="nav-tab" onclick="switchTab('ideas')">Ideas / Ідеї</div>
   </div>
@@ -1069,10 +1101,10 @@ input[type=text]:focus, textarea:focus, select:focus {
 
       <div class="mode-tabs">
         <div class="mode-tab on" id="modeTab-algo" onclick="switchMode('algo')">
-          <span class="mode-icon">🧩</span>Algorithm tutorial / Алгоритм
+          Algorithm tutorial / Алгоритм
         </div>
         <div class="mode-tab" id="modeTab-topic" onclick="switchMode('topic')">
-          <span class="mode-icon">💬</span>Free topic / Довільна тема
+          Free topic / Довільна тема
         </div>
       </div>
 
@@ -1155,7 +1187,6 @@ input[type=text]:focus, textarea:focus, select:focus {
             <input type="file" id="imgInput" accept="image/*" onchange="handleImg(event)" />
             <img class="drop-preview" id="imgPreview" />
             <div id="dropPlaceholder">
-              <div style="font-size:18px;margin-bottom:4px">📷</div>
               <div class="drop-zone-text">Click or <strong>Ctrl+V</strong></div>
             </div>
           </div>
@@ -1167,7 +1198,7 @@ input[type=text]:focus, textarea:focus, select:focus {
           <div class="toggle-row on" id="webSearchToggle" onclick="toggleWebSearch()">
             <div class="toggle-switch"></div>
             <div class="toggle-text">
-              🌐 Актуальна інформація / Real-time info
+              Актуальна інформація / Real-time info
               <small>Пошук трендів, тегів і назв через веб-пошук</small>
             </div>
           </div>
@@ -1181,46 +1212,63 @@ input[type=text]:focus, textarea:focus, select:focus {
     </div>
   </div>
 
-  <!-- TEMPLATE PAGE -->
-  <div class="pg" id="pg-tpl">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="panel">
-        <div class="panel-head"><div class="pip" style="background:var(--teal)"></div>Edit Template / Шаблон</div>
-        <div class="row2">
-          <div class="field"><label>Template Name / Назва</label><input type="text" id="tplName" placeholder="My Template" /></div>
-          <div class="field"><label>Channel / Канал</label><input type="text" id="tplChannel" value="BrainCube by Dmytro" /></div>
+  <!-- MAIN VIDEO (LONG-FORM) PAGE -->
+  <div class="pg" id="pg-long">
+    <div class="panel">
+      <div class="panel-head"><div class="pip" style="background:var(--teal)"></div>Main Video Parameters / Параметри основного відео</div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Video category / Категорія відео</label>
+          <select id="lvCategory">
+            <option value="ai" selected>AI decides / Нехай AI вирішить сам</option>
+            <option value="tutorial">Tutorial / Туторіал-навчання</option>
+            <option value="mosaic">Rubik's mosaic / Мозаїка з кубиків</option>
+            <option value="puzzle_overview">Puzzle collection overview / Огляд головоломок</option>
+            <option value="review">Unboxing &amp; review / Розпакування й огляд</option>
+            <option value="challenge">Challenge / Челендж</option>
+            <option value="story_vlog">Story / vlog / Історія-влог</option>
+            <option value="other">Other / Інше</option>
+          </select>
         </div>
-        <div class="row2">
-          <div class="field">
-            <label>Title Style / Стиль заголовку</label>
-            <select id="tplTitleStyle">
-              <option value="hook">Hook (Stop doing X!)</option>
-              <option value="secret">Secret Tip</option>
-              <option value="speed">Speed / Fast</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Sequence / Послідовність (тільки для режиму "Алгоритм")</label>
-            <select id="tplSequence">
-              <option value="hook_case_slow_fast_outro">Hook→Case→Slow→Fast→Outro</option>
-              <option value="hook_fast_slow_explain_outro">Hook→Fast→Slow→Explain→Outro</option>
-            </select>
-          </div>
-        </div>
-        <div class="field"><label>CTA (Call to Action)</label><input type="text" id="tplCTA" value="Subscribe for daily CFOP tips!" /></div>
-        <div class="field"><label>Base Hashtags / Хештеги</label><input type="text" id="tplHashtags" value="#Shorts #Speedcubing #RubiksCube #BrainCube" /></div>
-        <div style="display:flex;gap:7px;margin-top:4px">
-          <button class="btn btn-teal" onclick="saveTpl()" style="flex:1">Save / Зберегти</button>
-          <button class="btn btn-ghost" onclick="newTpl()">+ New</button>
+        <div class="field">
+          <label>Duration / Тривалість</label>
+          <select id="lvDuration">
+            <option value="3">~3 хв · короткий</option>
+            <option value="5" selected>~5 хв</option>
+            <option value="8">~8 хв</option>
+            <option value="12">~12 хв</option>
+            <option value="20">~20 хв · лонгрід</option>
+          </select>
         </div>
       </div>
-      <div class="panel">
-        <div class="panel-head"><div class="pip"></div>Saved / Збережені</div>
-        <div id="tplList"></div>
+
+      <div class="field">
+        <label>Topic / Тема відео (можна написати свою або обрати категорію вище)</label>
+        <input type="text" id="lvTopic" placeholder="Наприклад: Мозаїка Гомера Сімпсона з 50 кубиків 3x3 / GAN 14 Pro повний огляд / Топ-5 головоломок для початківців..." />
       </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Cube(s) / Кубик(и) (не обов'язково)</label>
+          <input type="text" id="lvCube" placeholder="GAN 14, MoYu RS3M V5, набір 3x3 x50..." />
+        </div>
+        <div class="field">
+          <label>Approx. details / Приблизні деталі (не обов'язково)</label>
+          <input type="text" id="lvDetails" placeholder="кількість кубиків, рівень складності, стиль монтажу..." />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Notes / Додаткові нотатки</label>
+        <input type="text" id="lvNotes" placeholder="будь-які інші побажання щодо сценарію..." />
+      </div>
+
+      <button class="btn btn-gen" id="lvGenBtn" onclick="generateLong()">Generate Video Plan / Згенерувати сценарій</button>
     </div>
   </div>
 
+  <!-- TEMPLATE PAGE -->
   <!-- HISTORY PAGE -->
   <div class="pg" id="pg-hist">
     <div class="panel">
@@ -1228,6 +1276,11 @@ input[type=text]:focus, textarea:focus, select:focus {
         <div class="pip" style="background:var(--yellow)"></div>
         History / Історія
         <button class="btn btn-red" onclick="clearHist()" style="margin-left:auto">Clear / Очистити</button>
+      </div>
+      <div class="nav" id="histSubnav" style="margin-bottom:14px">
+        <div class="nav-tab on" onclick="setHistFilter('all')" id="histTabAll">All / Все</div>
+        <div class="nav-tab" onclick="setHistFilter('shorts')" id="histTabShorts">Shorts</div>
+        <div class="nav-tab" onclick="setHistFilter('long')" id="histTabLong">Main video / Основне відео</div>
       </div>
       <div id="histList" style="color:var(--muted);font-size:0.8rem;text-align:center;padding:18px">Empty / Поки пусто...</div>
     </div>
@@ -1254,7 +1307,7 @@ input[type=text]:focus, textarea:focus, select:focus {
       </div>
 
       <div style="font-size:0.68rem;color:var(--dim);line-height:1.5;margin-bottom:10px">
-        🌐 Пошук завжди йде через весь інтернет і прив'язується до <strong id="ideasNowLabel"></strong> — щоб ідеї були максимально актуальні саме на цей момент.
+        Пошук завжди йде через весь інтернет і прив'язується до <strong id="ideasNowLabel"></strong> — щоб ідеї були максимально актуальні саме на цей момент.
       </div>
 
       <button class="btn btn-gen" id="ideasBtn" onclick="generateIdeas()">Generate Ideas / Згенерувати ідеї</button>
@@ -1281,18 +1334,29 @@ input[type=text]:focus, textarea:focus, select:focus {
     <div class="modal-body" id="modalBody">
       <div class="mloader"><div class="spin"></div><div>Analyzing... / Аналізую...</div></div>
     </div>
+    <div class="refine-bar" id="refineBar" style="display:none">
+      <input type="text" id="refineInput" placeholder="Що виправити? Наприклад: зроби хук енергійнішим, прибери 3-й кейс, зроби опис коротшим..." onkeydown="if(event.key==='Enter') requestRefine()" />
+      <button type="button" class="btn btn-teal" id="refineBtn" onclick="requestRefine()">Виправити / Fix with AI</button>
+    </div>
+    <div class="refine-loading" id="refineLoading">
+      <div class="spin"></div>
+      <div class="refine-loading-text">ШІ виправляє сценарій... / AI is fixing the script...</div>
+      <div class="refine-loading-sub">Зазвичай це займає кілька секунд. Не закривай вікно.</div>
+    </div>
   </div>
 </div>
 
 <script>
-let curTpl = null;
 let imgB64 = null;
 let lastResult = null;
+let lastLongResult = null;
+let activeMode = null;          // 'shorts' | 'long' | null — which result is currently shown in the modal
+let activeHistoryIndex = null;  // index into history[] of the result currently shown in the modal
+let histFilter = 'all';         // 'all' | 'shorts' | 'long' — which History sub-tab is active
 let lastTitleEN = '', lastTitleUA = '', lastTitleHashtags = '';
 let currentProvider = 'gemini'; // 'gemini' | 'claude'
 let currentMode = 'algo'; // 'algo' | 'topic'
 let useWebSearch = true;
-let templates = JSON.parse(localStorage.getItem('bc_tpl') || '[]');
 let history   = JSON.parse(localStorage.getItem('bc_hist') || '[]');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1328,9 +1392,7 @@ document.addEventListener('DOMContentLoaded', () => {
   useWebSearch = ws === null ? true : ws === '1';
   document.getElementById('webSearchToggle').classList.toggle('on', useWebSearch);
 
-  renderTpls();
   renderHist();
-  if (templates.length) loadTpl(0);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
   document.addEventListener('paste', onPaste);
 });
@@ -1361,6 +1423,18 @@ function switchMode(m) {
 function frameCountForDuration(sec) {
   const map = { 15: 3, 30: 5, 45: 6, 60: 7 };
   return map[sec] || 5;
+}
+
+// ── LONG VIDEO: duration (minutes) → approx total scene-count range ──
+function sceneRangeForLongDuration(min) {
+  const map = {
+    3:  '8-10',
+    5:  '12-16',
+    8:  '18-24',
+    12: '25-32',
+    20: '35-45'
+  };
+  return map[min] || '12-16';
 }
 
 function updateKeyHint(provider, saved) {
@@ -1396,7 +1470,7 @@ function saveClaudeModel() {
 }
 
 function switchTab(id) {
-  const tabs = ['gen','tpl','hist','ideas'];
+  const tabs = ['gen','long','hist','ideas'];
   document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('on', tabs[i] === id));
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   document.getElementById('pg-'+id).classList.add('on');
@@ -1443,66 +1517,14 @@ function onPaste(e) {
   }
 }
 
-function saveTpl() {
-  const name = document.getElementById('tplName').value.trim();
-  if (!name) { toast('Enter a template name / Введи назву шаблону', 'err'); return; }
-  const t = {
-    id: Date.now(), name,
-    titleStyle: document.getElementById('tplTitleStyle').value,
-    channel: document.getElementById('tplChannel').value,
-    hashtags: document.getElementById('tplHashtags').value,
-    cta: document.getElementById('tplCTA').value,
-    sequence: document.getElementById('tplSequence').value,
-  };
-  const i = templates.findIndex(x => x.name === name);
-  if (i >= 0) templates[i] = t; else templates.push(t);
-  localStorage.setItem('bc_tpl', JSON.stringify(templates));
-  curTpl = t; renderTpls(); toast('Template saved / Шаблон збережено', 'ok');
-}
-function loadTpl(i) {
-  const t = templates[i]; curTpl = t;
-  document.getElementById('tplName').value       = t.name;
-  document.getElementById('tplChannel').value    = t.channel;
-  document.getElementById('tplTitleStyle').value = t.titleStyle;
-  document.getElementById('tplSequence').value   = t.sequence || 'hook_case_slow_fast_outro';
-  document.getElementById('tplCTA').value        = t.cta;
-  document.getElementById('tplHashtags').value   = t.hashtags;
-  renderTpls();
-}
-function delTpl(i) {
-  if (!confirm('Delete? / Видалити?')) return;
-  templates.splice(i, 1);
-  localStorage.setItem('bc_tpl', JSON.stringify(templates));
-  curTpl = templates.length ? templates[0] : null;
-  if (curTpl) loadTpl(0);
-  renderTpls();
-}
-function newTpl() {
-  document.getElementById('tplName').value       = '';
-  document.getElementById('tplChannel').value    = 'BrainCube by Dmytro';
-  document.getElementById('tplTitleStyle').value = 'hook';
-  document.getElementById('tplSequence').value   = 'hook_case_slow_fast_outro';
-  document.getElementById('tplCTA').value        = 'Subscribe for daily CFOP tips!';
-  document.getElementById('tplHashtags').value   = '#Shorts #Speedcubing #BrainCube';
-  renderTpls();
-}
-function renderTpls() {
-  const el = document.getElementById('tplList');
-  if (!templates.length) { el.innerHTML = '<div style="color:var(--muted);font-size:0.75rem;padding:5px">Empty / Пусто...</div>'; return; }
-  el.innerHTML = templates.map((t,i) => `
-    <div class="tpl-item ${curTpl && curTpl.id === t.id ? 'on' : ''}" onclick="loadTpl(${i})">
-      <div class="tpl-name">${esc(t.name)}</div>
-      <button class="btn btn-red" onclick="event.stopPropagation();delTpl(${i})">✕</button>
-    </div>`).join('');
-}
-
 function historyContext() {
-  if (!history.length) return '';
-  const list = history.slice(0, 10).map((h,i) => {
+  const shortsHist = history.filter(h => h.mode === 'topic' || h.mode === 'algo');
+  if (!shortsHist.length) return '';
+  const list = shortsHist.slice(0, 10).map((h,i) => {
     const subject = h.mode === 'topic' ? `topic: ${h.topic || 'N/A'}` : `algo: ${h.algorithm || 'N/A'}`;
     return `${i+1}. "${h.titleUA || h.titleEN}" (${h.contentType || h.mode}, ${subject})`;
   }).join('\n');
-  return `\n\nIMPORTANT — LAST ${Math.min(history.length,10)} GENERATED VIDEOS (do NOT repeat these topics or titles):\n${list}`;
+  return `\n\nIMPORTANT — LAST ${Math.min(shortsHist.length,10)} GENERATED VIDEOS (do NOT repeat these topics or titles):\n${list}`;
 }
 
 // ──────────── MAIN PROMPT builder ────────────
@@ -1563,7 +1585,7 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
   // Build placeholder arrays of the right length for the example JSON block
   const arr = (val) => JSON.stringify(Array.from({ length: frameCount }, () => val));
 
-  return `You are an expert YouTube Shorts producer for the speedcubing channel "${tpl.channel || 'BrainCube'}".
+  return `You are an expert YouTube Shorts producer for the speedcubing channel "${tpl.channel || 'Brain Cube'}".
 
 Video mode: ${isAlgo ? 'ALGORITHM TUTORIAL' : 'FREE TOPIC (no algorithm)'}
 
@@ -1582,6 +1604,9 @@ Input fields may be written in English, Ukrainian, or a mix — this makes no di
 
 FACELESS RULE (very important, applies to EVERY frame without exception):
 This is a 100% FACELESS channel. The creator's face, mouth, or any talking-head / on-camera-selfie shot must NEVER appear or be implied. Every VISUALS (visualsUA) entry must describe a shot that shows ONLY: hands + cube close-ups, the cube itself, a table/desk surface, a screen recording/timer, text/graphics overlays, or other objects/b-roll — never "look at the camera", "show your face", "talk to viewer on camera", "selfie", "vlog-style shot", etc. All narration (voiceEN/voiceUA) is heard as voice-over only, never delivered on-camera.
+
+NO EMOJI RULE (very important, applies to every field in the output without exception):
+NEVER use emoji, emoticons, or decorative Unicode symbols (no rocket, fire, camera, checkmark emoji, etc.) anywhere in titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, tags, or seoTip. Plain text only (hashtags using the "#" character are fine).
 
 STRICT RULES:
 1. STRUCTURE: ${seqRule}
@@ -1612,6 +1637,240 @@ Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voice
   "tagsSpecific": ["...", "...", "..."],
   "seoTip": "Коротка SEO порада"
 }`;
+}
+
+// ──────────── LONG VIDEO history context (separate list, doesn't repeat Shorts topics) ──────────
+function longHistoryContext() {
+  const longHist = history.filter(h => h.mode === 'long');
+  if (!longHist.length) return '';
+  const list = longHist.slice(0, 8).map((h,i) => `${i+1}. "${h.titleUA || h.titleEN}" (${h.contentType || 'ai'}, topic: ${h.topic || 'N/A'})`).join('\n');
+  return `\n\nIMPORTANT — LAST ${Math.min(longHist.length,8)} GENERATED MAIN/LONG-FORM VIDEOS (do NOT repeat these topics or titles):\n${list}`;
+}
+
+const LV_CATEGORY_LABEL = {
+  ai: 'AI-PICKED', tutorial: 'TUTORIAL', mosaic: 'MOSAIC', puzzle_overview: 'OVERVIEW',
+  review: 'REVIEW', challenge: 'CHALLENGE', story_vlog: 'STORY/VLOG', other: 'OTHER'
+};
+
+const LV_CATEGORY_HINT = {
+  ai:              'Decide the single best-fitting content category yourself based on the topic (could be a tutorial, mosaic build, puzzle/collection overview, unboxing & review, challenge, story/vlog, or anything else that fits) — do not force it into a category that does not fit.',
+  tutorial:        'This is a TUTORIAL / how-to video (teaching a method, technique, or skill step by step).',
+  mosaic:          'This is a RUBIK\'S MOSAIC / CUBE-ART build video — arranging many cubes (or many faces) into a picture/mosaic. Cover: the concept/reference image, planning the pattern, the building/assembly process, problems encountered, and the reveal of the finished mosaic.',
+  puzzle_overview: 'This is a PUZZLE COLLECTION OVERVIEW — presenting and comparing multiple different twisty puzzles (not just one cube). Cover each puzzle with its own mini-segment: what it is, how it feels/turns, difficulty, and a quick verdict.',
+  review:          'This is an UNBOXING & REVIEW video for one (or a couple of) specific puzzle products. Cover: unboxing, first impressions/feel, internals/mechanism if relevant, performance testing, setup/lube if relevant, final verdict & value for money.',
+  challenge:       'This is a CHALLENGE video (speed challenge, blindfolded, one-handed, endurance, etc.) — cover setup of the challenge, attempts, struggles/highlights, and result.',
+  story_vlog:      'This is a STORY / VLOG style video — a personal narrative, journey, or opinion piece about cubing, told across a natural arc.',
+  other:           'Pick whatever real YouTube long-form format best fits the given topic; do not force an unrelated structure onto it.'
+};
+
+// ──────────── LONG/MAIN VIDEO prompt builder ────────────
+function buildLongPrompt(fields, durationMin, webSearchOn) {
+  const hCtx = longHistoryContext();
+  const sceneRange = sceneRangeForLongDuration(durationMin);
+  const categoryHint = LV_CATEGORY_HINT[fields.category] || LV_CATEGORY_HINT.ai;
+  const { dateHuman, timeHuman, iso } = nowStampForIdeas();
+
+  const webSearchBlock = webSearchOn
+    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check current facts relevant to this exact topic (e.g. real specs/price of a mentioned cube model, currently trending puzzle/mosaic ideas, recent community news, and what titles/thumbnails are currently performing well for similar content) so titles, thumbnails, description and details are accurate, current, and maximally clickable right now. If search is unavailable, fall back to solid general knowledge/best practice instead of guessing at "current" facts.`
+    : '';
+
+  return `You are an expert YouTube long-form video producer, scriptwriter, and thumbnail/CTR strategist for the speedcubing/twisty-puzzle channel "Brain Cube".
+
+CURRENT MOMENT (treat as ground truth — this video is being created right now):
+- Date: ${dateHuman}
+- Time: ${timeHuman} (Europe/Kyiv)
+- ISO timestamp: ${iso}
+
+TASK: Design a complete, ready-to-film long-form (main channel, NOT Shorts) video script for the topic below. This is a flexible, general "main video" format — you must figure out the best structure yourself based on the topic and category hint, the same way a real experienced YouTube producer would plan an actual video for that specific topic. Topics can be extremely varied: step-by-step tutorials, huge Rubik's-cube mosaic builds, overviews of many different puzzles, unboxings/reviews, challenges, story/vlogs, and more — adapt the whole structure, section count and scene count to what actually fits THIS topic. Do not force every video into the same generic shape.
+
+CATEGORY HINT: ${categoryHint}
+
+Video details (raw user input — see AUTO-CORRECT rule below):
+- Topic: ${fields.topic}
+- Cube(s) mentioned (optional): ${fields.cube || 'N/A'}
+- Approx. details (optional): ${fields.details || 'N/A'}
+- Extra notes (optional): ${fields.notes || 'N/A'}
+- Target length: ~${durationMin} minutes
+${hCtx}${webSearchBlock}
+
+AUTO-CORRECT RULE (very important):
+The fields above were typed quickly by a human and may contain typos, misspelled cube/model names, wrong WCA notation, or Ukrainian/English mixed together in any field. Silently fix all of this yourself and use the corrected version everywhere in the output. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field. If nothing needed fixing, return "corrections": "".
+
+LANGUAGE RULE (very important):
+The user input may be in English, Ukrainian, or mixed — this makes no difference. Produce a complete, natural, correctly translated version in BOTH English and Ukrainian for every bilingual field, regardless of what language the user typed in. The only exceptions are algorithm notation (WCA notation, e.g. R U R' U') and cube brand/model names, which stay as-is in both languages.
+
+FACELESS RULE (very important, applies to every scene without exception):
+This is a 100% FACELESS channel. The creator's face, mouth, or any talking-head / on-camera-selfie shot must NEVER appear or be implied. Every "action" (what to film) entry must describe a shot that shows ONLY: hands + cube/puzzle close-ups, the object itself, a table/desk surface, a screen recording/timer, text/graphics overlays, or other objects/b-roll — never "look at camera", "show your face", "talk to viewer on camera", "selfie", "vlog-style face shot". All narration (voiceEN/voiceUA) is voice-over only, never delivered on-camera.
+
+NO EMOJI RULE (very important, applies to every single field in the output without exception):
+NEVER use emoji, emoticons, or decorative Unicode symbols (no rocket/fire/camera/checkmark emoji etc.) anywhere — not in titles, thumbnailIdea, description, section titles, music notes, scene action, voice-over, screen text, tags, or seoTip. Plain text only (the "#" character in hashtags is fine).
+
+TITLES & THUMBNAILS RULE (very important):
+Propose EXACTLY 3 distinct title options, each paired with its own thumbnail concept. These must be optimized to be as clickable as possible for an audience seeing this RIGHT NOW (${dateHuman}) — think like a real YouTube strategist chasing maximum CTR for this exact topic today, not a generic evergreen title. The 3 options should take genuinely different angles (e.g. curiosity/question, bold claim/number, drama/before-after) rather than being small rewordings of each other. For each option provide:
+   - "titleEN" / "titleUA": the title itself (5-12 words, catchy but honest about the content, no clickbait lies).
+   - "thumbnailIdea": 1-2 sentences (Ukrainian) describing concretely what should be on the cover/thumbnail for THIS title — main visual subject, facial/hand expression or framing (still following the FACELESS RULE — no visible face, use hands/cube/objects/reaction-style graphics instead), any bold on-thumbnail text (short, ALL CAPS, max 4 words, no emoji), and color/mood direction.
+Order the 3 options from strongest to weakest recommendation. The FIRST one is treated as the recommended default.
+
+STRUCTURE RULES:
+1. Base narrative flow to build the sections around (adapt intelligently to the specific topic/category — merge, reorder, or skip a step only when there is a genuine reason it doesn't fit, but keep the overall spirit and always keep a real hook and a real ending):
+   a. Hook — a few very strong opening seconds that create curiosity or tension, before any greeting.
+   b. Greeting / intro — a brief, natural welcome and a one-line statement of what this video is about.
+   c. Main part 1 — the first major chunk of the actual content.
+   d. Interactive moment — a genuine moment of engagement with the viewer (a direct question to answer in the comments, a "pause and try this yourself" prompt, a poll-style either/or, or similar) that fits the topic naturally, not forced.
+   e. Main part 2 — the second major chunk of the actual content, building on part 1.
+   f. Conclusions — a short summary of what was covered/learned/shown.
+   g. Outro / ending — thanks + a natural CTA (subscribe/like/comment).
+   You are the producer: if the topic/category genuinely doesn't support two separate main parts or a natural interactive moment (e.g. a very short simple review), adapt intelligently rather than padding artificially — but always keep a coherent arc with a real hook and a real ending.
+2. Turn this flow into SECTIONS — each section maps to one (or more, if merged) of the steps above, using a topic-specific "sectionTitle" (Ukrainian, plain text, NO emoji) rather than literally "Hook"/"Greeting"/etc. Each section also needs a one-line "musicNote" (Ukrainian) describing the mood/music for that section.
+3. Each section contains an array of "scenes". Distribute a TOTAL of approximately ${sceneRange} scenes across all sections combined — pick the exact count that best fits the topic within that range, don't pad artificially.
+4. Every scene has:
+   - "action": 1 sentence (Ukrainian) describing exactly what to film in this scene (per FACELESS RULE).
+   - "voiceEN": 1-3 natural sentences of voice-over narration in English for this scene (conversational, like a real creator talking to the camera in voice-over).
+   - "voiceUA": the full, natural Ukrainian translation of voiceEN (not literal word-for-word, must sound natural).
+   - "screenText": OPTIONAL short on-screen text/caption for this scene (max 6 words, ALL CAPS, English, NO emoji) — use "" if this scene doesn't need one (most emotional/talking scenes don't need one; use it mainly for key facts, numbers, or section transitions).
+5. The FIRST scene overall must be the Hook. The LAST scene overall must include the natural CTA worked into the narration.
+6. Do NOT repeat topics/titles from the history list above.
+7. TAGS (tagsUniversal / tagsSpecific): JSON arrays of separate short lowercase keyword strings, no "#" symbol.
+   - tagsUniversal: 12-18 broad tags fitting any video on this channel.
+   - tagsSpecific: 10-15 tags specific to this exact topic/category/cube.
+8. descriptionEN and descriptionUA: SHORT and natural — a hook line, then 2-3 sentences about what the video covers overall. Do NOT list out the individual section/chapter titles or a "In this video: - ..." style outline — just a brief, natural overview, like a real YouTube description. End with the CTA, then 6-8 hashtags.
+
+Return ONLY valid JSON (no markdown, no extra text), following this exact shape (section/scene counts are illustrative only — use your own judgment per the rules above):
+{
+  "corrections": "Коротко що було виправлено, або порожній рядок",
+  "titles": [
+    { "titleEN": "Strongest option — catchy but honest English title", "titleUA": "Найсильніший варіант — заголовок українською", "thumbnailIdea": "Що має бути на обкладинці для цього варіанту" },
+    { "titleEN": "Second angle title", "titleUA": "Другий варіант заголовка", "thumbnailIdea": "Ідея обкладинки для другого варіанту" },
+    { "titleEN": "Third angle title", "titleUA": "Третій варіант заголовка", "thumbnailIdea": "Ідея обкладинки для третього варіанту" }
+  ],
+  "descriptionEN": "Hook line.\\n\\nA short 2-3 sentence overview of what this video covers.\\n\\nSubscribe for more!\\n\\n#Hashtags",
+  "descriptionUA": "Гачок.\\n\\nКоротко 2-3 речення про що це відео.\\n\\nПідписуйтесь!\\n\\n#Хештеги",
+  "sections": [
+    {
+      "sectionTitle": "Назва секції",
+      "musicNote": "Коротка нотатка про музику/настрій",
+      "scenes": [
+        { "action": "Що знімати в цій сцені", "voiceEN": "Voice-over line(s) for this scene.", "voiceUA": "Переклад начитки для цієї сцени.", "screenText": "" }
+      ]
+    }
+  ],
+  "tagsUniversal": ["speedcubing", "rubik's cube", "cubing", "..."],
+  "tagsSpecific": ["...", "...", "..."],
+  "seoTip": "Коротка SEO порада для цього конкретного відео"
+}`;
+}
+
+// ──────────── REFINE / FIX prompt builder (used for both Shorts and Main video results) ────────────
+function buildRefinePrompt(mode, originalResult, userRequest) {
+  // Strip internal/UI-only fields before sending back to the model
+  const clean = Object.assign({}, originalResult);
+  delete clean.__categoryLabel;
+  const originalJson = JSON.stringify(clean, null, 2);
+
+  if (mode === 'long') {
+    return `You previously generated the following JSON result for a YouTube long-form/main-channel video script for the speedcubing/twisty-puzzle channel "Brain Cube":
+
+${originalJson}
+
+The human creator reviewed this and requested the following change:
+"${userRequest}"
+
+Apply exactly this requested change (for example: removing/merging/splitting a section or scene, rewording a title or thumbnail idea, shortening or lengthening the description, changing the hook, adjusting tone, fixing a factual detail, etc). Keep everything else that the user did NOT ask to change as close to the original as reasonably possible — do NOT regenerate unrelated parts from scratch, and do not remove content the user didn't ask you to remove.
+
+Keep following all of the original rules:
+- FACELESS channel: no face/on-camera shots ever, every "action" only describes hands/object/screen/b-roll shots.
+- Fully bilingual EN + UA voice-over (voiceEN / voiceUA), natural translations, not literal.
+- NO emoji, emoticons, or decorative Unicode symbols anywhere in any field.
+- Exactly 3 distinct title options in "titles", each with its own "titleEN", "titleUA" and "thumbnailIdea".
+- descriptionEN / descriptionUA stay SHORT (hook line + 2-3 sentences overview + CTA + 6-8 hashtags) — do NOT add a bullet-point outline of section titles.
+- tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol.
+
+Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titles, descriptionEN, descriptionUA, sections, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
+  }
+
+  return `You previously generated the following JSON result for a YouTube Shorts video for the speedcubing channel "Brain Cube":
+
+${originalJson}
+
+The human creator reviewed this and requested the following change:
+"${userRequest}"
+
+Apply exactly this requested change (for example: rewording the title, adjusting a frame's voice-over or on-screen text, fixing the algorithm notation, changing the tone, fixing a factual detail, etc). Keep everything else that the user did NOT ask to change as close to the original as reasonably possible — do NOT regenerate unrelated parts from scratch.
+
+Keep following all of the original rules:
+- FACELESS channel: no face/on-camera shots ever, every "visualsUA" entry only describes hands/cube/screen/b-roll shots.
+- Fully bilingual EN + UA content, natural translations, not literal.
+- NO emoji, emoticons, or decorative Unicode symbols anywhere in any field.
+- The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA must all keep the exact same number of elements as in the original JSON above, unless the user explicitly asked to change the number of frames.
+- tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol.
+
+Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
+}
+
+async function requestRefine() {
+  const userRequest = document.getElementById('refineInput').value.trim();
+  if (!userRequest) { toast('Напиши що саме виправити', 'err'); return; }
+  if (activeMode === null || activeHistoryIndex === null || !history[activeHistoryIndex]) {
+    toast('Немає що виправляти', 'err');
+    return;
+  }
+
+  let apiKey;
+  if (currentProvider === 'gemini') {
+    apiKey = document.getElementById('geminiKey').value.trim() || localStorage.getItem('bc_apikey') || '';
+    if (!apiKey) { toast('Введи Gemini API ключ', 'err'); return; }
+  } else {
+    apiKey = document.getElementById('claudeKey').value.trim() || localStorage.getItem('bc_claude_key') || '';
+    if (!apiKey) { toast('Введи Claude (Anthropic) API ключ', 'err'); return; }
+  }
+
+  const btn = document.getElementById('refineBtn');
+  const input = document.getElementById('refineInput');
+  const loadingEl = document.getElementById('refineLoading');
+
+  btn.disabled = true;
+  input.disabled = true;
+  btn.textContent = 'Виправляю... / Fixing...';
+  loadingEl.classList.add('on');
+
+  const original = history[activeHistoryIndex].full;
+  const prompt = buildRefinePrompt(activeMode, original, userRequest);
+
+  try {
+    let d;
+    if (currentProvider === 'gemini') {
+      d = await callGemini(prompt, apiKey, false);
+    } else {
+      d = await callClaude(prompt, apiKey, false);
+    }
+
+    if (activeMode === 'long') {
+      d.__categoryLabel = original.__categoryLabel || '';
+      renderLongResult(d);
+      const topTitle = Array.isArray(d.titles) && d.titles[0] ? d.titles[0] : {};
+      history[activeHistoryIndex].titleEN = topTitle.titleEN || '';
+      history[activeHistoryIndex].titleUA = topTitle.titleUA || '';
+      history[activeHistoryIndex].title   = topTitle.titleEN || topTitle.titleUA || '';
+    } else {
+      renderResult(d);
+      history[activeHistoryIndex].titleEN = d.titleEN;
+      history[activeHistoryIndex].titleUA = d.titleUA;
+      history[activeHistoryIndex].title   = d.titleEN || d.titleUA;
+    }
+    history[activeHistoryIndex].full = d;
+    localStorage.setItem('bc_hist', JSON.stringify(history));
+    renderHist();
+    showRefineBar();
+    toast('Виправлено ✓', 'ok');
+
+  } catch (e) {
+    toast(`Помилка [${currentProvider}]: ${e.message}`, 'err');
+  }
+
+  loadingEl.classList.remove('on');
+  btn.disabled = false;
+  input.disabled = false;
+  btn.textContent = 'Виправити / Fix with AI';
 }
 
 // ──────────── GEMINI API call ────────────
@@ -1701,36 +1960,43 @@ function nowStampForIdeas() {
 
 function buildIdeasPrompt(niche, count) {
   const { dateHuman, timeHuman, iso } = nowStampForIdeas();
-  const nicheLine = niche ? niche : 'speedcubing / Rubik\'s cube (загальна тема каналу)';
+  const nicheLine = niche ? niche : 'speedcubing / Rubik\'s cube (general channel theme)';
 
-  return `You are a YouTube Shorts / TikTok content strategist for a speedcubing channel called "BrainCube Studio".
+  return `You are a YouTube Shorts / TikTok content strategist for a speedcubing channel called "Brain Cube".
+
+TARGET AUDIENCE (very important): This channel's audience is English-speaking and global (US / UK / worldwide English-speaking cubing community) — it is NOT a Ukrainian-audience channel. Every idea, trend, and reference must be something that lands with an English-speaking viewer scrolling English-language TikTok/YouTube Shorts. Do NOT propose ideas based on Ukrainian-only news, Ukrainian-language trends, or Ukrainian creators/events unless that same story is also genuinely current news for the global English-speaking cubing community.
 
 CURRENT MOMENT (treat this as ground truth — it is happening right now, do NOT rely only on older training knowledge):
 - Date: ${dateHuman}
-- Time: ${timeHuman} (Europe/Kyiv)
+- Time: ${timeHuman} (Europe/Kyiv, creator's local time — for scheduling reference only, NOT the audience's location)
 - ISO timestamp: ${iso}
 
 NICHE / FOCUS for these ideas: ${nicheLine}
 
 FACELESS CHANNEL (very important): This creator NEVER shows their face — no talking-head, no on-camera selfie shots, no "react on camera" formats. Every idea must be filmable using only hands + cube close-ups, screen recordings, text/graphics overlays, and voice-over narration. Do not propose ideas that require the creator to be visibly on camera.
 
-TASK: You have web search available — actually use it. Search the internet for what is happening RIGHT NOW (as close as possible to ${iso}) that is relevant to this niche: recent product launches (new cube models), upcoming or just-finished WCA competitions/events, viral TikTok/YouTube Shorts trends, sounds, challenges, hashtags, community news, records, controversies, or general short-form-video trends that a speedcubing creator could jump on TODAY. Prioritize genuinely current, dated information over generic evergreen ideas.
+NO EMOJI RULE (very important): NEVER use emoji, emoticons, or decorative Unicode symbols anywhere in the output (titles, hook, whyNow, hashtags, etc). Plain text only.
+
+TASK: You have web search available — actually use it. Search the internet (in English) for what is happening RIGHT NOW (as close as possible to ${iso}) that is relevant to this niche for an English-speaking, global audience: recent product launches (new cube models), upcoming or just-finished WCA competitions/events, viral English-language TikTok/YouTube Shorts trends, sounds, challenges, hashtags, community news, records, controversies, or general short-form-video trends that a speedcubing creator could jump on TODAY. Prioritize genuinely current, dated information over generic evergreen ideas.
 
 Propose EXACTLY ${count} distinct video ideas. Each idea must be something that makes sense to film specifically around ${dateHuman} — explain in "whyNow" exactly which real, current fact/trend/event it is tied to (name it concretely; do not just say "trends"). If truly nothing timely can be found for a couple of the ideas, you may include strong evergreen ideas but you MUST say so honestly in "whyNow" (e.g. "evergreen idea — no specific current trend found").${ideasHistoryContext()}
 
 For each idea return:
-- titleEN, titleUA: catchy Shorts-style titles (5-9 words)
+- titleEN, titleUA: catchy Shorts-style titles (5-9 words). titleEN is the primary title this idea is actually built around (for the English-speaking audience); titleUA is only a translation for the creator's own reference.
 - hook: 1 punchy sentence (English) describing the opening hook of the video
-- whyNow: 1-2 sentences (Ukrainian) explaining concretely why this idea is relevant RIGHT NOW, citing the specific real thing found via search (news/event/trend/release)
+- whyNow: 1-2 sentences (Ukrainian) — this is an internal note for the creator only, explaining concretely why this idea is relevant RIGHT NOW for the English-speaking audience, citing the specific real thing found via search (news/event/trend/release)
 - category: one of "algo" (algorithm tutorial), "qa", "story", "opinion", "challenge", "advice", "other" — whichever the "Generate" tab modes/categories support
-- suggestedTopic: a ready-to-paste short string for the app's "Topic" field (Ukrainian or English, whichever fits), OR if category is "algo", a ready-to-paste algorithm/case description
-- hashtags: array of 3-6 relevant hashtag words (no # symbol)
+- suggestedTopic: a ready-to-paste short string for the app's "Topic" field, in English, OR if category is "algo", a ready-to-paste algorithm/case description
+- contentType: ONLY if category is "algo" — which "Content Type" this tutorial actually is, one of exactly: "f2l", "oll", "pll", "fingertricks", "method". If category is not "algo", set this to an empty string "".
+- durationSec: the Shorts length that best fits how much this idea needs to say, one of exactly: 15, 30, 45, 60 (15 = single quick tip/answer, 30 = standard, 45-60 = multi-step tutorial or longer story/challenge)
+- cube: a specific cube model that is naturally relevant to this idea (e.g. a cube just mentioned in the news/trend this idea is based on), or an empty string "" if no specific cube model is relevant
+- hashtags: array of 3-6 relevant ENGLISH hashtag words (no # symbol) — the ones actually trending with the English-speaking cubing/shorts audience
 
 Return ONLY valid JSON, no markdown, no extra text:
 {
   "generatedForDate": "${dateHuman}, ${timeHuman}",
   "ideas": [
-    { "titleEN": "...", "titleUA": "...", "hook": "...", "whyNow": "...", "category": "qa", "suggestedTopic": "...", "hashtags": ["...", "..."] }
+    { "titleEN": "...", "titleUA": "...", "hook": "...", "whyNow": "...", "category": "qa", "suggestedTopic": "...", "contentType": "", "durationSec": 30, "cube": "", "hashtags": ["...", "..."] }
   ]
 }`;
 }
@@ -1775,8 +2041,8 @@ async function generateIdeas() {
 }
 
 const IDEA_CATEGORY_LABEL = {
-  algo: '🧩 ALGO', qa: '💬 Q&A', story: '📖 STORY', opinion: '🗣 OPINION',
-  challenge: '🏆 CHALLENGE', advice: '💡 ADVICE', other: '✨ OTHER'
+  algo: 'ALGO', qa: 'Q&A', story: 'STORY', opinion: 'OPINION',
+  challenge: 'CHALLENGE', advice: 'ADVICE', other: 'OTHER'
 };
 
 function renderIdeas(d) {
@@ -1792,7 +2058,7 @@ function renderIdeas(d) {
   }
 
   el.innerHTML = lastIdeas.map((idea, i) => {
-    const badge = IDEA_CATEGORY_LABEL[idea.category] || '✨ OTHER';
+    const badge = IDEA_CATEGORY_LABEL[idea.category] || 'OTHER';
     const tags = Array.isArray(idea.hashtags) ? idea.hashtags.map(t => '#' + String(t).replace(/^#/, '')).join(' ') : '';
     return `<div class="idea-card">
       <div class="idea-card-top">
@@ -1802,7 +2068,7 @@ function renderIdeas(d) {
         </div>
         <span class="idea-badge">${badge}</span>
       </div>
-      <div class="idea-hook">🎬 ${esc(idea.hook)}</div>
+      <div class="idea-hook">${esc(idea.hook)}</div>
       <div class="idea-why"><strong>Чому саме зараз:</strong> ${esc(idea.whyNow)}</div>
       ${tags ? `<div class="idea-tags">${esc(tags)}</div>` : ''}
       <div class="idea-card-actions">
@@ -1816,16 +2082,28 @@ function useIdea(i) {
   const idea = lastIdeas[i];
   if (!idea) return;
   const isAlgo = idea.category === 'algo';
+
   switchTab('gen');
   switchMode(isAlgo ? 'algo' : 'topic');
+
+  const DURATION_OPTIONS = [15, 30, 45, 60];
+  const durationSelect = document.getElementById('duration');
+  const suggestedDuration = parseInt(idea.durationSec, 10);
+  durationSelect.value = DURATION_OPTIONS.includes(suggestedDuration) ? String(suggestedDuration) : '30';
+
   if (isAlgo) {
+    const contentTypeSelect = document.getElementById('contentType');
+    const validTypes = Array.from(contentTypeSelect.options).map(o => o.value);
+    contentTypeSelect.value = validTypes.includes(idea.contentType) ? idea.contentType : 'method';
     document.getElementById('algorithm').value = idea.suggestedTopic || '';
     document.getElementById('caseSlot').value = '';
+    document.getElementById('cubeUsed').value = idea.cube || '';
   } else {
     const catSelect = document.getElementById('topicCategory');
     const validCats = Array.from(catSelect.options).map(o => o.value);
     catSelect.value = validCats.includes(idea.category) ? idea.category : 'other';
     document.getElementById('topic').value = idea.suggestedTopic || idea.titleEN || '';
+    document.getElementById('topicCube').value = idea.cube || '';
   }
   document.getElementById('notes').value = idea.hook || '';
   toast('Ідею підставлено у форму ✓', 'ok');
@@ -1865,7 +2143,7 @@ async function generate() {
   resetModalBody();
   document.getElementById('genBtn').disabled = true;
 
-  const tpl         = curTpl || {};
+  const tpl         = {}; // channel/CTA/hashtag defaults are applied inside buildPrompt
   const durationSec  = parseInt(document.getElementById('duration').value, 10) || 30;
   const frameCount   = frameCountForDuration(durationSec);
   const prompt       = buildPrompt(currentMode, fields, tpl, useWebSearch, frameCount);
@@ -1879,6 +2157,9 @@ async function generate() {
     }
 
     renderResult(d);
+    activeMode = 'shorts';
+    activeHistoryIndex = 0;
+    showRefineBar();
 
     history.unshift({
       date: new Date().toLocaleString('uk-UA'),
@@ -1905,6 +2186,255 @@ async function generate() {
   document.getElementById('genBtn').disabled = false;
 }
 
+// ──────────── GENERATE — MAIN / LONG-FORM VIDEO ────────────
+async function generateLong() {
+  const fields = {
+    category: document.getElementById('lvCategory').value,
+    topic:    document.getElementById('lvTopic').value.trim(),
+    cube:     document.getElementById('lvCube').value.trim(),
+    details:  document.getElementById('lvDetails').value.trim(),
+    notes:    document.getElementById('lvNotes').value.trim()
+  };
+  if (!fields.topic) { toast('Введи тему відео', 'err'); return; }
+
+  // Get active API key (shared with the Shorts tab)
+  let apiKey;
+  if (currentProvider === 'gemini') {
+    apiKey = document.getElementById('geminiKey').value.trim() || localStorage.getItem('bc_apikey') || '';
+    if (!apiKey) { toast('Введи Gemini API ключ', 'err'); return; }
+  } else {
+    apiKey = document.getElementById('claudeKey').value.trim() || localStorage.getItem('bc_claude_key') || '';
+    if (!apiKey) { toast('Введи Claude (Anthropic) API ключ', 'err'); return; }
+  }
+
+  openModal();
+  resetModalBody();
+  document.getElementById('lvGenBtn').disabled = true;
+
+  const durationMin = parseInt(document.getElementById('lvDuration').value, 10) || 5;
+  const prompt = buildLongPrompt(fields, durationMin, useWebSearch);
+
+  try {
+    let d;
+    if (currentProvider === 'gemini') {
+      d = await callGemini(prompt, apiKey, useWebSearch);
+    } else {
+      d = await callClaude(prompt, apiKey, useWebSearch);
+    }
+
+    d.__categoryLabel = LV_CATEGORY_LABEL[fields.category] || '';
+    renderLongResult(d);
+    activeMode = 'long';
+    activeHistoryIndex = 0;
+    showRefineBar();
+
+    const topTitle = Array.isArray(d.titles) && d.titles[0] ? d.titles[0] : {};
+    history.unshift({
+      date: new Date().toLocaleString('uk-UA'),
+      mode: 'long',
+      topic: fields.topic,
+      contentType: fields.category,
+      durationSec: durationMin * 60,
+      provider: currentProvider,
+      titleEN: topTitle.titleEN || '',
+      titleUA: topTitle.titleUA || '',
+      title: topTitle.titleEN || topTitle.titleUA || '',
+      full: d
+    });
+    if (history.length > 30) history.pop();
+    localStorage.setItem('bc_hist', JSON.stringify(history));
+    renderHist();
+
+  } catch (e) {
+    closeModal();
+    toast(`Помилка [${currentProvider}]: ${e.message}`, 'err');
+  }
+
+  document.getElementById('lvGenBtn').disabled = false;
+}
+
+// Flatten all scenes across all sections into one indexable array (for copy-line buttons)
+function flattenLongScenes(d) {
+  const out = [];
+  (d.sections || []).forEach(sec => {
+    (sec.scenes || []).forEach(sc => out.push({ section: sec.sectionTitle || '', ...sc }));
+  });
+  return out;
+}
+
+function copyLongVoiceAll(lang, btn) {
+  if (!lastLongResult) return;
+  const field = lang === 'EN' ? 'voiceEN' : 'voiceUA';
+  const scenes = flattenLongScenes(lastLongResult);
+  const text = scenes.map((sc, i) => `${i + 1}. ${sc[field] || ''}`).join('\n');
+  copyTextToClipboard(text)
+    .then(() => flashCopied(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+
+function copyLongSceneLine(field, idx, btn) {
+  if (!lastLongResult) return;
+  const scenes = flattenLongScenes(lastLongResult);
+  const val = scenes[idx]?.[field] || '';
+  copyTextToClipboard(val)
+    .then(() => flashCopiedIcon(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+
+function copyLongTitle(idx, lang, btn) {
+  if (!lastLongResult || !Array.isArray(lastLongResult.titles)) return;
+  const t = lastLongResult.titles[idx];
+  if (!t) return;
+  const text = lang === 'EN' ? (t.titleEN || '') : (t.titleUA || '');
+  copyTextToClipboard(text)
+    .then(() => flashCopied(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+
+function copyLongFieldPlain(field, btn) {
+  if (!lastLongResult) return;
+  const text = lastLongResult[field] || '';
+  copyTextToClipboard(text)
+    .then(() => flashCopied(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+
+function renderLongResult(d) {
+  lastLongResult = d;
+  lastResult = d; // so the generic per-field/array copy helpers (copyFieldPlain etc.) also work here
+  const titles = Array.isArray(d.titles) ? d.titles : [];
+  document.getElementById('modalHead').textContent = (titles[0] && (titles[0].titleEN || titles[0].titleUA)) || 'Result';
+
+  let fixHtml = '';
+  if (d.corrections && String(d.corrections).trim()) {
+    fixHtml = `<div class="out-section">
+      <div class="fix-box">
+        <div>
+          <div class="fix-label">Автовиправлення / Auto-corrected</div>
+          <div class="fix-text">${esc(d.corrections)}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  const titleHtml = titles.map((t, i) => `<div class="res-card cols-2" style="margin-bottom:8px">
+      <div class="res-col en">
+        <div class="res-col-head">
+          <span class="res-col-lang">${i === 0 ? 'RECOMMENDED — ' : ''}EN</span>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongTitle(${i}, 'EN', this)">⧉ Копіювати</button>
+        </div>
+        <div class="title-text">${esc(t.titleEN)}</div>
+      </div>
+      <div class="res-col ua">
+        <div class="res-col-head">
+          <span class="res-col-lang">UA</span>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongTitle(${i}, 'UA', this)">⧉ Копіювати</button>
+        </div>
+        <div class="title-text">${esc(t.titleUA)}</div>
+      </div>
+    </div>
+    ${t.thumbnailIdea ? `<div class="res-card" style="margin-bottom:14px"><div class="res-col"><div class="res-col-head"><span class="res-col-lang">Обкладинка / Thumbnail idea</span></div><div class="res-body-text">${esc(t.thumbnailIdea)}</div></div></div>` : ''}`).join('');
+
+  const descHtml = `<div class="res-card cols-2">
+      <div class="res-col en">
+        <div class="res-col-head">
+          <span class="res-col-lang">EN — English</span>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongFieldPlain('descriptionEN', this)">⧉ Копіювати</button>
+        </div>
+        <div class="res-body-text">${esc(d.descriptionEN)}</div>
+      </div>
+      <div class="res-col ua">
+        <div class="res-col-head">
+          <span class="res-col-lang">UA — Українська</span>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongFieldPlain('descriptionUA', this)">⧉ Копіювати</button>
+        </div>
+        <div class="res-body-text">${esc(d.descriptionUA)}</div>
+      </div>
+    </div>`;
+
+  const sections = Array.isArray(d.sections) ? d.sections : [];
+  const totalScenes = sections.reduce((n, s) => n + (Array.isArray(s.scenes) ? s.scenes.length : 0), 0);
+  let sceneIdx = 0;
+  const sectionsHtml = sections.map(sec => {
+    const scenesHtml = (sec.scenes || []).map(sc => {
+      const i = sceneIdx++;
+      const screenTextHtml = sc.screenText ? `<span class="lv-scene-screen">${esc(sc.screenText)}</span>` : '';
+      return `<div class="lv-scene-card">
+        <div class="lv-scene-top">
+          <span class="lv-scene-num">${i + 1}</span>
+          <span class="lv-scene-action">${esc(sc.action || '')}</span>
+        </div>
+        <div class="lv-scene-voice">
+          <div>
+            <div class="lv-scene-voice-lang">EN <button type="button" class="line-copy-btn" onclick="copyLongSceneLine('voiceEN', ${i}, this)" title="Copy">⧉</button></div>
+            <div class="en">${esc(sc.voiceEN || '')}</div>
+          </div>
+          <div>
+            <div class="lv-scene-voice-lang">UA <button type="button" class="line-copy-btn" onclick="copyLongSceneLine('voiceUA', ${i}, this)" title="Copy">⧉</button></div>
+            <div class="ua">${esc(sc.voiceUA || '')}</div>
+          </div>
+        </div>
+        ${screenTextHtml}
+      </div>`;
+    }).join('');
+
+    return `<div class="lv-section">
+      <div class="lv-section-bar">
+        <span class="lv-section-title">${esc(sec.sectionTitle || '')}</span>
+        ${sec.musicNote ? `<span class="lv-section-music">Music: ${esc(sec.musicNote)}</span>` : ''}
+      </div>
+      ${scenesHtml}
+    </div>`;
+  }).join('');
+
+  const tagsSpecificArr = Array.isArray(d.tagsSpecific) ? d.tagsSpecific : [];
+  const tagsUniversalArr = Array.isArray(d.tagsUniversal) ? d.tagsUniversal : [];
+  const tagsAll = [...tagsUniversalArr, ...tagsSpecificArr].map(t => '#' + String(t).replace(/^#/, '')).join(' ');
+
+  const tagsHtml = `<div class="res-card">
+      <div class="res-col">
+        <div class="res-col-head">
+          <span class="res-col-lang">TAGS</span>
+          <button type="button" class="res-copy-all-btn" onclick="copyTagsBox(this, 'lvTagsAll')">⧉ Копіювати все</button>
+        </div>
+        <div class="tags-allbox-body" id="lvTagsAll">${esc(tagsAll)}</div>
+      </div>
+    </div>`;
+
+  document.getElementById('modalBody').innerHTML = `
+    ${fixHtml}
+    <div class="out-section">
+      <div class="res-head"><div class="res-title"><span>Titles</span> &amp; Thumbnails / Назви й обкладинки</div><span class="res-count">${titles.length} варіанти</span></div>
+      ${titleHtml}
+    </div>
+    <div class="out-section">
+      <div class="res-head"><div class="res-title"><span>Description</span></div></div>
+      ${descHtml}
+    </div>
+    <div class="out-section">
+      <div class="res-head">
+        <div class="res-title"><span>Script</span> / Сценарій по секціях <span class="lv-cat-badge">${esc((d.__categoryLabel || ''))}</span></div>
+        <span class="res-count">${totalScenes} сцен</span>
+        <button type="button" class="res-copy-all-btn" style="margin-left:8px" onclick="copyLongVoiceAll('EN', this)">⧉ EN все</button>
+        <button type="button" class="res-copy-all-btn" onclick="copyLongVoiceAll('UA', this)">⧉ UA все</button>
+      </div>
+      ${sectionsHtml}
+    </div>
+    <div class="out-section">
+      <div class="res-head"><div class="res-title"><span>Tags</span></div></div>
+      ${tagsHtml}
+    </div>
+    <div class="out-section">
+      <div class="seo-box">
+        <div>
+          <div class="seo-label">SEO Tip / Порада</div>
+          <div class="seo-text">${esc(d.seoTip)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderResult(d) {
   lastResult = d;
   document.getElementById('modalHead').textContent = d.titleEN || d.titleUA || 'Result';
@@ -1915,7 +2445,7 @@ function renderResult(d) {
     fixHtml = `<div class="out-section">
       <div class="fix-box">
         <div>
-          <div class="fix-label">⚠ Автовиправлення / Auto-corrected</div>
+          <div class="fix-label">Автовиправлення / Auto-corrected</div>
           <div class="fix-text">${esc(d.corrections)}</div>
         </div>
       </div>
@@ -1939,58 +2469,68 @@ function renderResult(d) {
   lastTitleUA = d.titleUA || '';
   lastTitleHashtags = titleHashtags;
 
-  // Titles — always both languages, each with "copy title" / "copy title + tags"
-  let titlesHtml = `<div class="title-cards">
-      <div class="title-card en">
-        <div class="title-card-lang">EN — English</div>
-        <div class="title-card-text">${esc(d.titleEN)}</div>
+  // Titles — both languages in ONE card, with the exact hashtags that "Title + tags" copies
+  // shown right next to the buttons, so it's never a mystery what gets copied.
+  let titlesHtml = `<div class="res-card cols-2">
+      <div class="res-col en">
+        <div class="res-col-head"><span class="res-col-lang">EN — English</span></div>
+        <div class="title-text">${esc(d.titleEN)}</div>
+        <div class="title-tag-preview">${esc(titleHashtags || '—')}</div>
         <div class="title-card-actions">
-          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('EN', false, this)">⧉ Назва</button>
-          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('EN', true, this)">⧉ Назва + теги</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('EN', false, this)">⧉ Назва</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('EN', true, this)">⧉ Назва + теги</button>
         </div>
       </div>
-      <div class="title-card ua">
-        <div class="title-card-lang">UA — Українська</div>
-        <div class="title-card-text">${esc(d.titleUA)}</div>
+      <div class="res-col ua">
+        <div class="res-col-head"><span class="res-col-lang">UA — Українська</span></div>
+        <div class="title-text">${esc(d.titleUA)}</div>
+        <div class="title-tag-preview">${esc(titleHashtags || '—')}</div>
         <div class="title-card-actions">
-          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('UA', false, this)">⧉ Назва</button>
-          <button type="button" class="tags-copy-btn" onclick="copyTitleVariant('UA', true, this)">⧉ Назва + теги</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('UA', false, this)">⧉ Назва</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('UA', true, this)">⧉ Назва + теги</button>
         </div>
       </div>
     </div>
-    <div class="tags-group" style="margin-top:10px">
-      <div class="tags-group-top">
-        <div class="tags-group-label">Всі теги / All tags (${allTags.length})</div>
-        <button type="button" class="tags-copy-btn" onclick="copyTagsBox(this, 'tagsBoxAll')">⧉ Копіювати</button>
+    <div class="tags-allbox" style="margin-top:10px">
+      <div class="tags-allbox-top">
+        <div class="res-col-lang">Всі теги / All tags (${allTags.length})</div>
+        <button type="button" class="res-copy-all-btn" onclick="copyTagsBox(this, 'tagsBoxAll')">⧉ Копіювати все</button>
       </div>
-      <textarea class="tags-copybox" id="tagsBoxAll" readonly rows="2" onclick="this.select()">${esc(tagsPlainStr)}</textarea>
+      <div class="tags-allbox-body" id="tagsBoxAll">${esc(tagsPlainStr)}</div>
     </div>`;
 
-  // Descriptions — always both languages
-  let descHtml = `<div class="desc-wrap">
-      <div class="desc-col">
-        <span class="desc-lang">EN — English</span>
-        <div class="desc-body">${esc(d.descriptionEN)}</div>
+  // Descriptions — one card, both languages, each with its own "copy whole block" button
+  let descHtml = `<div class="res-card cols-2">
+      <div class="res-col en">
+        <div class="res-col-head">
+          <span class="res-col-lang">EN — English</span>
+          <button type="button" class="res-copy-all-btn" onclick="copyFieldPlain('descriptionEN', this)">⧉ Копіювати</button>
+        </div>
+        <div class="res-body-text">${esc(d.descriptionEN)}</div>
       </div>
-      <div class="desc-col">
-        <span class="desc-lang">UA — Українська</span>
-        <div class="desc-body">${esc(d.descriptionUA)}</div>
+      <div class="res-col ua">
+        <div class="res-col-head">
+          <span class="res-col-lang">UA — Українська</span>
+          <button type="button" class="res-copy-all-btn" onclick="copyFieldPlain('descriptionUA', this)">⧉ Копіювати</button>
+        </div>
+        <div class="res-body-text">${esc(d.descriptionUA)}</div>
       </div>
     </div>`;
 
   // Frame count is derived from what the AI actually returned
   const frameCount = (Array.isArray(d.voiceEN) && d.voiceEN.length) || (Array.isArray(d.visualsUA) && d.visualsUA.length) || 5;
 
-  // Checklist items
+  // Checklist items — each line keeps its own copy button, and each column also
+  // gets a "copy the whole block" button in its header (one language at a time).
   let voiceENItems = '', voiceUAItems = '';
   let visualItems = '';
   let screenENItems = '', screenUAItems = '';
   for (let i = 0; i < frameCount; i++) {
-    const num = `<span class="chk-num">${i+1}</span>`;
+    const num = `<span class="res-num">${i+1}</span>`;
     const cpBtn = (field, idx) => `<button type="button" class="line-copy-btn" onclick="copyChecklistLine('${field}', ${idx}, this)" title="Copy / Копіювати">⧉</button>`;
     voiceENItems  += `<li>${num}<span>${esc(d.voiceEN?.[i] || '')}</span>${cpBtn('voiceEN', i)}</li>`;
     voiceUAItems  += `<li>${num}<span>${esc(d.voiceUA?.[i] || '')}</span>${cpBtn('voiceUA', i)}</li>`;
-    visualItems   += `<li>${num}<span>${esc(d.visualsUA?.[i] || '')}</span></li>`;
+    visualItems   += `<li>${num}<span>${esc(d.visualsUA?.[i] || '')}</span>${cpBtn('visualsUA', i)}</li>`;
     screenENItems += `<li>${num}<span>${esc(d.screenTextEN?.[i] || '')}</span>${cpBtn('screenTextEN', i)}</li>`;
     screenUAItems += `<li>${num}<span>${esc(d.screenTextUA?.[i] || '')}</span>${cpBtn('screenTextUA', i)}</li>`;
   }
@@ -1998,56 +2538,72 @@ function renderResult(d) {
   document.getElementById('modalBody').innerHTML = `
     ${fixHtml}
     <div class="out-section">
-      <div class="out-label"><span>Title</span> &amp; Tags</div>
+      <div class="res-head"><div class="res-title"><span>Title</span> &amp; Tags</div></div>
       ${titlesHtml}
     </div>
     <div class="out-section">
-      <div class="out-label"><span>Description</span></div>
+      <div class="res-head"><div class="res-title"><span>Description</span></div></div>
       ${descHtml}
     </div>
-    <div class="chk-section">
-      <div class="chk-head">
-        <span class="chk-icon">🎙️</span>
-        <div class="chk-title"><span>Voice-over</span> / Озвучка — ${frameCount} фраз</div>
+
+    <div class="out-section">
+      <div class="res-head">
+        <div class="res-title"><span>Voice-over</span> / Озвучка</div>
+        <span class="res-count">${frameCount} фраз</span>
       </div>
-      <div class="chk-cols">
-        <div class="chk-col voice-col en">
-          <div class="chk-col-head">EN — English</div>
-          <ul class="chk-list">${voiceENItems}</ul>
+      <div class="res-card cols-2">
+        <div class="res-col en">
+          <div class="res-col-head">
+            <span class="res-col-lang">EN — English</span>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('voiceEN', this)">⧉ Копіювати все</button>
+          </div>
+          <ul class="res-list">${voiceENItems}</ul>
         </div>
-        <div class="chk-col voice-col ua">
-          <div class="chk-col-head">UA — Українська</div>
-          <ul class="chk-list">${voiceUAItems}</ul>
+        <div class="res-col ua">
+          <div class="res-col-head">
+            <span class="res-col-lang">UA — Українська</span>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('voiceUA', this)">⧉ Копіювати все</button>
+          </div>
+          <ul class="res-list">${voiceUAItems}</ul>
         </div>
       </div>
     </div>
 
-    <div class="chk-section">
-      <div class="chk-head">
-        <span class="chk-icon">🎥</span>
-        <div class="chk-title"><span>What to film</span> / Що знімати — ${frameCount} кадрів</div>
+    <div class="out-section">
+      <div class="res-head">
+        <div class="res-title"><span>What to film</span> / Що знімати</div>
+        <span class="res-count">${frameCount} кадрів</span>
       </div>
-      <div class="chk-cols">
-        <div class="chk-col visual-col" style="grid-column:1/-1">
-          <div class="chk-col-head">UA — Дія для кожного кадру</div>
-          <ul class="chk-list">${visualItems}</ul>
+      <div class="res-card">
+        <div class="res-col ua">
+          <div class="res-col-head">
+            <span class="res-col-lang">UA — Дія для кожного кадру</span>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('visualsUA', this)">⧉ Копіювати все</button>
+          </div>
+          <ul class="res-list">${visualItems}</ul>
         </div>
       </div>
     </div>
 
-    <div class="chk-section">
-      <div class="chk-head">
-        <span class="chk-icon">📝</span>
-        <div class="chk-title"><span>On-screen text</span> / Текст на екрані — ${frameCount} кадрів</div>
+    <div class="out-section">
+      <div class="res-head">
+        <div class="res-title"><span>On-screen text</span> / Текст на екрані</div>
+        <span class="res-count">${frameCount} кадрів</span>
       </div>
-      <div class="chk-cols">
-        <div class="chk-col screen-col en">
-          <div class="chk-col-head">EN — English</div>
-          <ul class="chk-list">${screenENItems}</ul>
+      <div class="res-card cols-2">
+        <div class="res-col en">
+          <div class="res-col-head">
+            <span class="res-col-lang">EN — English</span>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('screenTextEN', this)">⧉ Копіювати все</button>
+          </div>
+          <ul class="res-list mono">${screenENItems}</ul>
         </div>
-        <div class="chk-col screen-col ua">
-          <div class="chk-col-head">UA — Переклад</div>
-          <ul class="chk-list">${screenUAItems}</ul>
+        <div class="res-col ua">
+          <div class="res-col-head">
+            <span class="res-col-lang">UA — Переклад</span>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('screenTextUA', this)">⧉ Копіювати все</button>
+          </div>
+          <ul class="res-list mono">${screenUAItems}</ul>
         </div>
       </div>
     </div>
@@ -2063,15 +2619,38 @@ function renderResult(d) {
   `;
 }
 
+function setHistFilter(f) {
+  histFilter = f;
+  document.getElementById('histTabAll').classList.toggle('on', f === 'all');
+  document.getElementById('histTabShorts').classList.toggle('on', f === 'shorts');
+  document.getElementById('histTabLong').classList.toggle('on', f === 'long');
+  renderHist();
+}
 function renderHist() {
   const el = document.getElementById('histList');
+  const filtered = history
+    .map((h, origIndex) => ({ h, origIndex }))
+    .filter(({ h }) => {
+      if (histFilter === 'shorts') return h.mode !== 'long';
+      if (histFilter === 'long')   return h.mode === 'long';
+      return true;
+    });
+
   if (!history.length) {
     el.innerHTML = '<div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:16px">Empty / Поки пусто...</div>';
     return;
   }
-  el.innerHTML = history.map((h,i) => {
-    const modeLabel = h.mode === 'topic' ? '💬 TOPIC' : '🧩 ALGO';
-    const subject    = h.mode === 'topic' ? (h.topic || 'N/A') : (h.algorithm || 'N/A');
+  if (!filtered.length) {
+    const msg = histFilter === 'shorts'
+      ? 'No Shorts yet / Ще немає Shorts'
+      : 'No main videos yet / Ще немає основних відео';
+    el.innerHTML = `<div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:16px">${msg}</div>`;
+    return;
+  }
+
+  el.innerHTML = filtered.map(({ h, origIndex: i }) => {
+    const modeLabel = h.mode === 'long' ? 'MAIN VIDEO' : (h.mode === 'topic' ? 'TOPIC' : 'ALGO');
+    const subject    = h.mode === 'algo' ? (h.algorithm || 'N/A') : (h.topic || 'N/A');
     const typeLabel  = (h.contentType || '').toString().toUpperCase();
     const durLabel   = h.durationSec ? `${h.durationSec}s` : '';
     return `
@@ -2084,7 +2663,15 @@ function renderHist() {
     </div>`;
   }).join('');
 }
-function showHistItem(i) { openModal(); renderResult(history[i].full); }
+function showHistItem(i) {
+  openModal();
+  const h = history[i];
+  activeMode = h.mode === 'long' ? 'long' : 'shorts';
+  activeHistoryIndex = i;
+  if (h.mode === 'long') renderLongResult(h.full);
+  else renderResult(h.full);
+  showRefineBar();
+}
 function clearHist() {
   if (!confirm('Clear all history? / Очистити всю історію?')) return;
   history = []; localStorage.setItem('bc_hist', '[]'); renderHist();
@@ -2094,9 +2681,16 @@ function openModal() { document.getElementById('modal').classList.add('on'); doc
 function closeModal() { document.getElementById('modal').classList.remove('on'); document.body.style.overflow = ''; }
 function overlayClick(e) { if (e.target === document.getElementById('modal')) closeModal(); }
 function resetModalBody() {
+  activeMode = null;
+  activeHistoryIndex = null;
+  document.getElementById('refineBar').style.display = 'none';
   document.getElementById('modalHead').textContent = 'Generating... / Генерація...';
   document.getElementById('modalBody').innerHTML =
     '<div class="mloader"><div class="spin"></div><div>Analyzing... / Аналізую...</div></div>';
+}
+function showRefineBar() {
+  document.getElementById('refineBar').style.display = 'flex';
+  document.getElementById('refineInput').value = '';
 }
 
 function esc(s) {
@@ -2138,7 +2732,24 @@ function flashCopied(btn) {
 function copyTagsBox(btn, boxId) {
   const box = document.getElementById(boxId);
   if (!box) return;
-  copyTextToClipboard(box.value)
+  const text = ('value' in box) ? box.value : box.textContent;
+  copyTextToClipboard(text)
+    .then(() => flashCopied(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+function copyFieldPlain(field, btn) {
+  if (!lastResult) return;
+  const text = lastResult[field] || '';
+  copyTextToClipboard(text)
+    .then(() => flashCopied(btn))
+    .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
+}
+function copyFieldArray(field, btn) {
+  if (!lastResult) return;
+  const arr = lastResult[field];
+  if (!Array.isArray(arr)) return;
+  const text = arr.map((line, i) => `${i + 1}. ${line}`).join('\n');
+  copyTextToClipboard(text)
     .then(() => flashCopied(btn))
     .catch(() => toast('Не вдалося скопіювати / Copy failed', 'err'));
 }
