@@ -358,6 +358,8 @@ input[type=text]:focus, textarea:focus, select:focus {
   background: var(--s1);
 }
 
+textarea { resize: vertical; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.5; }
+
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .field { margin-bottom: 12px; }
 .field:last-child { margin-bottom: 0; }
@@ -610,8 +612,9 @@ input[type=text]:focus, textarea:focus, select:focus {
   border-top: 1px solid var(--border);
   background: var(--s2);
   flex-shrink: 0;
+  align-items: flex-end;
 }
-.refine-bar input[type=text] {
+.refine-bar textarea {
   flex: 1;
   min-width: 0;
   background: var(--s1);
@@ -623,11 +626,15 @@ input[type=text]:focus, textarea:focus, select:focus {
   font-size: 0.78rem;
   outline: none;
   transition: border-color 0.14s;
+  resize: vertical;
+  min-height: 38px;
+  max-height: 140px;
+  line-height: 1.4;
 }
-.refine-bar input[type=text]:focus { border-color: var(--orange); }
+.refine-bar textarea:focus { border-color: var(--orange); }
 .refine-bar button { flex-shrink: 0; white-space: nowrap; }
 @media (max-width: 640px) {
-  .refine-bar { flex-direction: column; }
+  .refine-bar { flex-direction: column; align-items: stretch; }
 }
 
 /* ──────────── LOADER ──────────── */
@@ -1160,7 +1167,7 @@ input[type=text]:focus, textarea:focus, select:focus {
           </div>
           <div class="field">
             <label>Topic / Тема відео</label>
-            <input type="text" id="topic" placeholder="Який був ваш перший кубик рубика?..." />
+            <textarea id="topic" rows="2" placeholder="Який був ваш перший кубик рубика?..."></textarea>
           </div>
         </div>
         <div class="field">
@@ -1180,8 +1187,8 @@ input[type=text]:focus, textarea:focus, select:focus {
           </select>
         </div>
         <div class="field">
-          <label>Notes / Нотатки</label>
-          <input type="text" id="notes" placeholder="effective trick, beginner-friendly..." />
+          <label>Notes / Нотатки <span style="font-weight:400;color:var(--dim)">(Shift+Enter — новий рядок)</span></label>
+          <textarea id="notes" rows="2" placeholder="effective trick, beginner-friendly..."></textarea>
         </div>
       </div>
 
@@ -1250,7 +1257,7 @@ input[type=text]:focus, textarea:focus, select:focus {
 
       <div class="field">
         <label>Topic / Тема відео (можна написати свою або обрати категорію вище)</label>
-        <input type="text" id="lvTopic" placeholder="Наприклад: Мозаїка Гомера Сімпсона з 50 кубиків 3x3 / GAN 14 Pro повний огляд / Топ-5 головоломок для початківців..." />
+        <textarea id="lvTopic" rows="2" placeholder="Наприклад: Мозаїка Гомера Сімпсона з 50 кубиків 3x3 / GAN 14 Pro повний огляд / Топ-5 головоломок для початківців..."></textarea>
       </div>
 
       <div class="row2">
@@ -1265,8 +1272,8 @@ input[type=text]:focus, textarea:focus, select:focus {
       </div>
 
       <div class="field">
-        <label>Notes / Додаткові нотатки</label>
-        <input type="text" id="lvNotes" placeholder="будь-які інші побажання щодо сценарію..." />
+        <label>Notes / Додаткові нотатки <span style="font-weight:400;color:var(--dim)">(Shift+Enter — новий рядок)</span></label>
+        <textarea id="lvNotes" rows="2" placeholder="будь-які інші побажання щодо сценарію..."></textarea>
       </div>
 
       <button class="btn btn-gen" id="lvGenBtn" onclick="generateLong()">Generate Video Plan / Згенерувати сценарій</button>
@@ -1340,7 +1347,7 @@ input[type=text]:focus, textarea:focus, select:focus {
       <div class="mloader"><div class="spin"></div><div>Analyzing... / Аналізую...</div></div>
     </div>
     <div class="refine-bar" id="refineBar" style="display:none">
-      <input type="text" id="refineInput" placeholder="Що виправити? Наприклад: зроби хук енергійнішим, прибери 3-й кейс, зроби опис коротшим..." onkeydown="if(event.key==='Enter') requestRefine()" />
+      <textarea id="refineInput" rows="1" placeholder="Що виправити? Наприклад: зроби хук енергійнішим, прибери 3-й кейс, зроби опис коротшим... (Shift+Enter — новий рядок)" onkeydown="onRefineKeydown(event)"></textarea>
       <button type="button" class="btn btn-teal" id="refineBtn" onclick="requestRefine()">Виправити / Fix with AI</button>
     </div>
     <div class="refine-loading" id="refineLoading">
@@ -1442,6 +1449,24 @@ function sceneRangeForLongDuration(min) {
   return map[min] || '12-16';
 }
 
+// ── CUBE QUANTITY DETECTION ──
+// Detects when a "cube" field describes a QUANTITY of many cubes (e.g. "100 cubes",
+// "почти 300 кубiв", "hundreds of cubes") rather than one specific cube model/product.
+// Used to keep raw "Cube: X" style labels out of titles/descriptions/thumbnails —
+// a quantity is not a product name and should only be woven into narrative text.
+function isCubeQuantityPhrase(str) {
+  if (!str) return false;
+  const s = String(str).trim();
+  if (!s) return false;
+  const m = s.match(/(\d{1,6})\s*[\+xх]?\s*(cubes?|куб(?:ів|и|а|иків|ика|ик)?|kubik\w*)/i);
+  if (m) {
+    const num = parseInt(m[1], 10);
+    if (!isNaN(num) && num > 1) return true;
+  }
+  if (/\b(many|hundreds?|dozens?|tons of|a lot of|сот(ень|ня)?|десятк\w*|багато|набір)\b/i.test(s) && /куб|cube/i.test(s)) return true;
+  return false;
+}
+
 function updateKeyHint(provider, saved) {
   const el = document.getElementById(provider + 'Hint');
   if (!el) return;
@@ -1522,6 +1547,14 @@ function onPaste(e) {
   }
 }
 
+// ── REFINE INPUT: Enter submits, Shift+Enter inserts a newline ──
+function onRefineKeydown(event) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    requestRefine();
+  }
+}
+
 function historyContext() {
   const shortsHist = history.filter(h => h.mode === 'topic' || h.mode === 'algo');
   if (!shortsHist.length) return '';
@@ -1538,8 +1571,14 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
   const isAlgo = mode === 'algo';
 
   const webSearchBlock = webSearchOn
-    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check what is CURRENTLY trending on YouTube Shorts / TikTok for speedcubing content right now (trending sounds/formats, popular phrasing, currently-ranking hashtags and keywords). Let the titles, tags and SEO tip reflect what is actually working right now, not generic evergreen advice. If search is unavailable for some reason, fall back to strong evergreen best practice instead of guessing at "current" facts.`
+    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check what is CURRENTLY trending on YouTube Shorts / TikTok for speedcubing content right now (trending sounds/formats, popular phrasing, currently-ranking hashtags and keywords) FOR AN ENGLISH-SPEAKING GLOBAL AUDIENCE specifically. Let the titles, tags and SEO tip reflect what is actually working right now, not generic evergreen advice. If search is unavailable for some reason, fall back to strong evergreen best practice instead of guessing at "current" facts.`
     : '';
+
+  // ── AUDIENCE / LOCALIZATION RULE — always enforced regardless of mode ──
+  const audienceRule = `\n\nAUDIENCE RULE (very important): This channel's audience is 100% English-speaking and global (US/UK/worldwide English-language cubing/TikTok/Shorts community) — it is NOT a Ukrainian-audience channel. The Ukrainian (UA) fields exist ONLY as an internal translation/reference for the Ukrainian-speaking creator — they are never shown to viewers. Because of this:
+- NEVER reference Ukraine, Ukrainian culture, Ukrainian slang/jargon (e.g. do not write things like "often called a 'braid' or 'косичка' in Ukrainian cubing slang"), Ukrainian-language internet trends, or Ukrainian creators/events inside the EN fields, and avoid them in the UA fields too unless the user explicitly asked for that reference — the UA text should read like a natural translation of the English content, not add extra Ukrainian-specific commentary of its own.
+- Never mention what language something is "called in Ukrainian" or similar meta-commentary about Ukrainian slang anywhere in the output — an English-speaking viewer has no context for it and it does not belong in a global speedcubing video.
+- All trends, references, slang, and cultural context used in the content (including web-search results) must be relevant to an English-speaking global audience.`;
 
   // ── Sequence / structure rule — DIFFERS by mode ──
   let seqRule;
@@ -1555,7 +1594,9 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
   }
 
   // ── Subject-specific input block ──
-  let subjectBlock, autoCorrectNote, descAlgoLine;
+  let subjectBlock, autoCorrectNote;
+  const cubeVal = isAlgo ? fields.cubeUsed : fields.topicCube;
+  const cubeIsQuantity = isCubeQuantityPhrase(cubeVal);
   if (isAlgo) {
     subjectBlock = `- Type: ${fields.contentType}
 - Algorithm: ${fields.algorithm}
@@ -1563,29 +1604,36 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
 - Cube: ${fields.cubeUsed || 'N/A'}
 - Notes: ${fields.notes || 'N/A'}`;
     autoCorrectNote = `The fields above were typed quickly by a human and may contain typos, wrong WCA notation (missing apostrophes, wrong letters, stray spaces), misspelled cube model names, or Ukrainian/English mixed together in any field regardless of which field it is.`;
-    descAlgoLine = `\\nAlgorithm: ${fields.algorithm}\\nCube: ${fields.cubeUsed || 'N/A'}`;
   } else {
     subjectBlock = `- Topic category: ${fields.topicCategory}
 - Topic: ${fields.topic}
 - Cube mentioned (optional): ${fields.topicCube || 'N/A'}
 - Notes: ${fields.notes || 'N/A'}`;
     autoCorrectNote = `The fields above were typed quickly by a human and may contain typos or Ukrainian/English mixed together in any field regardless of which field it is.`;
-    descAlgoLine = fields.topicCube ? `\\nCube: ${fields.topicCube}` : '';
   }
+  // Only stitch a raw "Cube: X" / "Algorithm: X" line into the description template when
+  // it's a real, single specific cube model — never for a bare quantity of many cubes.
+  const descAlgoLine = isAlgo
+    ? `\\nAlgorithm: ${fields.algorithm}${(fields.cubeUsed && !cubeIsQuantity) ? `\\nCube: ${fields.cubeUsed}` : ''}`
+    : ((fields.topicCube && !cubeIsQuantity) ? `\\nCube: ${fields.topicCube}` : '');
+
+  const cubeQuantityRule = `\n\nCUBE MENTION RULE (very important): If the "Cube" input describes ONE specific cube model/product (e.g. "GAN 14 Pro", "MoYu WRM 2024"), you may reference that model naturally wherever relevant. If instead it describes a QUANTITY of many cubes (e.g. "100 cubes", "почти 300 кубiв", "a set of 50 cubes") rather than one specific product, do NOT output it as a raw labeled field like "Cube: X" anywhere (title, description, screen text, tags). A quantity is not a product name. You may still mention the quantity naturally within the narrative/voice-over/description text itself if it's relevant to the story (e.g. "built from nearly 300 cubes"), but never as a bare data label.`;
 
   // ── Voice/screen-text rule — the SLOW-MOTION notation exception only applies to algo mode ──
   const screenTextRule = isAlgo
-    ? `SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of the main line.
-   EXCEPTION — the frame that is the SLOW-MOTION exec in the sequence: its subtitle line (second line) MUST be the corrected algorithm notation itself (e.g. "R U R' U'"), NEVER a generic phrase like "Watch closely". The main line above it can still be a punchy ALL CAPS phrase (e.g. "SMOOTH INSERT"). In screenTextUA for this same frame, keep the main line translated to Ukrainian, but the subtitle stays the exact same algorithm notation (notation is not translated).`
-    : `SCREEN TEXT (screenTextEN / screenTextUA): max 4 words on main line + max 4 words subtitle per frame. Punchy, ALL CAPS main line. screenTextUA = Ukrainian translation of both lines (no algorithm notation involved in this mode — everything gets translated normally).`;
+    ? `SCREEN TEXT (screenTextEN / screenTextUA): EXACTLY two lines per frame, separated by a single "\\n" — never a third line. Line 1 = a punchy ALL CAPS main phrase, MAX 4 words. Line 2 = a subtitle, MAX 4 words. Keep both lines extremely short — this is bold overlay text that must comfortably fit on a phone screen at a glance, not a sentence. screenTextUA = Ukrainian translation of the main line only (see exception below for line 2).
+   EXCEPTION — the frame that is the SLOW-MOTION exec in the sequence: its line 2 (subtitle) MUST be the corrected algorithm notation itself (e.g. "R U R' U'"), NEVER a generic phrase like "Watch closely". Line 1 above it can still be a punchy ALL CAPS phrase (e.g. "SMOOTH INSERT"). In screenTextUA for this same frame, line 1 is translated to Ukrainian, but line 2 stays the exact same algorithm notation (notation is not translated).`
+    : `SCREEN TEXT (screenTextEN / screenTextUA): EXACTLY two lines per frame, separated by a single "\\n" — never a third line, never a list of separate ideas stacked together. Line 1 = a punchy ALL CAPS main phrase, MAX 4 words. Line 2 = a subtitle, MAX 4 words. Keep both lines extremely short — this is bold overlay text that must comfortably fit on a phone screen at a glance, not a sentence or a CTA paragraph. screenTextUA = Ukrainian translation of both lines (no algorithm notation involved in this mode — everything gets translated normally). Do NOT try to cram a full call-to-action or multiple thoughts into one frame's screen text — one short idea per frame is enough.`;
 
   const voiceRule = isAlgo
     ? `VOICE (voiceEN / voiceUA): 1 short sentence per frame, MAX 12 words. Talk about the CONCEPT and FEELING, NEVER read out the algorithm notation aloud. The algorithm is shown visually, not spoken.`
     : `VOICE (voiceEN / voiceUA): 1 short, natural, conversational sentence per frame, MAX 14 words — narrated in voice-over ONLY (the creator's face is never shown, see FACELESS RULE), as if speaking directly to the viewer through narration, not on-camera.`;
 
   const tagsSpecificHint = isAlgo
-    ? `tagsSpecific: 10-15 tags specific to THIS exact video (the algorithm, the case/slot, the cube model, the content type: ${fields.contentType}).`
-    : `tagsSpecific: 10-15 tags specific to THIS exact video (the topic itself, the topic category: ${fields.topicCategory}, and the cube model if one was mentioned).`;
+    ? `tagsSpecific: 12-18 tags specific to THIS exact video (the algorithm, the case/slot, the cube model, the content type: ${fields.contentType}) — these should feel fresh and topic-driven, not the same generic list every time.`
+    : `tagsSpecific: 12-18 tags specific to THIS exact video (the topic itself, the topic category: ${fields.topicCategory}, and the cube model if one was mentioned) — these should feel fresh and topic-driven, not the same generic list every time.`;
+
+  const tagsVarietyRule = `\n\nTAG VARIETY RULE (very important): tagsUniversal must NOT be the same fixed list every single generation. Keep only 1-2 truly constant core tags (e.g. "speedcubing", "rubik's cube") and pick the remaining 3-5 broad tags freshly each time from the wide pool of plausible channel-wide tags (e.g. "cubing", "cuber", "shorts", "puzzle", "wca", "cube tricks", "speedcube", "cubing community", etc.) so different videos end up with different broad-tag combinations. Put most of the real keyword variety into tagsSpecific instead, which should be closely tied to this exact video's subject.`;
 
   // Build placeholder arrays of the right length for the example JSON block
   const arr = (val) => JSON.stringify(Array.from({ length: frameCount }, () => val));
@@ -1599,7 +1647,7 @@ ${subjectBlock}
 - Title style: ${tpl.titleStyle || 'hook'}
 - CTA: ${tpl.cta || 'Subscribe for more CFOP tips!'}
 - Base hashtags: ${tpl.hashtags || '#Shorts #Speedcubing'}
-${hCtx}${webSearchBlock}
+${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}
 
 AUTO-CORRECT RULE (very important):
 ${autoCorrectNote} Silently fix all of this yourself and use the corrected version everywhere in the output. Do not ask the user anything — just produce the corrected result. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field what you fixed. If nothing needed fixing, return "corrections": "".
@@ -1623,7 +1671,7 @@ STRICT RULES:
 7. ${screenTextRule}
 8. VISUALS (visualsUA): 1 action/shot-description sentence per frame only — what to actually film. MUST follow the FACELESS RULE above — no face/on-camera shots, ever.
 9. TAGS (tagsUniversal / tagsSpecific): return each as a JSON ARRAY of separate short lowercase keyword strings, NO "#" symbol, one tag per array element (do NOT put several tags inside one string, do NOT run words together without separation).
-   - tagsUniversal: 15-20 broad tags that fit ANY Shorts video on this channel (e.g. "speedcubing", "rubik's cube", "cubing", "cuber", "shorts").
+   - tagsUniversal: 5-7 broad tags — see TAG VARIETY RULE above, do not reuse the exact same set every time.
    - ${tagsSpecificHint}
 
 Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA MUST each contain EXACTLY ${frameCount} elements (one per frame):
@@ -1674,10 +1722,17 @@ function buildLongPrompt(fields, durationMin, webSearchOn) {
   const sceneRange = sceneRangeForLongDuration(durationMin);
   const categoryHint = LV_CATEGORY_HINT[fields.category] || LV_CATEGORY_HINT.ai;
   const { dateHuman, timeHuman, iso } = nowStampForIdeas();
+  const cubeIsQuantity = isCubeQuantityPhrase(fields.cube);
 
   const webSearchBlock = webSearchOn
-    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check current facts relevant to this exact topic (e.g. real specs/price of a mentioned cube model, currently trending puzzle/mosaic ideas, recent community news, and what titles/thumbnails are currently performing well for similar content) so titles, thumbnails, description and details are accurate, current, and maximally clickable right now. If search is unavailable, fall back to solid general knowledge/best practice instead of guessing at "current" facts.`
+    ? `\n\nREAL-TIME INFO: You have web search available. Use it to check current facts relevant to this exact topic (e.g. real specs/price of a mentioned cube model, currently trending puzzle/mosaic ideas, recent community news, and what titles/thumbnails are currently performing well for similar content) FOR AN ENGLISH-SPEAKING GLOBAL AUDIENCE, so titles, thumbnails, description and details are accurate, current, and maximally clickable right now. If search is unavailable, fall back to solid general knowledge/best practice instead of guessing at "current" facts.`
     : '';
+
+  const audienceRule = `\n\nAUDIENCE RULE (very important): This channel's audience is 100% English-speaking and global — it is NOT a Ukrainian-audience channel. The Ukrainian (UA) fields exist ONLY as an internal translation/reference for the Ukrainian-speaking creator and are never shown to viewers. NEVER reference Ukraine, Ukrainian culture, Ukrainian slang/jargon, or Ukrainian-language internet trends inside the EN fields, and avoid adding extra Ukrainian-specific commentary in the UA fields too — UA text should read like a natural translation of the English content, not introduce its own cultural references. Never explain what something is "called in Ukrainian" anywhere in the output.`;
+
+  const cubeQuantityRule = `\n\nCUBE MENTION RULE (very important): If "Cube(s) mentioned" describes ONE specific cube model/product, you may reference that model naturally in titles, thumbnail ideas, description, and scenes wherever relevant. If instead it describes a QUANTITY of many cubes (e.g. "100 cubes", "почти 300 кубiв", "a set of 50 cubes") rather than one specific product, do NOT output it as a raw labeled field like "Cube: X" anywhere in the output (titles, thumbnailIdea, description, tags). A quantity is not a product name. You may still mention the quantity naturally within the narrative/voice-over/description/thumbnail-idea text itself when relevant to the story (e.g. "built from nearly 300 cubes"), but never as a bare data label.`;
+
+  const tagsVarietyRule = `\n\nTAG VARIETY RULE (very important): tagsUniversal must NOT be the same fixed list every single generation. Keep only 1-2 truly constant core tags (e.g. "speedcubing", "rubik's cube") and pick the remaining broad tags freshly each time from a wide pool of plausible channel-wide tags so different videos end up with different broad-tag combinations. Put most of the real keyword variety into tagsSpecific instead, closely tied to this exact video's subject.`;
 
   return `You are an expert YouTube long-form video producer, scriptwriter, and thumbnail/CTR strategist for the speedcubing/twisty-puzzle channel "Brain Cube".
 
@@ -1696,7 +1751,7 @@ Video details (raw user input — see AUTO-CORRECT rule below):
 - Approx. details (optional): ${fields.details || 'N/A'}
 - Extra notes (optional): ${fields.notes || 'N/A'}
 - Target length: ~${durationMin} minutes
-${hCtx}${webSearchBlock}
+${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}
 
 AUTO-CORRECT RULE (very important):
 The fields above were typed quickly by a human and may contain typos, misspelled cube/model names, wrong WCA notation, or Ukrainian/English mixed together in any field. Silently fix all of this yourself and use the corrected version everywhere in the output. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field. If nothing needed fixing, return "corrections": "".
@@ -1732,12 +1787,12 @@ STRUCTURE RULES:
    - "action": 1 sentence (Ukrainian) describing exactly what to film in this scene (per FACELESS RULE).
    - "voiceEN": 1-3 natural sentences of voice-over narration in English for this scene (conversational, like a real creator talking to the camera in voice-over).
    - "voiceUA": the full, natural Ukrainian translation of voiceEN (not literal word-for-word, must sound natural).
-   - "screenText": OPTIONAL short on-screen text/caption for this scene (max 6 words, ALL CAPS, English, NO emoji) — use "" if this scene doesn't need one (most emotional/talking scenes don't need one; use it mainly for key facts, numbers, or section transitions).
+   - "screenText": OPTIONAL short on-screen text/caption for this scene — ONE short line only, MAX 6 words, ALL CAPS, English, NO emoji, no more than one idea/sentence — use "" if this scene doesn't need one (most emotional/talking scenes don't need one; use it mainly for a single key fact, number, or section transition). Never stack multiple sentences or CTAs into this field.
 5. The FIRST scene overall must be the Hook. The LAST scene overall must include the natural CTA worked into the narration.
 6. Do NOT repeat topics/titles from the history list above.
 7. TAGS (tagsUniversal / tagsSpecific): JSON arrays of separate short lowercase keyword strings, no "#" symbol.
-   - tagsUniversal: 12-18 broad tags fitting any video on this channel.
-   - tagsSpecific: 10-15 tags specific to this exact topic/category/cube.
+   - tagsUniversal: 4-6 broad tags — see TAG VARIETY RULE above, do not reuse the exact same set every time.
+   - tagsSpecific: 12-18 tags specific to this exact topic/category/cube.
 8. descriptionEN and descriptionUA: SHORT and natural — a hook line, then 2-3 sentences about what the video covers overall. Do NOT list out the individual section/chapter titles or a "In this video: - ..." style outline — just a brief, natural overview, like a real YouTube description. End with the CTA, then 6-8 hashtags.
 
 Return ONLY valid JSON (no markdown, no extra text), following this exact shape (section/scene counts are illustrative only — use your own judgment per the rules above):
@@ -1771,6 +1826,7 @@ function buildRefinePrompt(mode, originalResult, userRequest) {
   const clean = Object.assign({}, originalResult);
   delete clean.__categoryLabel;
   const originalJson = JSON.stringify(clean, null, 2);
+  const audienceReminder = `\n\nReminder: this channel's audience is 100% English-speaking and global — never introduce or leave in any Ukrainian-culture references, Ukrainian slang explanations, or "called X in Ukrainian" commentary in the output; the UA fields are only an internal translation for the creator.`;
 
   if (mode === 'long') {
     return `You previously generated the following JSON result for a YouTube long-form/main-channel video script for the speedcubing/twisty-puzzle channel "Brain Cube":
@@ -1786,9 +1842,11 @@ Keep following all of the original rules:
 - FACELESS channel: no face/on-camera shots ever, every "action" only describes hands/object/screen/b-roll shots.
 - Fully bilingual EN + UA voice-over (voiceEN / voiceUA), natural translations, not literal.
 - NO emoji, emoticons, or decorative Unicode symbols anywhere in any field.
+- "screenText" stays ONE short line, MAX 6 words, no stacked sentences.
 - Exactly 3 distinct title options in "titles", each with its own "titleEN", "titleUA" and "thumbnailIdea".
 - descriptionEN / descriptionUA stay SHORT (hook line + 2-3 sentences overview + CTA + 6-8 hashtags) — do NOT add a bullet-point outline of section titles.
-- tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol.
+- tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol. Do not just repeat the same tagsUniversal list out of habit unless the user asked to keep tags unchanged.
+- Never mention a specific cube quantity (e.g. "300 cubes") as a raw "Cube: X" label — only naturally within narrative text, per the original CUBE MENTION RULE.${audienceReminder}
 
 Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titles, descriptionEN, descriptionUA, sections, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
   }
@@ -1806,8 +1864,10 @@ Keep following all of the original rules:
 - FACELESS channel: no face/on-camera shots ever, every "visualsUA" entry only describes hands/cube/screen/b-roll shots.
 - Fully bilingual EN + UA content, natural translations, not literal.
 - NO emoji, emoticons, or decorative Unicode symbols anywhere in any field.
+- screenTextEN / screenTextUA stay EXACTLY two lines each (one "\\n"), max 4 words per line — never a third line.
 - The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA must all keep the exact same number of elements as in the original JSON above, unless the user explicitly asked to change the number of frames.
-- tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol.
+- tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol. Do not just repeat the same tagsUniversal list out of habit unless the user asked to keep tags unchanged.
+- Never mention a specific cube quantity (e.g. "300 cubes") as a raw "Cube: X" label — only naturally within narrative text, per the original CUBE MENTION RULE.${audienceReminder}
 
 Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
 }
@@ -1969,7 +2029,7 @@ function buildIdeasPrompt(niche, count) {
 
   return `You are a YouTube Shorts / TikTok content strategist for a speedcubing channel called "Brain Cube".
 
-TARGET AUDIENCE (very important): This channel's audience is English-speaking and global (US / UK / worldwide English-speaking cubing community) — it is NOT a Ukrainian-audience channel. Every idea, trend, and reference must be something that lands with an English-speaking viewer scrolling English-language TikTok/YouTube Shorts. Do NOT propose ideas based on Ukrainian-only news, Ukrainian-language trends, or Ukrainian creators/events unless that same story is also genuinely current news for the global English-speaking cubing community.
+TARGET AUDIENCE (very important): This channel's audience is English-speaking and global (US / UK / worldwide English-speaking cubing community) — it is NOT a Ukrainian-audience channel. Every idea, trend, and reference must be something that lands with an English-speaking viewer scrolling English-language TikTok/YouTube Shorts. Do NOT propose ideas based on Ukrainian-only news, Ukrainian-language trends, or Ukrainian creators/events unless that same story is also genuinely current news for the global English-speaking cubing community. Never explain what something is "called in Ukrainian" or reference Ukrainian slang/jargon anywhere in the output — the whyNow field is an internal Ukrainian-language note for the creator, not a place to add Ukrainian cultural context to the idea itself.
 
 CURRENT MOMENT (treat this as ground truth — it is happening right now, do NOT rely only on older training knowledge):
 - Date: ${dateHuman}
