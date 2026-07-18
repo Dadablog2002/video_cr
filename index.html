@@ -467,6 +467,50 @@ textarea { resize: vertical; font-family: 'Plus Jakarta Sans', sans-serif; line-
 }
 .hist-meta { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
 
+/* PIN / FAVORITE STAR */
+.pin-star {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--border2);
+  padding: 2px 4px;
+  flex-shrink: 0;
+  transition: color 0.14s, transform 0.1s;
+}
+.pin-star:hover { color: #d4af17; transform: scale(1.12); }
+.pin-star.on { color: #d4af17; }
+.hist-item.pinned { border-color: rgba(212,175,23,0.5); background: rgba(212,175,23,0.05); }
+
+.modal-pin-btn {
+  width: 28px; height: 28px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--border2);
+  font-size: 0.95rem;
+  transition: border-color 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+.modal-pin-btn:hover { border-color: #d4af17; color: #d4af17; }
+.modal-pin-btn.on { color: #d4af17; border-color: rgba(212,175,23,0.5); background: rgba(212,175,23,0.08); }
+
+/* ON-SCREEN TEXT — color-coded lines (top line = variable color, bottom line = always white) */
+.screen-line-block { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
+.screen-line-row { display: flex; align-items: center; gap: 6px; }
+.screen-color-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+.screen-line-main { font-weight: 800; font-size: 0.72rem; letter-spacing: 0.2px; }
+.screen-line-sub { font-weight: 600; font-size: 0.7rem; color: var(--muted); }
+.screen-color-label { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; color: var(--dim); margin-left: 2px; }
+
 /* ──────────── IDEAS ──────────── */
 #pg-ideas .panel + .panel { margin-top: 14px; }
 .idea-card {
@@ -1341,6 +1385,7 @@ textarea { resize: vertical; font-family: 'Plus Jakarta Sans', sans-serif; line-
         <span class="modal-brand-brain">Brain</span><span class="modal-brand-cube">Cube</span><span class="modal-brand-dot"></span><span class="modal-brand-studio">Studio</span>
       </div>
       <div class="modal-heading" id="modalHead">Generating... / Генерація...</div>
+      <button type="button" class="modal-pin-btn" id="modalPinBtn" onclick="toggleActivePin()" title="Закріпити / Pin">★</button>
       <div class="modal-x" onclick="closeModal()" title="Close (Esc)">✕</div>
     </div>
     <div class="modal-body" id="modalBody">
@@ -1622,8 +1667,10 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
   // ── Voice/screen-text rule — the SLOW-MOTION notation exception only applies to algo mode ──
   const screenTextRule = isAlgo
     ? `SCREEN TEXT (screenTextEN / screenTextUA): EXACTLY two lines per frame, separated by a single "\\n" — never a third line. Line 1 = a punchy ALL CAPS main phrase, MAX 4 words. Line 2 = a subtitle, MAX 4 words. Keep both lines extremely short — this is bold overlay text that must comfortably fit on a phone screen at a glance, not a sentence. screenTextUA = Ukrainian translation of the main line only (see exception below for line 2).
-   EXCEPTION — the frame that is the SLOW-MOTION exec in the sequence: its line 2 (subtitle) MUST be the corrected algorithm notation itself (e.g. "R U R' U'"), NEVER a generic phrase like "Watch closely". Line 1 above it can still be a punchy ALL CAPS phrase (e.g. "SMOOTH INSERT"). In screenTextUA for this same frame, line 1 is translated to Ukrainian, but line 2 stays the exact same algorithm notation (notation is not translated).`
-    : `SCREEN TEXT (screenTextEN / screenTextUA): EXACTLY two lines per frame, separated by a single "\\n" — never a third line, never a list of separate ideas stacked together. Line 1 = a punchy ALL CAPS main phrase, MAX 4 words. Line 2 = a subtitle, MAX 4 words. Keep both lines extremely short — this is bold overlay text that must comfortably fit on a phone screen at a glance, not a sentence or a CTA paragraph. screenTextUA = Ukrainian translation of both lines (no algorithm notation involved in this mode — everything gets translated normally). Do NOT try to cram a full call-to-action or multiple thoughts into one frame's screen text — one short idea per frame is enough.`;
+   EXCEPTION — the frame that is the SLOW-MOTION exec in the sequence: its line 2 (subtitle) MUST be the corrected algorithm notation itself (e.g. "R U R' U'"), NEVER a generic phrase like "Watch closely". Line 1 above it can still be a punchy ALL CAPS phrase (e.g. "SMOOTH INSERT"). In screenTextUA for this same frame, line 1 is translated to Ukrainian, but line 2 stays the exact same algorithm notation (notation is not translated).
+   COLOR: Line 1 (the main/top text) gets a colored overlay — line 2 (the subtitle/bottom text) is ALWAYS plain white and is never colored. Return the line-1 color for each frame in a separate "screenTextColor" array (see JSON shape below) — one lowercase English color word per frame (e.g. "green", "red", "yellow", "orange", "blue", "cyan", "purple", "pink", "white"), chosen to emphasize or match the meaning/emotion of that frame (e.g. green for "correct/success", red for "mistake/warning", yellow for "attention/tip"). Do not put color words inside the screenTextEN/screenTextUA strings themselves — they only go in screenTextColor.`
+    : `SCREEN TEXT (screenTextEN / screenTextUA): EXACTLY two lines per frame, separated by a single "\\n" — never a third line, never a list of separate ideas stacked together. Line 1 = a punchy ALL CAPS main phrase, MAX 4 words. Line 2 = a subtitle, MAX 4 words. Keep both lines extremely short — this is bold overlay text that must comfortably fit on a phone screen at a glance, not a sentence or a CTA paragraph. screenTextUA = Ukrainian translation of both lines (no algorithm notation involved in this mode — everything gets translated normally). Do NOT try to cram a full call-to-action or multiple thoughts into one frame's screen text — one short idea per frame is enough.
+   COLOR: Line 1 (the main/top text) gets a colored overlay — line 2 (the subtitle/bottom text) is ALWAYS plain white and is never colored. Return the line-1 color for each frame in a separate "screenTextColor" array (see JSON shape below) — one lowercase English color word per frame (e.g. "green", "red", "yellow", "orange", "blue", "cyan", "purple", "pink", "white"), chosen to emphasize or match the meaning/emotion of that frame. Do not put color words inside the screenTextEN/screenTextUA strings themselves — they only go in screenTextColor.`;
 
   const voiceRule = isAlgo
     ? `VOICE (voiceEN / voiceUA): 1 short sentence per frame, MAX 12 words. Talk about the CONCEPT and FEELING, NEVER read out the algorithm notation aloud. The algorithm is shown visually, not spoken.`
@@ -1674,7 +1721,7 @@ STRICT RULES:
    - tagsUniversal: 5-7 broad tags — see TAG VARIETY RULE above, do not reuse the exact same set every time.
    - ${tagsSpecificHint}
 
-Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA MUST each contain EXACTLY ${frameCount} elements (one per frame):
+Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor MUST each contain EXACTLY ${frameCount} elements (one per frame):
 {
   "corrections": "Коротко що було виправлено, або порожній рядок",
   "titleEN": "Catchy English title 5-8 words",
@@ -1686,6 +1733,7 @@ Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voice
   "voiceUA": ${arr('1 коротке речення')},
   "screenTextEN": ${arr('MAIN LINE\\nSubtitle')},
   "screenTextUA": ${arr('ГОЛОВНИЙ\\nПідзаголовок')},
+  "screenTextColor": ${arr('green')},
   "tagsUniversal": ["speedcubing", "rubik's cube", "cubing", "cuber", "shorts", "..."],
   "tagsSpecific": ["...", "...", "..."],
   "seoTip": "Коротка SEO порада"
@@ -1865,11 +1913,12 @@ Keep following all of the original rules:
 - Fully bilingual EN + UA content, natural translations, not literal.
 - NO emoji, emoticons, or decorative Unicode symbols anywhere in any field.
 - screenTextEN / screenTextUA stay EXACTLY two lines each (one "\\n"), max 4 words per line — never a third line.
-- The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA must all keep the exact same number of elements as in the original JSON above, unless the user explicitly asked to change the number of frames.
+- screenTextColor stays an array with the same number of elements as screenTextEN (one color word per frame, applies to line 1 only — line 2 is always plain white). Only change a frame's color if the user explicitly asked to.
+- The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor must all keep the exact same number of elements as in the original JSON above, unless the user explicitly asked to change the number of frames.
 - tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol. Do not just repeat the same tagsUniversal list out of habit unless the user asked to keep tags unchanged.
 - Never mention a specific cube quantity (e.g. "300 cubes") as a raw "Cube: X" label — only naturally within narrative text, per the original CUBE MENTION RULE.${audienceReminder}
 
-Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
+Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
 }
 
 async function requestRefine() {
@@ -2237,6 +2286,7 @@ async function generate() {
       titleEN: d.titleEN,
       titleUA: d.titleUA,
       title: d.titleEN || d.titleUA,
+      pinned: false,
       full: d
     });
     if (history.length > 30) history.pop();
@@ -2304,6 +2354,7 @@ async function generateLong() {
       titleEN: topTitle.titleEN || '',
       titleUA: topTitle.titleUA || '',
       title: topTitle.titleEN || topTitle.titleUA || '',
+      pinned: false,
       full: d
     });
     if (history.length > 30) history.pop();
@@ -2386,14 +2437,14 @@ function renderLongResult(d) {
       <div class="res-col en">
         <div class="res-col-head">
           <span class="res-col-lang">${i === 0 ? 'RECOMMENDED — ' : ''}EN</span>
-          <button type="button" class="res-copy-all-btn" onclick="copyLongTitle(${i}, 'EN', this)">⧉ Копіювати</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongTitle(${i}, 'EN', this)">Копіювати</button>
         </div>
         <div class="title-text">${esc(t.titleEN)}</div>
       </div>
       <div class="res-col ua">
         <div class="res-col-head">
           <span class="res-col-lang">UA</span>
-          <button type="button" class="res-copy-all-btn" onclick="copyLongTitle(${i}, 'UA', this)">⧉ Копіювати</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongTitle(${i}, 'UA', this)">Копіювати</button>
         </div>
         <div class="title-text">${esc(t.titleUA)}</div>
       </div>
@@ -2404,14 +2455,14 @@ function renderLongResult(d) {
       <div class="res-col en">
         <div class="res-col-head">
           <span class="res-col-lang">EN — English</span>
-          <button type="button" class="res-copy-all-btn" onclick="copyLongFieldPlain('descriptionEN', this)">⧉ Копіювати</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongFieldPlain('descriptionEN', this)">Копіювати</button>
         </div>
         <div class="res-body-text">${esc(d.descriptionEN)}</div>
       </div>
       <div class="res-col ua">
         <div class="res-col-head">
           <span class="res-col-lang">UA — Українська</span>
-          <button type="button" class="res-copy-all-btn" onclick="copyLongFieldPlain('descriptionUA', this)">⧉ Копіювати</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyLongFieldPlain('descriptionUA', this)">Копіювати</button>
         </div>
         <div class="res-body-text">${esc(d.descriptionUA)}</div>
       </div>
@@ -2431,11 +2482,11 @@ function renderLongResult(d) {
         </div>
         <div class="lv-scene-voice">
           <div>
-            <div class="lv-scene-voice-lang">EN <button type="button" class="line-copy-btn" onclick="copyLongSceneLine('voiceEN', ${i}, this)" title="Copy">⧉</button></div>
+            <div class="lv-scene-voice-lang">EN <button type="button" class="line-copy-btn" onclick="copyLongSceneLine('voiceEN', ${i}, this)" title="Copy">Копіювати</button></div>
             <div class="en">${esc(sc.voiceEN || '')}</div>
           </div>
           <div>
-            <div class="lv-scene-voice-lang">UA <button type="button" class="line-copy-btn" onclick="copyLongSceneLine('voiceUA', ${i}, this)" title="Copy">⧉</button></div>
+            <div class="lv-scene-voice-lang">UA <button type="button" class="line-copy-btn" onclick="copyLongSceneLine('voiceUA', ${i}, this)" title="Copy">Копіювати</button></div>
             <div class="ua">${esc(sc.voiceUA || '')}</div>
           </div>
         </div>
@@ -2460,7 +2511,7 @@ function renderLongResult(d) {
       <div class="res-col">
         <div class="res-col-head">
           <span class="res-col-lang">TAGS</span>
-          <button type="button" class="res-copy-all-btn" onclick="copyTagsBox(this, 'lvTagsAll')">⧉ Копіювати все</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTagsBox(this, 'lvTagsAll')">Копіювати все</button>
         </div>
         <div class="tags-allbox-body" id="lvTagsAll">${esc(tagsAll)}</div>
       </div>
@@ -2480,8 +2531,8 @@ function renderLongResult(d) {
       <div class="res-head">
         <div class="res-title"><span>Script</span> / Сценарій по секціях <span class="lv-cat-badge">${esc((d.__categoryLabel || ''))}</span></div>
         <span class="res-count">${totalScenes} сцен</span>
-        <button type="button" class="res-copy-all-btn" style="margin-left:8px" onclick="copyLongVoiceAll('EN', this)">⧉ EN все</button>
-        <button type="button" class="res-copy-all-btn" onclick="copyLongVoiceAll('UA', this)">⧉ UA все</button>
+        <button type="button" class="res-copy-all-btn" style="margin-left:8px" onclick="copyLongVoiceAll('EN', this)">EN все</button>
+        <button type="button" class="res-copy-all-btn" onclick="copyLongVoiceAll('UA', this)">UA все</button>
       </div>
       ${sectionsHtml}
     </div>
@@ -2542,8 +2593,8 @@ function renderResult(d) {
         <div class="title-text">${esc(d.titleEN)}</div>
         <div class="title-tag-preview">${esc(titleHashtags || '—')}</div>
         <div class="title-card-actions">
-          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('EN', false, this)">⧉ Назва</button>
-          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('EN', true, this)">⧉ Назва + теги</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('EN', false, this)">Назва</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('EN', true, this)">Назва + теги</button>
         </div>
       </div>
       <div class="res-col ua">
@@ -2551,15 +2602,15 @@ function renderResult(d) {
         <div class="title-text">${esc(d.titleUA)}</div>
         <div class="title-tag-preview">${esc(titleHashtags || '—')}</div>
         <div class="title-card-actions">
-          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('UA', false, this)">⧉ Назва</button>
-          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('UA', true, this)">⧉ Назва + теги</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('UA', false, this)">Назва</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyTitleVariant('UA', true, this)">Назва + теги</button>
         </div>
       </div>
     </div>
     <div class="tags-allbox" style="margin-top:10px">
       <div class="tags-allbox-top">
         <div class="res-col-lang">Всі теги / All tags (${allTags.length})</div>
-        <button type="button" class="res-copy-all-btn" onclick="copyTagsBox(this, 'tagsBoxAll')">⧉ Копіювати все</button>
+        <button type="button" class="res-copy-all-btn" onclick="copyTagsBox(this, 'tagsBoxAll')">Копіювати все</button>
       </div>
       <div class="tags-allbox-body" id="tagsBoxAll">${esc(tagsPlainStr)}</div>
     </div>`;
@@ -2569,14 +2620,14 @@ function renderResult(d) {
       <div class="res-col en">
         <div class="res-col-head">
           <span class="res-col-lang">EN — English</span>
-          <button type="button" class="res-copy-all-btn" onclick="copyFieldPlain('descriptionEN', this)">⧉ Копіювати</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyFieldPlain('descriptionEN', this)">Копіювати</button>
         </div>
         <div class="res-body-text">${esc(d.descriptionEN)}</div>
       </div>
       <div class="res-col ua">
         <div class="res-col-head">
           <span class="res-col-lang">UA — Українська</span>
-          <button type="button" class="res-copy-all-btn" onclick="copyFieldPlain('descriptionUA', this)">⧉ Копіювати</button>
+          <button type="button" class="res-copy-all-btn" onclick="copyFieldPlain('descriptionUA', this)">Копіювати</button>
         </div>
         <div class="res-body-text">${esc(d.descriptionUA)}</div>
       </div>
@@ -2585,19 +2636,20 @@ function renderResult(d) {
   // Frame count is derived from what the AI actually returned
   const frameCount = (Array.isArray(d.voiceEN) && d.voiceEN.length) || (Array.isArray(d.visualsUA) && d.visualsUA.length) || 5;
 
-  // Checklist items — each line keeps its own copy button, and each column also
-  // gets a "copy the whole block" button in its header (one language at a time).
+  // Checklist items — "What to film" keeps its per-line copy button; Voice-over and
+  // On-screen text now only offer a "copy all" button per the simplified UI.
   let voiceENItems = '', voiceUAItems = '';
   let visualItems = '';
   let screenENItems = '', screenUAItems = '';
+  const colorArr = Array.isArray(d.screenTextColor) ? d.screenTextColor : [];
   for (let i = 0; i < frameCount; i++) {
     const num = `<span class="res-num">${i+1}</span>`;
-    const cpBtn = (field, idx) => `<button type="button" class="line-copy-btn" onclick="copyChecklistLine('${field}', ${idx}, this)" title="Copy / Копіювати">⧉</button>`;
-    voiceENItems  += `<li>${num}<span>${esc(d.voiceEN?.[i] || '')}</span>${cpBtn('voiceEN', i)}</li>`;
-    voiceUAItems  += `<li>${num}<span>${esc(d.voiceUA?.[i] || '')}</span>${cpBtn('voiceUA', i)}</li>`;
+    const cpBtn = (field, idx) => `<button type="button" class="line-copy-btn" onclick="copyChecklistLine('${field}', ${idx}, this)" title="Copy / Копіювати">Копіювати</button>`;
+    voiceENItems  += `<li>${num}<span>${esc(d.voiceEN?.[i] || '')}</span></li>`;
+    voiceUAItems  += `<li>${num}<span>${esc(d.voiceUA?.[i] || '')}</span></li>`;
     visualItems   += `<li>${num}<span>${esc(d.visualsUA?.[i] || '')}</span>${cpBtn('visualsUA', i)}</li>`;
-    screenENItems += `<li>${num}<span>${esc(d.screenTextEN?.[i] || '')}</span>${cpBtn('screenTextEN', i)}</li>`;
-    screenUAItems += `<li>${num}<span>${esc(d.screenTextUA?.[i] || '')}</span>${cpBtn('screenTextUA', i)}</li>`;
+    screenENItems += `<li>${num}${screenLineBlockHtml(d.screenTextEN?.[i], colorArr[i])}</li>`;
+    screenUAItems += `<li>${num}${screenLineBlockHtml(d.screenTextUA?.[i], colorArr[i])}</li>`;
   }
 
   document.getElementById('modalBody').innerHTML = `
@@ -2620,14 +2672,14 @@ function renderResult(d) {
         <div class="res-col en">
           <div class="res-col-head">
             <span class="res-col-lang">EN — English</span>
-            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('voiceEN', this)">⧉ Копіювати все</button>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('voiceEN', this)">Копіювати все</button>
           </div>
           <ul class="res-list">${voiceENItems}</ul>
         </div>
         <div class="res-col ua">
           <div class="res-col-head">
             <span class="res-col-lang">UA — Українська</span>
-            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('voiceUA', this)">⧉ Копіювати все</button>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('voiceUA', this)">Копіювати все</button>
           </div>
           <ul class="res-list">${voiceUAItems}</ul>
         </div>
@@ -2643,7 +2695,7 @@ function renderResult(d) {
         <div class="res-col ua">
           <div class="res-col-head">
             <span class="res-col-lang">UA — Дія для кожного кадру</span>
-            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('visualsUA', this)">⧉ Копіювати все</button>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('visualsUA', this)">Копіювати все</button>
           </div>
           <ul class="res-list">${visualItems}</ul>
         </div>
@@ -2659,14 +2711,14 @@ function renderResult(d) {
         <div class="res-col en">
           <div class="res-col-head">
             <span class="res-col-lang">EN — English</span>
-            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('screenTextEN', this)">⧉ Копіювати все</button>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('screenTextEN', this)">Копіювати все</button>
           </div>
           <ul class="res-list mono">${screenENItems}</ul>
         </div>
         <div class="res-col ua">
           <div class="res-col-head">
             <span class="res-col-lang">UA — Переклад</span>
-            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('screenTextUA', this)">⧉ Копіювати все</button>
+            <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('screenTextUA', this)">Копіювати все</button>
           </div>
           <ul class="res-list mono">${screenUAItems}</ul>
         </div>
@@ -2699,7 +2751,8 @@ function renderHist() {
       if (histFilter === 'shorts') return h.mode !== 'long';
       if (histFilter === 'long')   return h.mode === 'long';
       return true;
-    });
+    })
+    .sort((a, b) => (b.h.pinned ? 1 : 0) - (a.h.pinned ? 1 : 0)); // pinned items float to the top, stable order otherwise
 
   if (!history.length) {
     el.innerHTML = '<div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:16px">Empty / Поки пусто...</div>';
@@ -2718,9 +2771,11 @@ function renderHist() {
     const subject    = h.mode === 'algo' ? (h.algorithm || 'N/A') : (h.topic || 'N/A');
     const typeLabel  = (h.contentType || '').toString().toUpperCase();
     const durLabel   = h.durationSec ? `${h.durationSec}s` : '';
+    const pinned     = !!h.pinned;
     return `
-    <div class="hist-item" onclick="showHistItem(${i})">
+    <div class="hist-item${pinned ? ' pinned' : ''}" onclick="showHistItem(${i})">
       <div class="hist-item-top">
+        <button type="button" class="pin-star${pinned ? ' on' : ''}" onclick="togglePin(event, ${i})" title="Закріпити / Pin">★</button>
         <div class="hist-title">${esc(h.titleEN || h.title || 'Untitled')}</div>
         <span class="hist-badge">${h.date}</span>
       </div>
@@ -2752,16 +2807,74 @@ function resetModalBody() {
   document.getElementById('modalHead').textContent = 'Generating... / Генерація...';
   document.getElementById('modalBody').innerHTML =
     '<div class="mloader"><div class="spin"></div><div>Analyzing... / Аналізую...</div></div>';
+  updateActivePinButton();
 }
 function showRefineBar() {
   document.getElementById('refineBar').style.display = 'flex';
   document.getElementById('refineInput').value = '';
+  updateActivePinButton();
+}
+
+// ── PIN / FAVORITE (star) ──
+function updateActivePinButton() {
+  const btn = document.getElementById('modalPinBtn');
+  if (!btn) return;
+  const pinned = activeHistoryIndex !== null && history[activeHistoryIndex] && history[activeHistoryIndex].pinned;
+  btn.classList.toggle('on', !!pinned);
+}
+function toggleActivePin() {
+  if (activeHistoryIndex === null || !history[activeHistoryIndex]) { toast('Немає що закріпити', 'err'); return; }
+  history[activeHistoryIndex].pinned = !history[activeHistoryIndex].pinned;
+  localStorage.setItem('bc_hist', JSON.stringify(history));
+  updateActivePinButton();
+  renderHist();
+  toast(history[activeHistoryIndex].pinned ? 'Закріплено ✓' : 'Відкріплено', 'ok');
+}
+function togglePin(e, i) {
+  e.stopPropagation();
+  if (!history[i]) return;
+  history[i].pinned = !history[i].pinned;
+  localStorage.setItem('bc_hist', JSON.stringify(history));
+  renderHist();
+  updateActivePinButton();
 }
 
 function esc(s) {
   return String(s || '')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/\n/g,'<br>');
+}
+
+// ── ON-SCREEN TEXT COLOR HELPERS ──
+// Top line color varies per frame (AI-chosen); bottom line is always plain white/static.
+const SCREEN_COLOR_MAP = {
+  red: '#e11d2e', green: '#16a34a', blue: '#2563eb', yellow: '#eab308',
+  orange: '#f97316', purple: '#9333ea', pink: '#ec4899', cyan: '#06b6d4',
+  teal: '#0d9488', lime: '#84cc16', magenta: '#d926aa', gold: '#c9971f',
+  black: '#12192a', white: '#8a94a6', gray: '#6b7280', grey: '#6b7280'
+};
+function colorNameToHex(name) {
+  const key = String(name || '').trim().toLowerCase();
+  return SCREEN_COLOR_MAP[key] || 'var(--orange)';
+}
+function screenLineBlockHtml(text, colorName) {
+  const parts = String(text || '').split('\n');
+  const line1 = parts[0] || '';
+  const line2 = parts.slice(1).join(' ') || '';
+  const hex = colorNameToHex(colorName);
+  const colorLabel = String(colorName || '').trim() || '—';
+  return `<div class="screen-line-block">
+    <div class="screen-line-row">
+      <span class="screen-color-dot" style="background:${hex}"></span>
+      <span class="screen-line-main" style="color:${hex}">${esc(line1)}</span>
+      <span class="screen-color-label">${esc(colorLabel)}</span>
+    </div>
+    <div class="screen-line-row">
+      <span class="screen-color-dot" style="background:#ffffff"></span>
+      <span class="screen-line-sub">${esc(line2)}</span>
+      <span class="screen-color-label">WHITE</span>
+    </div>
+  </div>`;
 }
 
 // ── COPY TO CLIPBOARD (tags) ──
