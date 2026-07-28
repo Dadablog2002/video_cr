@@ -947,6 +947,37 @@ textarea { resize: vertical; font-family: 'Plus Jakarta Sans', sans-serif; line-
   .lv-scene-voice { grid-template-columns: 1fr; }
 }
 
+/* MONTAGE / EDIT block — shown at the bottom of each frame/scene */
+.montage-block {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border2);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.montage-pos {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  width: fit-content;
+}
+.montage-pos.first { background: rgba(34,180,100,0.1); color: #1a7a45; border: 1px solid rgba(34,180,100,0.3); }
+.montage-pos.last  { background: rgba(210,50,50,0.08); color: #b02020; border: 1px solid rgba(210,50,50,0.25); }
+.montage-pos.mid   { background: rgba(3,105,161,0.08); color: var(--yellow); border: 1px solid rgba(3,105,161,0.22); }
+.montage-text {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.res-col.ua .montage-text { color: var(--teal); font-style: italic; }
+
 /* SEO */
 .seo-box {
   display: flex; gap: 10px; align-items: flex-start;
@@ -1682,6 +1713,11 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
 
   const tagsVarietyRule = `\n\nTAG VARIETY RULE (very important): tagsUniversal must NOT be the same fixed list every single generation. Keep only 1-2 truly constant core tags (e.g. "speedcubing", "rubik's cube") and pick the remaining 3-5 broad tags freshly each time from the wide pool of plausible channel-wide tags (e.g. "cubing", "cuber", "shorts", "puzzle", "wca", "cube tricks", "speedcube", "cubing community", etc.) so different videos end up with different broad-tag combinations. Put most of the real keyword variety into tagsSpecific instead, which should be closely tied to this exact video's subject.`;
 
+  const montageRule = `\n\nMONTAGE / EDIT RULE (very important — new field): For EVERY frame, also write a short montage/editing note (Ukrainian, field "montageUA") describing HOW that frame should be cut/edited, based on what is being SAID (voiceEN/voiceUA for that frame) and what is being SHOWN (visualsUA for that frame — for the Free-topic mode use the general idea of that frame instead). This is technical editing guidance for the video editor, distinct from the shot description itself. For each frame's montage note, cover in 1-2 short sentences:
+   - the CUT IN — how the previous frame transitions into this one (hard cut, jump cut, whip pan, zoom transition, match cut on motion, etc.) and pacing (fast/snappy vs held longer);
+   - the CUT OUT / pacing WITHIN the frame — whether the shot holds static, has a quick zoom/push-in, speed-ramp, or freeze-frame, matched to the emotional beat of what's said/shown.
+   The FIRST frame overall is the opening/hook of the whole video — its montage note should describe a punchy, attention-grabbing opening cut (no "cut in from previous frame" since there is none). The LAST frame overall is the outro/CTA — its montage note should describe a clean closing cut that leaves room for the CTA/subscribe prompt. Middle frames should describe a normal mid-video cut that keeps pacing tight. Do NOT restate the visual action itself (that's visualsUA's job) — focus purely on the cut/transition/pacing technique.`;
+
   // Build placeholder arrays of the right length for the example JSON block
   const arr = (val) => JSON.stringify(Array.from({ length: frameCount }, () => val));
 
@@ -1694,7 +1730,7 @@ ${subjectBlock}
 - Title style: ${tpl.titleStyle || 'hook'}
 - CTA: ${tpl.cta || 'Subscribe for more CFOP tips!'}
 - Base hashtags: ${tpl.hashtags || '#Shorts #Speedcubing'}
-${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}
+${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}${montageRule}
 
 AUTO-CORRECT RULE (very important):
 ${autoCorrectNote} Silently fix all of this yourself and use the corrected version everywhere in the output. Do not ask the user anything — just produce the corrected result. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field what you fixed. If nothing needed fixing, return "corrections": "".
@@ -1706,22 +1742,23 @@ FACELESS RULE (very important, applies to EVERY frame without exception):
 This is a 100% FACELESS channel. The creator's face, mouth, or any talking-head / on-camera-selfie shot must NEVER appear or be implied. Every VISUALS (visualsUA) entry must describe a shot that shows ONLY: hands + cube close-ups, the cube itself, a table/desk surface, a screen recording/timer, text/graphics overlays, or other objects/b-roll — never "look at the camera", "show your face", "talk to viewer on camera", "selfie", "vlog-style shot", etc. All narration (voiceEN/voiceUA) is heard as voice-over only, never delivered on-camera.
 
 NO EMOJI RULE (very important, applies to every field in the output without exception):
-NEVER use emoji, emoticons, or decorative Unicode symbols (no rocket, fire, camera, checkmark emoji, etc.) anywhere in titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, tags, or seoTip. Plain text only (hashtags using the "#" character are fine).
+NEVER use emoji, emoticons, or decorative Unicode symbols (no rocket, fire, camera, checkmark emoji, etc.) anywhere in titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, montageUA, tags, or seoTip. Plain text only (hashtags using the "#" character are fine).
 
 STRICT RULES:
 1. STRUCTURE: ${seqRule}
 2. Title: 5-8 words, catchy.${isAlgo ? ' NEVER include the algorithm notation in the title.' : ''}
 3. descriptionEN and descriptionUA must end with 6-8 hashtags.
-4. EN fields → English only. UA fields → Ukrainian only. visualsUA and seoTip → Ukrainian.
+4. EN fields → English only. UA fields → Ukrainian only. visualsUA, montageUA and seoTip → Ukrainian.
 5. Do NOT repeat topics/titles from history above.
 6. ${voiceRule}
 7. ${screenTextRule}
 8. VISUALS (visualsUA): 1 action/shot-description sentence per frame only — what to actually film. MUST follow the FACELESS RULE above — no face/on-camera shots, ever.
-9. TAGS (tagsUniversal / tagsSpecific): return each as a JSON ARRAY of separate short lowercase keyword strings, NO "#" symbol, one tag per array element (do NOT put several tags inside one string, do NOT run words together without separation).
+9. MONTAGE (montageUA): see MONTAGE / EDIT RULE above — 1-2 short sentences per frame about the cut/transition/pacing technique for that specific frame.
+10. TAGS (tagsUniversal / tagsSpecific): return each as a JSON ARRAY of separate short lowercase keyword strings, NO "#" symbol, one tag per array element (do NOT put several tags inside one string, do NOT run words together without separation).
    - tagsUniversal: 5-7 broad tags — see TAG VARIETY RULE above, do not reuse the exact same set every time.
    - ${tagsSpecificHint}
 
-Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor MUST each contain EXACTLY ${frameCount} elements (one per frame):
+Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor, montageUA MUST each contain EXACTLY ${frameCount} elements (one per frame):
 {
   "corrections": "Коротко що було виправлено, або порожній рядок",
   "titleEN": "Catchy English title 5-8 words",
@@ -1734,6 +1771,7 @@ Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voice
   "screenTextEN": ${arr('MAIN LINE\\nSubtitle')},
   "screenTextUA": ${arr('ГОЛОВНИЙ\\nПідзаголовок')},
   "screenTextColor": ${arr('green')},
+  "montageUA": ${arr('Коротка нотатка про монтаж/склейку цього кадру')},
   "tagsUniversal": ["speedcubing", "rubik's cube", "cubing", "cuber", "shorts", "..."],
   "tagsSpecific": ["...", "...", "..."],
   "seoTip": "Коротка SEO порада"
@@ -1782,6 +1820,11 @@ function buildLongPrompt(fields, durationMin, webSearchOn) {
 
   const tagsVarietyRule = `\n\nTAG VARIETY RULE (very important): tagsUniversal must NOT be the same fixed list every single generation. Keep only 1-2 truly constant core tags (e.g. "speedcubing", "rubik's cube") and pick the remaining broad tags freshly each time from a wide pool of plausible channel-wide tags so different videos end up with different broad-tag combinations. Put most of the real keyword variety into tagsSpecific instead, closely tied to this exact video's subject.`;
 
+  const montageRule = `\n\nMONTAGE / EDIT RULE (very important — new per-scene field): EVERY scene also needs a short montage/editing note (Ukrainian, field "montage") describing HOW that scene should be cut/edited, based on what is SAID (voiceEN/voiceUA for that scene) and what is SHOWN (action for that scene). This is technical editing guidance for the video editor, separate from the shot description. In 1-2 short sentences cover:
+   - the CUT IN — how the previous scene transitions into this one (hard cut, jump cut, whip pan, zoom transition, match cut on motion, cross-dissolve, etc.) and pacing;
+   - the pacing/treatment WITHIN the scene (static hold, slow push-in, speed-ramp, freeze-frame, b-roll overlay, etc.), matched to the emotional beat of what's said/shown.
+   The VERY FIRST scene of the ENTIRE video is the opening hook — its montage note should describe a punchy, attention-grabbing opening cut (no incoming transition since there is none before it). The VERY LAST scene of the ENTIRE video is the outro/CTA — its montage note should describe a clean closing cut/fade that leaves room for the CTA. Every other scene should describe a normal cut that keeps the section's pacing coherent (interactive-moment scenes can call for a slightly different, more "paused" editing feel if that fits the beat). Do NOT restate the shot's visual action itself (that belongs in "action") — focus purely on the cut/transition/pacing technique.`;
+
   return `You are an expert YouTube long-form video producer, scriptwriter, and thumbnail/CTR strategist for the speedcubing/twisty-puzzle channel "Brain Cube".
 
 CURRENT MOMENT (treat as ground truth — this video is being created right now):
@@ -1799,7 +1842,7 @@ Video details (raw user input — see AUTO-CORRECT rule below):
 - Approx. details (optional): ${fields.details || 'N/A'}
 - Extra notes (optional): ${fields.notes || 'N/A'}
 - Target length: ~${durationMin} minutes
-${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}
+${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}${montageRule}
 
 AUTO-CORRECT RULE (very important):
 The fields above were typed quickly by a human and may contain typos, misspelled cube/model names, wrong WCA notation, or Ukrainian/English mixed together in any field. Silently fix all of this yourself and use the corrected version everywhere in the output. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field. If nothing needed fixing, return "corrections": "".
@@ -1811,7 +1854,7 @@ FACELESS RULE (very important, applies to every scene without exception):
 This is a 100% FACELESS channel. The creator's face, mouth, or any talking-head / on-camera-selfie shot must NEVER appear or be implied. Every "action" (what to film) entry must describe a shot that shows ONLY: hands + cube/puzzle close-ups, the object itself, a table/desk surface, a screen recording/timer, text/graphics overlays, or other objects/b-roll — never "look at camera", "show your face", "talk to viewer on camera", "selfie", "vlog-style face shot". All narration (voiceEN/voiceUA) is voice-over only, never delivered on-camera.
 
 NO EMOJI RULE (very important, applies to every single field in the output without exception):
-NEVER use emoji, emoticons, or decorative Unicode symbols (no rocket/fire/camera/checkmark emoji etc.) anywhere — not in titles, thumbnailIdea, description, section titles, music notes, scene action, voice-over, screen text, tags, or seoTip. Plain text only (the "#" character in hashtags is fine).
+NEVER use emoji, emoticons, or decorative Unicode symbols (no rocket/fire/camera/checkmark emoji etc.) anywhere — not in titles, thumbnailIdea, description, section titles, music notes, scene action, voice-over, screen text, montage notes, tags, or seoTip. Plain text only (the "#" character in hashtags is fine).
 
 TITLES & THUMBNAILS RULE (very important):
 Propose EXACTLY 3 distinct title options, each paired with its own thumbnail concept. These must be optimized to be as clickable as possible for an audience seeing this RIGHT NOW (${dateHuman}) — think like a real YouTube strategist chasing maximum CTR for this exact topic today, not a generic evergreen title. The 3 options should take genuinely different angles (e.g. curiosity/question, bold claim/number, drama/before-after) rather than being small rewordings of each other. For each option provide:
@@ -1836,6 +1879,7 @@ STRUCTURE RULES:
    - "voiceEN": 1-3 natural sentences of voice-over narration in English for this scene (conversational, like a real creator talking to the camera in voice-over).
    - "voiceUA": the full, natural Ukrainian translation of voiceEN (not literal word-for-word, must sound natural).
    - "screenText": OPTIONAL short on-screen text/caption for this scene — ONE short line only, MAX 6 words, ALL CAPS, English, NO emoji, no more than one idea/sentence — use "" if this scene doesn't need one (most emotional/talking scenes don't need one; use it mainly for a single key fact, number, or section transition). Never stack multiple sentences or CTAs into this field.
+   - "montage": see MONTAGE / EDIT RULE above — 1-2 short sentences (Ukrainian) about the cut/transition/pacing technique for this specific scene.
 5. The FIRST scene overall must be the Hook. The LAST scene overall must include the natural CTA worked into the narration.
 6. Do NOT repeat topics/titles from the history list above.
 7. TAGS (tagsUniversal / tagsSpecific): JSON arrays of separate short lowercase keyword strings, no "#" symbol.
@@ -1858,7 +1902,7 @@ Return ONLY valid JSON (no markdown, no extra text), following this exact shape 
       "sectionTitle": "Назва секції",
       "musicNote": "Коротка нотатка про музику/настрій",
       "scenes": [
-        { "action": "Що знімати в цій сцені", "voiceEN": "Voice-over line(s) for this scene.", "voiceUA": "Переклад начитки для цієї сцени.", "screenText": "" }
+        { "action": "Що знімати в цій сцені", "voiceEN": "Voice-over line(s) for this scene.", "voiceUA": "Переклад начитки для цієї сцени.", "screenText": "", "montage": "Коротка нотатка про монтаж/склейку цієї сцени" }
       ]
     }
   ],
@@ -1891,12 +1935,13 @@ Keep following all of the original rules:
 - Fully bilingual EN + UA voice-over (voiceEN / voiceUA), natural translations, not literal.
 - NO emoji, emoticons, or decorative Unicode symbols anywhere in any field.
 - "screenText" stays ONE short line, MAX 6 words, no stacked sentences.
+- Every scene keeps its "montage" field — 1-2 short Ukrainian sentences on the cut/transition/pacing technique for that scene (see original MONTAGE / EDIT RULE): first scene overall = punchy opening cut, last scene overall = clean closing cut, all others = normal mid-video cut. Only change a scene's montage note if the user's request affects that scene's editing, position, or pacing.
 - Exactly 3 distinct title options in "titles", each with its own "titleEN", "titleUA" and "thumbnailIdea".
 - descriptionEN / descriptionUA stay SHORT (hook line + 2-3 sentences overview + CTA + 6-8 hashtags) — do NOT add a bullet-point outline of section titles.
 - tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol. Do not just repeat the same tagsUniversal list out of habit unless the user asked to keep tags unchanged.
 - Never mention a specific cube quantity (e.g. "300 cubes") as a raw "Cube: X" label — only naturally within narrative text, per the original CUBE MENTION RULE.${audienceReminder}
 
-Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titles, descriptionEN, descriptionUA, sections, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
+Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titles, descriptionEN, descriptionUA, sections, tagsUniversal, tagsSpecific, seoTip — each scene keeps its action, voiceEN, voiceUA, screenText, montage keys). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
   }
 
   return `You previously generated the following JSON result for a YouTube Shorts video for the speedcubing channel "Brain Cube":
@@ -1914,11 +1959,12 @@ Keep following all of the original rules:
 - NO emoji, emoticons, or decorative Unicode symbols anywhere in any field.
 - screenTextEN / screenTextUA stay EXACTLY two lines each (one "\\n"), max 4 words per line — never a third line.
 - screenTextColor stays an array with the same number of elements as screenTextEN (one color word per frame, applies to line 1 only — line 2 is always plain white). Only change a frame's color if the user explicitly asked to.
-- The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor must all keep the exact same number of elements as in the original JSON above, unless the user explicitly asked to change the number of frames.
+- montageUA stays an array with the same number of elements as the other per-frame arrays — 1-2 short Ukrainian sentences per frame on the cut/transition/pacing technique (see original MONTAGE / EDIT RULE): frame 1 = punchy opening cut, last frame = clean closing cut, middle frames = normal mid-video cut. Only change a frame's montage note if the user's request affects that frame's editing, position, or pacing.
+- The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor, montageUA must all keep the exact same number of elements as in the original JSON above, unless the user explicitly asked to change the number of frames.
 - tagsUniversal / tagsSpecific stay as JSON arrays of separate lowercase keyword strings, no "#" symbol. Do not just repeat the same tagsUniversal list out of habit unless the user asked to keep tags unchanged.
 - Never mention a specific cube quantity (e.g. "300 cubes") as a raw "Cube: X" label — only naturally within narrative text, per the original CUBE MENTION RULE.${audienceReminder}
 
-Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
+Return ONLY the complete corrected JSON, in EXACTLY the same shape/field names as the JSON above (keys: corrections, titleEN, titleUA, descriptionEN, descriptionUA, visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor, montageUA, tagsUniversal, tagsSpecific, seoTip). Put a short Ukrainian note of what you changed in the "corrections" field (overwrite it, don't append). No markdown, no extra text.`;
 }
 
 async function requestRefine() {
@@ -2475,6 +2521,12 @@ function renderLongResult(d) {
     const scenesHtml = (sec.scenes || []).map(sc => {
       const i = sceneIdx++;
       const screenTextHtml = sc.screenText ? `<span class="lv-scene-screen">${esc(sc.screenText)}</span>` : '';
+      const posClass = i === 0 ? 'first' : (i === totalScenes - 1 ? 'last' : 'mid');
+      const posLabel = i === 0 ? 'ПЕРШИЙ КАДР — HOOK CUT' : (i === totalScenes - 1 ? 'ФІНАЛЬНИЙ КАДР — OUTRO CUT' : `СЕРЕДИНА — КАДР ${i + 1}`);
+      const montageHtml = sc.montage ? `<div class="montage-block">
+          <span class="montage-pos ${posClass}">${esc(posLabel)}</span>
+          <div class="montage-text">${esc(sc.montage)}</div>
+        </div>` : '';
       return `<div class="lv-scene-card">
         <div class="lv-scene-top">
           <span class="lv-scene-num">${i + 1}</span>
@@ -2491,6 +2543,7 @@ function renderLongResult(d) {
           </div>
         </div>
         ${screenTextHtml}
+        ${montageHtml}
       </div>`;
     }).join('');
 
@@ -2641,6 +2694,7 @@ function renderResult(d) {
   let voiceENItems = '', voiceUAItems = '';
   let visualItems = '';
   let screenENItems = '', screenUAItems = '';
+  let montageItems = '';
   const colorArr = Array.isArray(d.screenTextColor) ? d.screenTextColor : [];
   for (let i = 0; i < frameCount; i++) {
     const num = `<span class="res-num">${i+1}</span>`;
@@ -2650,6 +2704,13 @@ function renderResult(d) {
     visualItems   += `<li>${num}<span>${esc(d.visualsUA?.[i] || '')}</span>${cpBtn('visualsUA', i)}</li>`;
     screenENItems += `<li>${num}${screenLineBlockHtml(d.screenTextEN?.[i], colorArr[i])}</li>`;
     screenUAItems += `<li>${num}${screenLineBlockHtml(d.screenTextUA?.[i], colorArr[i])}</li>`;
+
+    const posClass = i === 0 ? 'first' : (i === frameCount - 1 ? 'last' : 'mid');
+    const posLabel = i === 0 ? 'ПЕРШИЙ КАДР — HOOK CUT' : (i === frameCount - 1 ? 'ФІНАЛЬНИЙ КАДР — OUTRO CUT' : `СЕРЕДИНА — КАДР ${i + 1}`);
+    montageItems += `<li>${num}<div class="montage-block" style="margin-top:0;padding-top:0;border-top:none;flex:1">
+        <span class="montage-pos ${posClass}">${esc(posLabel)}</span>
+        <span class="montage-text">${esc(d.montageUA?.[i] || '')}</span>
+      </div>${cpBtn('montageUA', i)}</li>`;
   }
 
   document.getElementById('modalBody').innerHTML = `
@@ -2721,6 +2782,19 @@ function renderResult(d) {
             <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('screenTextUA', this)">Копіювати все</button>
           </div>
           <ul class="res-list mono">${screenUAItems}</ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="out-section">
+      <div class="res-head">
+        <div class="res-title"><span>Montage</span> / Монтаж кожного кадру</div>
+        <span class="res-count">${frameCount} кадрів</span>
+        <button type="button" class="res-copy-all-btn" onclick="copyFieldArray('montageUA', this)">Копіювати все</button>
+      </div>
+      <div class="res-card">
+        <div class="res-col ua">
+          <ul class="res-list">${montageItems}</ul>
         </div>
       </div>
     </div>
