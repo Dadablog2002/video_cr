@@ -1718,6 +1718,13 @@ function buildPrompt(mode, fields, tpl, webSearchOn, frameCount) {
    - the CUT OUT / pacing WITHIN the frame — whether the shot holds static, has a quick zoom/push-in, speed-ramp, or freeze-frame, matched to the emotional beat of what's said/shown.
    The FIRST frame overall is the opening/hook of the whole video — its montage note should describe a punchy, attention-grabbing opening cut (no "cut in from previous frame" since there is none). The LAST frame overall is the outro/CTA — its montage note should describe a clean closing cut that leaves room for the CTA/subscribe prompt. Middle frames should describe a normal mid-video cut that keeps pacing tight. Do NOT restate the visual action itself (that's visualsUA's job) — focus purely on the cut/transition/pacing technique.`;
 
+  const naturalLanguageRule = `\n\nSOUND LIKE A REAL HUMAN CUBER, NOT AN AI (extremely important — this is the #1 quality bar): Everything you write — title, hook/voice-over, on-screen text, description, tags — must read like it was casually typed by an actual young speedcuber talking to other cubers online, NOT like AI-generated copy. Concretely:
+   - BAN generic AI/marketing phrasing: never open with or reuse stock lines like "Did you know", "Ever wondered", "In this video", "Get ready to", "Unlock the secret", "Master this in seconds", "This will change how you cube", "Let's dive in", "Discover", "game-changer", "level up your cubing", or any similar template phrase that could open literally any cubing short. If a line feels reusable across videos, throw it out and write something specific to THIS video instead.
+   - VARY the structure every single time: titles, hooks and sentence rhythm must differ from generation to generation and must NOT resemble the pattern of the history list above — don't reuse the same sentence shape, word order, or punctuation style back-to-back. No two generations should read like they came from the same fill-in-the-blank template.
+   - USE REAL, CURRENT SPEEDCUBING/SHORTS SLANG naturally, only where it genuinely fits — the kind of words real cubers actually use in comments and TikTok/Shorts captions right now (e.g. "OH", "PB", "sub-X", "recon", "look-ahead", "TPS", "pop", "DNF", "cross skip", "lockup", "corner cutting", "magnetic feel", "this cube hits different", "no cap", "goated", "it's over for other cubes"). Never force slang into a sentence where it sounds fake or random — natural beats trendy. If web search is available, prefer whatever phrasing is actually trending right now over this example list.
+   - KEEP IT SIMPLE TO READ: short, plain, everyday words. A viewer scrolling Shorts must instantly understand every line without re-reading it — no rare vocabulary, no long or nested clauses, no textbook/technical tone even when explaining something technical. A short punchy sentence beats one long "correct" one every time.
+   - Contractions, casual punctuation and a bit of personality are encouraged (within the NO EMOJI rule) — this should feel like a real person talking, not a press release.`;
+
   // Build placeholder arrays of the right length for the example JSON block
   const arr = (val) => JSON.stringify(Array.from({ length: frameCount }, () => val));
 
@@ -1730,7 +1737,7 @@ ${subjectBlock}
 - Title style: ${tpl.titleStyle || 'hook'}
 - CTA: ${tpl.cta || 'Subscribe for more CFOP tips!'}
 - Base hashtags: ${tpl.hashtags || '#Shorts #Speedcubing'}
-${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}${montageRule}
+${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}${montageRule}${naturalLanguageRule}
 
 AUTO-CORRECT RULE (very important):
 ${autoCorrectNote} Silently fix all of this yourself and use the corrected version everywhere in the output. Do not ask the user anything — just produce the corrected result. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field what you fixed. If nothing needed fixing, return "corrections": "".
@@ -1757,6 +1764,7 @@ STRICT RULES:
 10. TAGS (tagsUniversal / tagsSpecific): return each as a JSON ARRAY of separate short lowercase keyword strings, NO "#" symbol, one tag per array element (do NOT put several tags inside one string, do NOT run words together without separation).
    - tagsUniversal: 5-7 broad tags — see TAG VARIETY RULE above, do not reuse the exact same set every time.
    - ${tagsSpecificHint}
+11. NATURALNESS: see SOUND LIKE A REAL HUMAN CUBER rule above — no generic AI/marketing phrasing, no repeated templates between videos, real current slang where it fits, and simple, easy-to-read words throughout every field.
 
 Return ONLY valid JSON (no markdown, no extra text). The arrays visualsUA, voiceEN, voiceUA, screenTextEN, screenTextUA, screenTextColor, montageUA MUST each contain EXACTLY ${frameCount} elements (one per frame):
 {
@@ -1825,6 +1833,13 @@ function buildLongPrompt(fields, durationMin, webSearchOn) {
    - the pacing/treatment WITHIN the scene (static hold, slow push-in, speed-ramp, freeze-frame, b-roll overlay, etc.), matched to the emotional beat of what's said/shown.
    The VERY FIRST scene of the ENTIRE video is the opening hook — its montage note should describe a punchy, attention-grabbing opening cut (no incoming transition since there is none before it). The VERY LAST scene of the ENTIRE video is the outro/CTA — its montage note should describe a clean closing cut/fade that leaves room for the CTA. Every other scene should describe a normal cut that keeps the section's pacing coherent (interactive-moment scenes can call for a slightly different, more "paused" editing feel if that fits the beat). Do NOT restate the shot's visual action itself (that belongs in "action") — focus purely on the cut/transition/pacing technique.`;
 
+  const naturalLanguageRule = `\n\nSOUND LIKE A REAL HUMAN CUBER, NOT AN AI (extremely important — this is the #1 quality bar): Titles, thumbnail ideas, voice-over, on-screen text and description must all read like they were casually written by an actual experienced speedcuber/YouTuber, NOT like AI-generated copy. Concretely:
+   - BAN generic AI/marketing phrasing: never use stock openers or CTA lines like "Did you know", "Ever wondered", "In this video I'm going to", "Get ready to", "Unlock the secret", "Master this", "This will change how you cube", "Let's dive in", "Discover", "game-changer", "level up your cubing". If a line feels reusable across any random cubing video, cut it and write something specific to THIS video's actual content instead.
+   - VARY the structure every time: titles, hooks, section titles and sentence rhythm must differ from generation to generation and must NOT resemble the pattern of the history list above — don't reuse the same sentence shape, opening word, or punctuation style back-to-back.
+   - USE REAL, CURRENT SPEEDCUBING/YOUTUBE SLANG naturally, only where it genuinely fits the moment (e.g. "OH", "PB", "sub-X", "recon", "look-ahead", "TPS", "pop", "DNF", "lockup", "corner cutting", "magnetic feel", "this cube hits different", "no cap", "goated"). Never force slang where it sounds fake. If web search is available, prefer whatever phrasing is actually trending right now for this audience over this example list.
+   - KEEP VOICE-OVER AND SCREEN TEXT SIMPLE TO FOLLOW: everyday, plain words, short sentences, no textbook or corporate tone even when explaining something technical — the viewer is listening/watching, not reading a manual.
+   - Contractions and a bit of personality are encouraged (within the NO EMOJI rule) — this should sound like a real creator talking, not a press release.`;
+
   return `You are an expert YouTube long-form video producer, scriptwriter, and thumbnail/CTR strategist for the speedcubing/twisty-puzzle channel "Brain Cube".
 
 CURRENT MOMENT (treat as ground truth — this video is being created right now):
@@ -1842,7 +1857,7 @@ Video details (raw user input — see AUTO-CORRECT rule below):
 - Approx. details (optional): ${fields.details || 'N/A'}
 - Extra notes (optional): ${fields.notes || 'N/A'}
 - Target length: ~${durationMin} minutes
-${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}${montageRule}
+${hCtx}${webSearchBlock}${audienceRule}${cubeQuantityRule}${tagsVarietyRule}${montageRule}${naturalLanguageRule}
 
 AUTO-CORRECT RULE (very important):
 The fields above were typed quickly by a human and may contain typos, misspelled cube/model names, wrong WCA notation, or Ukrainian/English mixed together in any field. Silently fix all of this yourself and use the corrected version everywhere in the output. If you made any non-trivial correction, summarize briefly in Ukrainian in the "corrections" field. If nothing needed fixing, return "corrections": "".
@@ -1886,6 +1901,7 @@ STRUCTURE RULES:
    - tagsUniversal: 4-6 broad tags — see TAG VARIETY RULE above, do not reuse the exact same set every time.
    - tagsSpecific: 12-18 tags specific to this exact topic/category/cube.
 8. descriptionEN and descriptionUA: SHORT and natural — a hook line, then 2-3 sentences about what the video covers overall. Do NOT list out the individual section/chapter titles or a "In this video: - ..." style outline — just a brief, natural overview, like a real YouTube description. End with the CTA, then 6-8 hashtags.
+9. NATURALNESS: see SOUND LIKE A REAL HUMAN CUBER rule above — no generic AI/marketing phrasing, no repeated templates between videos, real current slang where it fits, and simple, easy-to-follow language throughout.
 
 Return ONLY valid JSON (no markdown, no extra text), following this exact shape (section/scene counts are illustrative only — use your own judgment per the rules above):
 {
@@ -2136,6 +2152,8 @@ NICHE / FOCUS for these ideas: ${nicheLine}
 FACELESS CHANNEL (very important): This creator NEVER shows their face — no talking-head, no on-camera selfie shots, no "react on camera" formats. Every idea must be filmable using only hands + cube close-ups, screen recordings, text/graphics overlays, and voice-over narration. Do not propose ideas that require the creator to be visibly on camera.
 
 NO EMOJI RULE (very important): NEVER use emoji, emoticons, or decorative Unicode symbols anywhere in the output (titles, hook, whyNow, hashtags, etc). Plain text only.
+
+SOUND LIKE A REAL HUMAN CUBER, NOT AN AI (very important): titleEN, titleUA and hook must read like something an actual speedcuber would casually type, not AI copy. Ban generic openers/phrases like "Did you know", "Ever wondered", "Get ready to", "Unlock the secret", "game-changer", "level up your cubing" or any other line that could open literally any cubing video. Vary the phrasing, sentence shape and word choice between all ${count} ideas — no two should sound like the same template refilled. Use real, currently-trending speedcubing/Shorts slang where it genuinely fits (e.g. "OH", "PB", "sub-X", "pop", "DNF", "hits different", "goated", "no cap") — pull real trending phrasing from your web search results whenever possible instead of guessing. Keep titleEN and hook short and simple: everyday words, no jargon a casual viewer wouldn't instantly get, one clear idea per line.
 
 TASK: You have web search available — actually use it. Search the internet (in English) for what is happening RIGHT NOW (as close as possible to ${iso}) that is relevant to this niche for an English-speaking, global audience: recent product launches (new cube models), upcoming or just-finished WCA competitions/events, viral English-language TikTok/YouTube Shorts trends, sounds, challenges, hashtags, community news, records, controversies, or general short-form-video trends that a speedcubing creator could jump on TODAY. Prioritize genuinely current, dated information over generic evergreen ideas.
 
